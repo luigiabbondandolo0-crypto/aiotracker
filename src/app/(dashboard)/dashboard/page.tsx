@@ -22,15 +22,15 @@ async function getDashboardData(userId: string) {
       }),
     ]);
 
-  const propFirmTotal = propFirm.reduce((s, a) => s + a.equity, 0);
-  const tradingTotal = trading.reduce((s, a) => s + a.balance, 0);
-  const etfTotal = etf.reduce((s, a) => s + a.currentValue, 0);
+  const propFirmTotal = propFirm.reduce((s: number, a) => s + a.equity, 0);
+  const tradingTotal = trading.reduce((s: number, a) => s + a.balance, 0);
+  const etfTotal = etf.reduce((s: number, a) => s + a.currentValue, 0);
   const stocksTotal = stocks.reduce(
-    (s, h) => s + h.units * (h.currentPrice ?? h.avgPrice),
+    (s: number, h) => s + h.units * (h.currentPrice ?? h.avgPrice),
     0
   );
   const cryptoTotal = crypto.reduce(
-    (s, h) => s + h.amount * (h.currentPrice ?? h.avgBuyPrice),
+    (s: number, h) => s + h.amount * (h.currentPrice ?? h.avgBuyPrice),
     0
   );
 
