@@ -1,12 +1,13 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { formatCurrency, formatPercent, pnlColor } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
+import { PropAccountStatus } from "@prisma/client";
 
 async function getDashboardData(userId: string) {
   const [propFirm, trading, etf, stocks, crypto, transactions, budgets] =
     await Promise.all([
-      prisma.propFirmAccount.findMany({ where: { userId, status: { in: ["ACTIVE", "FUNDED"] } } }),
+      prisma.propFirmAccount.findMany({ where: { userId, status: PropAccountStatus.ACTIVE } }),
       prisma.tradingAccount.findMany({ where: { userId, isActive: true } }),
       prisma.eTFPlan.findMany({ where: { userId, isActive: true } }),
       prisma.stockHolding.findMany({ where: { userId } }),
