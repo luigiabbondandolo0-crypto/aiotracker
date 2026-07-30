@@ -28,6 +28,10 @@ model User {
   transactions       Transaction[]
   budgets            Budget[]
   netWorthSnapshots  NetWorthSnapshot[]
+  incomeSources      IncomeSource[]
+  incomeEntries      IncomeEntry[]
+  budgetAllocations  BudgetAllocation[]
+  expenses           Expense[]
 }
 
 model Account {
@@ -366,4 +370,84 @@ model NetWorthSnapshot {
 enum TransactionType {
   INCOME
   EXPENSE
+}
+
+// ─── ENTRATE & BUDGET ────────────────────────────────────────────────────────
+
+// Tipi di entrata definiti dall'utente (es. Stipendio, Prop Firm, Stripe...)
+model IncomeSource {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String                      // es. "Stipendio", "Prop Firm FTMO"
+  taxRate   Float    @default(0)        // percentuale tassazione 0-100
+  isTaxed   Boolean  @default(false)
+  color     String   @default("#3b82f6") // colore UI
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  incomeEntries IncomeEntry[]
+}
+
+// Singola entrata di reddito
+model IncomeEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  sourceId    String
+  grossAmount Float                      // lordo
+  taxAmount   Float                      // tasse calcolate
+  netAmount   Float                      // netto = lordo - tasse
+  taxRate     Float                      // snapshot del tax rate al momento
+  date        DateTime
+  month       Int
+  year        Int
+  description String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  source IncomeSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+}
+
+// Allocazione budget mensile (% sul netto totale)
+model BudgetAllocation {
+  id         String   @id @default(cuid())
+  userId     String
+  month      Int
+  year       Int
+  category   BudgetCategory
+  percentage Float                       // % del netto da allocare
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, month, year, category])
+}
+
+// Spesa mensile categorizzata
+model Expense {
+  id          String         @id @default(cuid())
+  userId      String
+  category    BudgetCategory
+  amount      Float
+  description String?
+  date        DateTime
+  month       Int
+  year        Int
+  notes       String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum BudgetCategory {
+  SPESE_NECESSARIE
+  SPESE_GIORNALIERE
+  INVESTIMENTI
+  FONDO_EMERGENZA
+  LIQUIDITA
 }
