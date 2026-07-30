@@ -1,18 +1,278 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Modal } from "@/components/ui/Modal";
+import { formatCurrency, formatDate } from "@/lib/utils";
+import { LineChart, Plus, Edit2, Trash2, TrendingUp, TrendingDown, DollarSign, AlertCircle, RefreshCw } from "lucide-react";
+
+interface StockHolding {
+  id: string;
+  ticker: string;
+  companyName?: string;
+  exchange?: string;
+  broker?: string;
+  units: number;
+  avgPrice: number;
+  currentPrice?: number;
+  currency: string;
+  sector?: string;
+  country?: string;
+  notes?: string;
+}
+
+const emptyForm = {
+  ticker: "", companyName: "", exchange: "", broker: "",
+  units: "", avgPrice: "", currentPrice: "", currency: "USD",
+  sector: "", country: "", notes: "",
+};
+
+const inputStyle = {
+  background: "#212946", border: "1px solid #29314f", color: "#bdc8f0",
+  borderRadius: "8px", padding: "8px 12px", width: "100%", outline: "none",
+};
+const labelStyle: React.CSSProperties = {
+  display: "block", fontSize: "12px", fontWeight: 500, color: "#8492c4", marginBottom: "6px",
+};
+
 export default function StocksPage() {
+  const [holdings, setHoldings] = useState<StockHolding[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showAdd, setShowAdd] = useState(false);
+  const [editing, setEditing] = useState<StockHolding | null>(null);
+  const [deleting, setDeleting] = useState<StockHolding | null>(null);
+  const [updatingPrice, setUpdatingPrice] = useState<StockHolding | null>(null);
+  const [newPrice, setNewPrice] = useState("");
+  const [form, setForm] = useState(emptyForm);
+  const [saving, setSaving] = useState(false);
+
+  const fetchData = async () => {
+    const res = await fetch("/api/stocks");
+    const data = await res.json();
+    setHoldings(data);
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const f = (k: string, v: string) => setForm((p) => ({ ...p, [k]: v }));
+
+  const openEdit = (h: StockHolding) => {
+    setForm({
+      ticker: h.ticker, companyName: h.companyName ?? "", exchange: h.exchange ?? "",
+      broker: h.broker ?? "", units: String(h.units), avgPrice: String(h.avgPrice),
+      currentPrice: h.currentPrice ? String(h.currentPrice) : "", currency: h.currency,
+      sector: h.sector ?? "", country: h.country ?? "", notes: h.notes ?? "",
+    });
+    setEditing(h);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    const url = editing ? `/api/stocks/${editing.id}` : "/api/stocks";
+    await fetch(url, { method: editing ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+    await fetchData(); setSaving(false); setShowAdd(false); setEditing(null);
+  };
+
+  const handleDelete = async () => {
+    if (!deleting) return;
+    await fetch(`/api/stocks/${deleting.id}`, { method: "DELETE" });
+    await fetchData(); setDeleting(null);
+  };
+
+  const handleUpdatePrice = async () => {
+    if (!updatingPrice || !newPrice) return;
+    setSaving(true);
+    const h = updatingPrice;
+    await fetch(`/api/stocks/${h.id}`, {
+      method: "PUT", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ticker: h.ticker, companyName: h.companyName, exchange: h.exchange, broker: h.broker,
+        units: h.units, avgPrice: h.avgPrice, currentPrice: newPrice, currency: h.currency,
+        sector: h.sector, country: h.country, notes: h.notes,
+      }),
+    });
+    await fetchData(); setSaving(false); setUpdatingPrice(null); setNewPrice("");
+  };
+
+  const totalValue = holdings.reduce((s, h) => s + h.units * (h.currentPrice ?? h.avgPrice), 0);
+  const totalCost = holdings.reduce((s, h) => s + h.units * h.avgPrice, 0);
+  const totalGain = totalValue - totalCost;
+  const totalGainPct = totalCost > 0 ? (totalGain / totalCost) * 100 : 0;
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-white">Azioni</h1>
-        <p className="text-slate-400 text-sm mt-1">Portfolio azionario</p>
-      </div>
-      <div className="bg-[#111827] border border-[#1e2a3a] rounded-xl p-8 text-center">
-        <p className="text-4xl mb-3">💹</p>
-        <p className="text-white font-medium">Nessuna posizione</p>
-        <p className="text-slate-500 text-sm mt-1">Aggiungi le tue azioni</p>
-        <button className="mt-4 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded-xl transition">
-          + Aggiungi Azione
+    <div className="space-y-6 pb-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>Azioni</h1>
+          <p className="text-sm mt-0.5" style={{ color: "#8492c4" }}>Portfolio azionario</p>
+        </div>
+        <button onClick={() => { setForm(emptyForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
+          <Plus size={15} /> Aggiungi Azione
         </button>
       </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: "Valore Portfolio", value: formatCurrency(totalValue, "USD"), icon: <DollarSign size={16} />, color: "#90caf9" },
+          { label: "Costo Totale", value: formatCurrency(totalCost, "USD"), icon: <DollarSign size={16} />, color: "#b39ddb" },
+          { label: "P&L Non Realizzato", value: formatCurrency(totalGain, "USD"), icon: totalGain >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalGain >= 0 ? "#00e676" : "#f44336" },
+          { label: "Titoli", value: String(holdings.length), icon: <LineChart size={16} />, color: "#69f0ae" },
+        ].map((s) => (
+          <div key={s.label} className="card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span style={{ color: s.color }}>{s.icon}</span>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>{s.label}</p>
+            </div>
+            <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
+            {s.label === "P&L Non Realizzato" && (
+              <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>{totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(2)}%</p>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {loading ? (
+        <div className="card p-8 text-center" style={{ color: "#8492c4" }}>Caricamento...</div>
+      ) : holdings.length === 0 ? (
+        <div className="card p-10 text-center">
+          <LineChart size={40} style={{ color: "#8492c4", margin: "0 auto 12px" }} />
+          <p className="font-medium" style={{ color: "#d7dcec" }}>Nessuna posizione azionaria</p>
+          <p className="text-sm mt-1" style={{ color: "#8492c4" }}>Aggiungi le tue azioni al portfolio</p>
+          <button onClick={() => setShowAdd(true)} className="btn-primary mt-4">Aggiungi Azione</button>
+        </div>
+      ) : (
+        <div className="card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid #29314f" }}>
+                  {["Ticker", "Azienda", "Qtà", "Prezzo Medio", "Prezzo Attuale", "Valore", "P&L", "P&L %", ""].map((h) => (
+                    <th key={h} style={{ padding: "10px 14px", textAlign: "left", color: "#8492c4", fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {holdings.map((h) => {
+                  const price = h.currentPrice ?? h.avgPrice;
+                  const value = h.units * price;
+                  const cost = h.units * h.avgPrice;
+                  const pnl = value - cost;
+                  const pnlPct = cost > 0 ? (pnl / cost) * 100 : 0;
+                  return (
+                    <tr key={h.id} style={{ borderBottom: "1px solid #29314f", transition: "background 150ms" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "#212946")}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+                      <td style={{ padding: "10px 14px" }}>
+                        <span className="badge badge-blue">{h.ticker}</span>
+                      </td>
+                      <td style={{ padding: "10px 14px", color: "#bdc8f0" }}>
+                        <div>{h.companyName ?? "—"}</div>
+                        {h.exchange && <div style={{ color: "#8492c4", fontSize: "11px" }}>{h.exchange}</div>}
+                      </td>
+                      <td style={{ padding: "10px 14px", color: "#bdc8f0" }}>{h.units}</td>
+                      <td style={{ padding: "10px 14px", color: "#8492c4" }}>{formatCurrency(h.avgPrice, h.currency)}</td>
+                      <td style={{ padding: "10px 14px" }}>
+                        <button onClick={() => { setUpdatingPrice(h); setNewPrice(h.currentPrice ? String(h.currentPrice) : ""); }}
+                          className="flex items-center gap-1.5 cursor-pointer transition-all"
+                          style={{ color: h.currentPrice ? "#bdc8f0" : "#8492c4", background: "none", border: "none", padding: 0 }}
+                          title="Aggiorna prezzo">
+                          {h.currentPrice ? formatCurrency(h.currentPrice, h.currency) : "—"}
+                          <RefreshCw size={11} style={{ opacity: 0.5 }} />
+                        </button>
+                      </td>
+                      <td style={{ padding: "10px 14px", color: "#d7dcec", fontWeight: 600 }}>{formatCurrency(value, h.currency)}</td>
+                      <td style={{ padding: "10px 14px", color: pnl >= 0 ? "#00e676" : "#f44336", fontWeight: 600 }}>
+                        {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, h.currency)}
+                      </td>
+                      <td style={{ padding: "10px 14px", color: pnlPct >= 0 ? "#00e676" : "#f44336" }}>
+                        {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
+                      </td>
+                      <td style={{ padding: "10px 14px" }}>
+                        <div className="flex gap-1">
+                          <button onClick={() => openEdit(h)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
+                          <button onClick={() => setDeleting(h)} className="btn-ghost p-1.5" style={{ color: "#ef9a9a" }}><Trash2 size={13} /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Add/Edit Modal */}
+      {(showAdd || editing) && (
+        <Modal title={editing ? `Modifica ${editing.ticker}` : "Aggiungi Azione"} onClose={() => { setShowAdd(false); setEditing(null); }}>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div><label style={labelStyle}>Ticker *</label><input style={inputStyle} placeholder="es. AAPL" value={form.ticker} onChange={(e) => f("ticker", e.target.value.toUpperCase())} /></div>
+              <div><label style={labelStyle}>Azienda</label><input style={inputStyle} placeholder="es. Apple Inc." value={form.companyName} onChange={(e) => f("companyName", e.target.value)} /></div>
+              <div><label style={labelStyle}>Exchange</label><input style={inputStyle} placeholder="es. NASDAQ" value={form.exchange} onChange={(e) => f("exchange", e.target.value)} /></div>
+              <div><label style={labelStyle}>Broker</label><input style={inputStyle} placeholder="es. Interactive Brokers" value={form.broker} onChange={(e) => f("broker", e.target.value)} /></div>
+              <div><label style={labelStyle}>Quantità *</label><input style={inputStyle} type="number" step="any" placeholder="0" value={form.units} onChange={(e) => f("units", e.target.value)} /></div>
+              <div><label style={labelStyle}>Prezzo Medio *</label><input style={inputStyle} type="number" step="any" placeholder="0.00" value={form.avgPrice} onChange={(e) => f("avgPrice", e.target.value)} /></div>
+              <div><label style={labelStyle}>Prezzo Attuale</label><input style={inputStyle} type="number" step="any" placeholder="0.00" value={form.currentPrice} onChange={(e) => f("currentPrice", e.target.value)} /></div>
+              <div><label style={labelStyle}>Valuta</label>
+                <select style={inputStyle} value={form.currency} onChange={(e) => f("currency", e.target.value)}>
+                  <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option>
+                </select>
+              </div>
+              <div><label style={labelStyle}>Settore</label><input style={inputStyle} placeholder="es. Technology" value={form.sector} onChange={(e) => f("sector", e.target.value)} /></div>
+              <div><label style={labelStyle}>Paese</label><input style={inputStyle} placeholder="es. USA" value={form.country} onChange={(e) => f("country", e.target.value)} /></div>
+              <div className="col-span-2"><label style={labelStyle}>Note</label><input style={inputStyle} value={form.notes} onChange={(e) => f("notes", e.target.value)} /></div>
+            </div>
+            <div className="flex gap-2 justify-end pt-2">
+              <button className="btn-ghost" onClick={() => { setShowAdd(false); setEditing(null); }}>Annulla</button>
+              <button className="btn-primary" onClick={handleSave} disabled={saving || !form.ticker || !form.units || !form.avgPrice}>
+                {saving ? "Salvo..." : editing ? "Aggiorna" : "Aggiungi"}
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Update Price Modal */}
+      {updatingPrice && (
+        <Modal title={`Aggiorna Prezzo — ${updatingPrice.ticker}`} onClose={() => setUpdatingPrice(null)}>
+          <div className="space-y-4">
+            <div>
+              <label style={labelStyle}>Prezzo Attuale ({updatingPrice.currency})</label>
+              <input style={inputStyle} type="number" step="any" placeholder="0.00" value={newPrice}
+                onChange={(e) => setNewPrice(e.target.value)} autoFocus />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button className="btn-ghost" onClick={() => setUpdatingPrice(null)}>Annulla</button>
+              <button className="btn-primary" onClick={handleUpdatePrice} disabled={saving || !newPrice}>
+                {saving ? "Salvo..." : "Aggiorna"}
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Delete Confirm */}
+      {deleting && (
+        <Modal title="Elimina Posizione" onClose={() => setDeleting(null)}>
+          <div className="space-y-4">
+            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
+              <AlertCircle size={18} style={{ color: "#f44336", flexShrink: 0, marginTop: 1 }} />
+              <p className="text-sm" style={{ color: "#bdc8f0" }}>
+                Elimina <strong style={{ color: "#d7dcec" }}>{deleting.ticker}</strong>{deleting.companyName ? ` (${deleting.companyName})` : ""}. Azione irreversibile.
+              </p>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
+              <button onClick={handleDelete} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
+                style={{ background: "rgba(244,67,54,0.15)", color: "#f44336", border: "1px solid rgba(244,67,54,0.3)" }}>
+                Elimina
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

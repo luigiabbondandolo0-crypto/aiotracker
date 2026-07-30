@@ -9,7 +9,9 @@
       "Bash(python3 \"C:/Users/luigi/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"fintech trading dashboard dark premium\" --design-system -p \"AIO Tracker\" -f markdown)",
       "Bash(python3 \"C:/Users/luigi/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"animation micro-interaction card hover modal\" --domain ux)",
       "Read(//c/Users/luigi/Documents/Downloads/**)",
-      "Bash(powershell -Command \"Expand-Archive -Path 'berry-free-react-admin-template-v51.0.zip' -DestinationPath './berry-extract' -Force\")"
+      "Bash(powershell -Command \"Expand-Archive -Path 'berry-free-react-admin-template-v51.0.zip' -DestinationPath './berry-extract' -Force\")",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: full CRUD for prop firm, trading, ETF, stocks and crypto modules *)"
     ]
   }
 }
