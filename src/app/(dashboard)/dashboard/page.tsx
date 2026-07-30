@@ -58,25 +58,26 @@ export default async function DashboardPage() {
       <div className="animate-fade-in">
         <div className="flex items-center gap-2 mb-1">
           <div className="dot-live" />
-          <span className="text-xs font-medium" style={{ color: "#10b981" }}>Live</span>
+          <span className="text-xs font-medium" style={{ color: "#00e676" }}>Live</span>
         </div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">
+        <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>
           Ciao, <span className="gradient-text-blue">{firstName}</span>
         </h1>
-        <p className="text-sm capitalize mt-0.5" style={{ color: "#475569" }}>{monthName}</p>
+        <p className="text-sm capitalize mt-0.5" style={{ color: "#8492c4" }}>{monthName}</p>
       </div>
 
-      {/* Net Worth Hero */}
+      {/* Net Worth Hero — Berry EarningCard style */}
       <div className="animate-fade-in delay-100 rounded-2xl p-6 relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.05) 100%)", border: "1px solid rgba(59,130,246,0.15)" }}>
-        <div className="absolute top-0 right-0 w-64 h-64 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.05), transparent)", transform: "translate(30%, -30%)" }} />
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#334155" }}>Net Worth Totale</p>
-        <p className="text-4xl font-bold tracking-tight text-white animate-count-up delay-200">
+        style={{ background: "linear-gradient(135deg, #5e35b1 0%, #7c4dff 100%)" }}>
+        {/* Decorative circles */}
+        <div className="absolute pointer-events-none" style={{ width: "210px", height: "210px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", top: "-80px", right: "-60px" }} />
+        <div className="absolute pointer-events-none" style={{ width: "210px", height: "210px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", top: "20px", right: "60px" }} />
+        <p className="text-xs font-semibold uppercase tracking-widest mb-2 relative" style={{ color: "rgba(255,255,255,0.7)" }}>Net Worth Totale</p>
+        <p className="text-4xl font-bold tracking-tight animate-count-up delay-200 relative" style={{ color: "white" }}>
           {formatCurrency(data.netWorth)}
         </p>
-        <div className="flex items-center gap-2 mt-3">
-          <span className="badge badge-blue">
+        <div className="flex items-center gap-2 mt-3 relative">
+          <span className="badge" style={{ background: "rgba(255,255,255,0.15)", color: "white", borderColor: "rgba(255,255,255,0.2)", fontSize: "11px" }}>
             <ArrowUpRight size={10} />
             Tutti gli asset
           </span>
@@ -85,28 +86,28 @@ export default async function DashboardPage() {
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-        <StatCard label="Prop Firm" value={formatCurrency(data.breakdown.propFirmTotal, "USD")} sub="Account attivi" accentColor="#60a5fa" delay={150} icon={<Trophy />} glowColor="blue" />
-        <StatCard label="Trading" value={formatCurrency(data.breakdown.tradingTotal, "USD")} sub="Broker personali" accentColor="#a78bfa" delay={200} icon={<TrendingUp />} glowColor="purple" />
-        <StatCard label="ETF & PAC" value={formatCurrency(data.breakdown.etfTotal)} sub="Piani accumulo" accentColor="#34d399" delay={250} icon={<BarChart2 />} glowColor="green" />
-        <StatCard label="Azioni" value={formatCurrency(data.breakdown.stocksTotal, "USD")} sub="Portfolio azionario" accentColor="#fbbf24" delay={300} icon={<LineChart />} glowColor="yellow" />
-        <StatCard label="Crypto" value={formatCurrency(data.breakdown.cryptoTotal, "USD")} sub="Holdings crypto" accentColor="#f87171" delay={350} icon={<Bitcoin />} glowColor="red" />
-        <StatCard label="Budget Mese" value={formatCurrency(data.monthlyNet)} sub="Netto disponibile" accentColor="#34d399" delay={400} icon={<Wallet />} glowColor="green" />
+        <StatCard label="Prop Firm" value={formatCurrency(data.breakdown.propFirmTotal, "USD")} sub="Account attivi" accentColor="#90caf9" delay={150} icon={<Trophy />} glowColor="blue" />
+        <StatCard label="Trading" value={formatCurrency(data.breakdown.tradingTotal, "USD")} sub="Broker personali" accentColor="#b39ddb" delay={200} icon={<TrendingUp />} glowColor="purple" />
+        <StatCard label="ETF & PAC" value={formatCurrency(data.breakdown.etfTotal)} sub="Piani accumulo" accentColor="#69f0ae" delay={250} icon={<BarChart2 />} glowColor="green" />
+        <StatCard label="Azioni" value={formatCurrency(data.breakdown.stocksTotal, "USD")} sub="Portfolio azionario" accentColor="#ffe57f" delay={300} icon={<LineChart />} glowColor="yellow" />
+        <StatCard label="Crypto" value={formatCurrency(data.breakdown.cryptoTotal, "USD")} sub="Holdings crypto" accentColor="#ef9a9a" delay={350} icon={<Bitcoin />} glowColor="red" />
+        <StatCard label="Budget Mese" value={formatCurrency(data.monthlyNet)} sub="Netto disponibile" accentColor="#69f0ae" delay={400} icon={<Wallet />} glowColor="green" />
       </div>
 
       {/* Asset Allocation */}
       <div className="card p-5 animate-fade-in delay-400">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-sm font-semibold text-white">Asset Allocation</h2>
+          <h2 className="text-sm font-semibold" style={{ color: "#d7dcec" }}>Asset Allocation</h2>
           <span className="badge badge-blue">{formatCurrency(data.netWorth)}</span>
         </div>
         <div className="space-y-4">
           {breakdown.map((item) => (
             <div key={item.label}>
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs font-medium" style={{ color: "#94a3b8" }}>{item.label}</span>
+                <span className="text-xs font-medium" style={{ color: "#bdc8f0" }}>{item.label}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs" style={{ color: "#475569" }}>{formatCurrency(item.value)}</span>
-                  <span className="text-xs font-semibold" style={{ color: "#60a5fa" }}>{item.pct.toFixed(1)}%</span>
+                  <span className="text-xs" style={{ color: "#8492c4" }}>{formatCurrency(item.value)}</span>
+                  <span className="text-xs font-semibold" style={{ color: "#90caf9" }}>{item.pct.toFixed(1)}%</span>
                 </div>
               </div>
               <ProgressBar value={item.pct} color={item.color} />
@@ -119,17 +120,17 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-2 gap-3 animate-fade-in delay-500">
         <div className="card p-4">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp size={14} className="text-emerald-400" />
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#334155" }}>Netto Mese</p>
+            <TrendingUp size={14} style={{ color: "#69f0ae" }} />
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Netto Mese</p>
           </div>
-          <p className="text-xl font-bold text-emerald-400">{formatCurrency(data.monthlyNet)}</p>
+          <p className="text-xl font-bold" style={{ color: "#69f0ae" }}>{formatCurrency(data.monthlyNet)}</p>
         </div>
         <div className="card p-4">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingDown size={14} className="text-red-400" />
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#334155" }}>Spese Mese</p>
+            <TrendingDown size={14} style={{ color: "#ef9a9a" }} />
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Spese Mese</p>
           </div>
-          <p className="text-xl font-bold text-red-400">{formatCurrency(data.monthlyExpenses)}</p>
+          <p className="text-xl font-bold" style={{ color: "#ef9a9a" }}>{formatCurrency(data.monthlyExpenses)}</p>
         </div>
       </div>
     </div>

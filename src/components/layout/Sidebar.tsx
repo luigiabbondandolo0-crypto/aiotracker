@@ -46,18 +46,18 @@ export function Sidebar() {
 
   return (
     <aside className="w-56 min-h-screen flex flex-col flex-shrink-0 animate-slide-in-left"
-      style={{ background: "#080c14", borderRight: "1px solid #1a2332" }}>
+      style={{ background: "#1a223f", borderRight: "1px solid #29314f" }}>
 
       {/* Logo */}
-      <div className="px-4 py-5" style={{ borderBottom: "1px solid #1a2332" }}>
+      <div className="px-4 py-5" style={{ borderBottom: "1px solid #29314f" }}>
         <div className="flex items-center gap-3">
           <div className="relative w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: "rgba(59,130,246,0.15)", border: "1px solid rgba(59,130,246,0.25)" }}>
-            <Zap size={14} className="text-blue-400" />
+            style={{ background: "linear-gradient(135deg, #5e35b1, #7c4dff)", boxShadow: "0 2px 8px rgba(94,53,177,0.4)" }}>
+            <Zap size={14} className="text-white" />
           </div>
           <div>
-            <p className="text-white font-semibold text-sm leading-none tracking-tight">AIO Tracker</p>
-            <p className="text-xs mt-0.5" style={{ color: "#334155" }}>Financial Hub</p>
+            <p className="font-semibold text-sm leading-none tracking-tight" style={{ color: "#d7dcec" }}>AIO Tracker</p>
+            <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>Financial Hub</p>
           </div>
         </div>
       </div>
@@ -66,8 +66,8 @@ export function Sidebar() {
       <nav className="flex-1 px-2 py-4 space-y-5 overflow-y-auto">
         {nav.map((section, si) => (
           <div key={section.label} className="animate-fade-in" style={{ animationDelay: `${si * 60}ms` }}>
-            <p className="text-xs font-semibold uppercase tracking-widest px-3 mb-1.5"
-              style={{ color: "#1e3a5f", letterSpacing: "0.1em" }}>
+            <p className="text-xs font-semibold uppercase px-3 mb-1.5"
+              style={{ color: "#8492c4", fontSize: "11px", letterSpacing: "0.1em" }}>
               {section.label}
             </p>
             <div className="space-y-0.5">
@@ -81,13 +81,14 @@ export function Sidebar() {
                     className={cn(
                       "group flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-150 cursor-pointer",
                       active
-                        ? "nav-active text-blue-400"
-                        : "text-slate-500 hover:text-slate-200 hover:bg-white/[0.03]"
+                        ? "nav-active"
+                        : "hover:bg-[#212946]"
                     )}
+                    style={active ? {} : { color: "#8492c4" }}
                   >
-                    <Icon size={15} className={active ? "text-blue-400" : "text-slate-600 group-hover:text-slate-400 transition-colors"} />
-                    <span className="font-medium">{item.label}</span>
-                    {active && <ChevronRight size={12} className="ml-auto text-blue-400/50" />}
+                    <Icon size={15} style={{ color: active ? "#90caf9" : "#8492c4" }} className="transition-colors" />
+                    <span className="font-medium" style={{ color: active ? "#90caf9" : "#bdc8f0" }}>{item.label}</span>
+                    {active && <ChevronRight size={12} className="ml-auto" style={{ color: "rgba(144,202,249,0.5)" }} />}
                   </Link>
                 );
               })}
@@ -97,26 +98,28 @@ export function Sidebar() {
       </nav>
 
       {/* User + Logout */}
-      <div className="px-2 pb-4 space-y-1" style={{ borderTop: "1px solid #1a2332", paddingTop: "12px" }}>
+      <div className="px-2 pb-4 space-y-1" style={{ borderTop: "1px solid #29314f", paddingTop: "12px" }}>
         {session?.user && (
           <div className="flex items-center gap-2.5 px-3 py-2 mb-1">
-            <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-              <span className="text-blue-400 text-xs font-bold">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+              style={{ background: "rgba(33,150,243,0.15)", border: "1px solid rgba(33,150,243,0.25)" }}>
+              <span className="text-xs font-bold" style={{ color: "#90caf9" }}>
                 {session.user.name?.[0]?.toUpperCase() ?? "U"}
               </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-slate-300 truncate">{session.user.name}</p>
-              <p className="text-xs truncate" style={{ color: "#334155" }}>{session.user.email}</p>
+              <p className="text-xs font-medium truncate" style={{ color: "#d7dcec" }}>{session.user.name}</p>
+              <p className="text-xs truncate" style={{ color: "#8492c4" }}>{session.user.email}</p>
             </div>
           </div>
         )}
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="w-full group flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-150 cursor-pointer text-slate-600 hover:text-red-400 hover:bg-red-500/5"
+          className="w-full group flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-150 cursor-pointer hover:bg-red-500/5"
+          style={{ color: "#8492c4" }}
         >
           <LogOut size={14} className="group-hover:text-red-400 transition-colors" />
-          <span className="font-medium">Logout</span>
+          <span className="font-medium group-hover:text-red-400 transition-colors">Logout</span>
         </button>
       </div>
     </aside>

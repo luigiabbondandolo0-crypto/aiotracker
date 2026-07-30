@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,9 +21,9 @@ export default function RootLayout({
   return (
     <html
       lang="it"
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
+      className={`${inter.className} h-full`}
     >
-      <body className="min-h-full bg-[#0b0f1a] text-slate-200">
+      <body className="min-h-full" style={{ background: "#111936", color: "#bdc8f0" }}>
         <Providers>{children}</Providers>
       </body>
     </html>

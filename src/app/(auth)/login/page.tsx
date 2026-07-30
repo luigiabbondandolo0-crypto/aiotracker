@@ -31,33 +31,34 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: "radial-gradient(ellipse at 60% 20%, rgba(94,53,177,0.08) 0%, #111936 60%)" }}>
       {/* Background orbs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-[0.03]"
-          style={{ background: "radial-gradient(circle, #3b82f6, transparent)", filter: "blur(60px)" }} />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-[0.03]"
-          style={{ background: "radial-gradient(circle, #8b5cf6, transparent)", filter: "blur(60px)" }} />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, #2196f3, transparent)", filter: "blur(60px)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, #7c4dff, transparent)", filter: "blur(60px)" }} />
       </div>
 
       <div className="w-full max-w-sm animate-fade-in-scale">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-4"
-            style={{ background: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.2)", boxShadow: "0 0 24px rgba(59,130,246,0.1)" }}>
-            <Zap size={20} className="text-blue-400" />
+            style={{ background: "linear-gradient(135deg, #5e35b1, #7c4dff)", boxShadow: "0 4px 16px rgba(94,53,177,0.4)" }}>
+            <Zap size={20} className="text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">AIO Tracker</h1>
-          <p className="text-sm mt-1" style={{ color: "#475569" }}>Accedi al tuo workspace finanziario</p>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>AIO Tracker</h1>
+          <p className="text-sm mt-1" style={{ color: "#8492c4" }}>Accedi al tuo workspace finanziario</p>
         </div>
 
         {/* Card */}
-        <div style={{ background: "#0d1117", border: "1px solid #1a2332", borderRadius: "20px", padding: "28px" }}>
+        <div style={{ background: "#1a223f", border: "1px solid #29314f", borderRadius: "16px", padding: "32px" }}>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#475569" }}>Email</label>
+              <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#8492c4" }}>Email</label>
               <div className="relative">
-                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" />
+                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#8492c4" }} />
                 <input
                   type="email"
                   value={email}
@@ -70,9 +71,9 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#475569" }}>Password</label>
+              <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#8492c4" }}>Password</label>
               <div className="relative">
-                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" />
+                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#8492c4" }} />
                 <input
                   type="password"
                   value={password}
@@ -86,9 +87,9 @@ export default function LoginPage() {
 
             {error && (
               <div className="flex items-center gap-2 px-4 py-3 rounded-xl animate-fade-in"
-                style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
-                <AlertCircle size={14} className="text-red-400 flex-shrink-0" />
-                <p className="text-red-400 text-sm">{error}</p>
+                style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
+                <AlertCircle size={14} className="flex-shrink-0" style={{ color: "#ef9a9a" }} />
+                <p className="text-sm" style={{ color: "#ef9a9a" }}>{error}</p>
               </div>
             )}
 
@@ -105,9 +106,9 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-sm mt-5" style={{ color: "#334155" }}>
+        <p className="text-center text-sm mt-5" style={{ color: "#8492c4" }}>
           Non hai un account?{" "}
-          <Link href="/register" className="text-blue-400 hover:text-blue-300 transition font-medium">
+          <Link href="/register" className="font-medium transition" style={{ color: "#90caf9" }}>
             Registrati gratis
           </Link>
         </p>

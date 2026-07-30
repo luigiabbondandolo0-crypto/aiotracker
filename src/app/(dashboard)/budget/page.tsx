@@ -29,11 +29,11 @@ interface Allocation { category: string; percentage: number; }
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const CATEGORIES = [
-  { key: "SPESE_NECESSARIE",  label: "Spese Necessarie",  Icon: Home,         color: "#60a5fa", bg: "rgba(59,130,246,0.08)",  border: "rgba(59,130,246,0.2)",  bar: "blue" as const },
-  { key: "SPESE_GIORNALIERE", label: "Spese Giornaliere", Icon: ShoppingCart, color: "#a78bfa", bg: "rgba(139,92,246,0.08)", border: "rgba(139,92,246,0.2)",  bar: "purple" as const },
-  { key: "INVESTIMENTI",      label: "Investimenti",      Icon: BarChart2,    color: "#34d399", bg: "rgba(16,185,129,0.08)", border: "rgba(16,185,129,0.2)",  bar: "green" as const },
-  { key: "FONDO_EMERGENZA",   label: "Fondo Emergenza",   Icon: Shield,       color: "#fbbf24", bg: "rgba(245,158,11,0.08)", border: "rgba(245,158,11,0.2)",  bar: "yellow" as const },
-  { key: "LIQUIDITA",         label: "Liquidità",         Icon: Droplets,     color: "#22d3ee", bg: "rgba(6,182,212,0.08)",  border: "rgba(6,182,212,0.2)",   bar: "blue" as const },
+  { key: "SPESE_NECESSARIE",  label: "Spese Necessarie",  Icon: Home,         color: "#90caf9", bg: "rgba(33,150,243,0.08)",  border: "rgba(33,150,243,0.2)",  bar: "blue" as const },
+  { key: "SPESE_GIORNALIERE", label: "Spese Giornaliere", Icon: ShoppingCart, color: "#b39ddb", bg: "rgba(124,77,255,0.08)",  border: "rgba(124,77,255,0.2)",  bar: "purple" as const },
+  { key: "INVESTIMENTI",      label: "Investimenti",      Icon: BarChart2,    color: "#69f0ae", bg: "rgba(0,230,118,0.08)",   border: "rgba(0,230,118,0.2)",   bar: "green" as const },
+  { key: "FONDO_EMERGENZA",   label: "Fondo Emergenza",   Icon: Shield,       color: "#ffe57f", bg: "rgba(255,193,7,0.08)",   border: "rgba(255,193,7,0.2)",   bar: "yellow" as const },
+  { key: "LIQUIDITA",         label: "Liquidità",         Icon: Droplets,     color: "#80deea", bg: "rgba(0,188,212,0.08)",   border: "rgba(0,188,212,0.2)",   bar: "blue" as const },
 ];
 
 const PALETTE = [
@@ -147,13 +147,13 @@ export default function BudgetPage() {
       {/* Header */}
       <div className="flex items-center justify-between animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Budget & Spese</h1>
-          <p className="text-sm capitalize mt-0.5" style={{ color: "#475569" }}>{monthName}</p>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>Budget & Spese</h1>
+          <p className="text-sm capitalize mt-0.5" style={{ color: "#8492c4" }}>{monthName}</p>
         </div>
-        <div className="flex items-center gap-1 rounded-xl p-1" style={{ background: "#0d1117", border: "1px solid #1a2332" }}>
-          <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition cursor-pointer"><ChevronLeft size={14} /></button>
-          <span className="text-sm font-medium text-slate-300 capitalize px-2 min-w-[130px] text-center">{monthName}</span>
-          <button onClick={nextMonth} className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition cursor-pointer"><ChevronRight size={14} /></button>
+        <div className="flex items-center gap-1 rounded-xl p-1" style={{ background: "#212946", border: "1px solid #29314f" }}>
+          <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center rounded-lg transition cursor-pointer hover:bg-white/5" style={{ color: "#8492c4" }}><ChevronLeft size={14} /></button>
+          <span className="text-sm font-medium capitalize px-2 min-w-[130px] text-center" style={{ color: "#bdc8f0" }}>{monthName}</span>
+          <button onClick={nextMonth} className="w-8 h-8 flex items-center justify-center rounded-lg transition cursor-pointer hover:bg-white/5" style={{ color: "#8492c4" }}><ChevronRight size={14} /></button>
         </div>
       </div>
 
@@ -168,13 +168,13 @@ export default function BudgetPage() {
           {/* KPI */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { label: "Entrate Lorde", value: formatCurrency(totalGross), color: "#e2e8f0", border: "#1a2332" },
-              { label: "Tasse",         value: `-${formatCurrency(totalTax)}`, color: "#f87171", border: "rgba(239,68,68,0.15)" },
-              { label: "Netto",         value: formatCurrency(totalNet),   color: "#34d399", border: "rgba(16,185,129,0.15)" },
-              { label: "Spese",         value: formatCurrency(totalExpenses), color: totalExpenses > totalNet ? "#f87171" : "#fb923c", border: "#1a2332" },
+              { label: "Entrate Lorde", value: formatCurrency(totalGross), color: "#d7dcec", border: "#29314f" },
+              { label: "Tasse",         value: `-${formatCurrency(totalTax)}`, color: "#ef9a9a", border: "rgba(244,67,54,0.2)" },
+              { label: "Netto",         value: formatCurrency(totalNet),   color: "#69f0ae", border: "rgba(0,230,118,0.2)" },
+              { label: "Spese",         value: formatCurrency(totalExpenses), color: totalExpenses > totalNet ? "#ef9a9a" : "#ffe57f", border: "#29314f" },
             ].map((k, i) => (
               <div key={k.label} className="card p-4 animate-fade-in" style={{ animationDelay: `${i * 60}ms`, borderColor: k.border }}>
-                <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#334155" }}>{k.label}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>{k.label}</p>
                 <p className="text-xl font-bold" style={{ color: k.color }}>{k.value}</p>
               </div>
             ))}
@@ -186,10 +186,10 @@ export default function BudgetPage() {
             const positive = saldo >= 0;
             return (
               <div className="rounded-2xl p-5 animate-fade-in delay-200"
-                style={{ background: positive ? "rgba(16,185,129,0.05)" : "rgba(239,68,68,0.05)", border: `1px solid ${positive ? "rgba(16,185,129,0.15)" : "rgba(239,68,68,0.15)"}` }}>
-                <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#334155" }}>Saldo del Mese</p>
-                <p className="text-3xl font-bold" style={{ color: positive ? "#34d399" : "#f87171" }}>{formatCurrency(saldo)}</p>
-                <p className="text-xs mt-2" style={{ color: "#475569" }}>Netto {formatCurrency(totalNet)} − Spese {formatCurrency(totalExpenses)}</p>
+                style={{ background: positive ? "rgba(0,230,118,0.06)" : "rgba(244,67,54,0.06)", border: `1px solid ${positive ? "rgba(0,230,118,0.2)" : "rgba(244,67,54,0.2)"}` }}>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#8492c4" }}>Saldo del Mese</p>
+                <p className="text-3xl font-bold" style={{ color: positive ? "#69f0ae" : "#ef9a9a" }}>{formatCurrency(saldo)}</p>
+                <p className="text-xs mt-2" style={{ color: "#8492c4" }}>Netto {formatCurrency(totalNet)} − Spese {formatCurrency(totalExpenses)}</p>
               </div>
             );
           })()}
@@ -197,7 +197,7 @@ export default function BudgetPage() {
           {/* Allocazione */}
           {allocations.some((a) => a.percentage > 0) && totalNet > 0 && (
             <div className="card p-5 animate-fade-in delay-300">
-              <h3 className="text-sm font-semibold text-white mb-4">Allocazione Budget</h3>
+              <h3 className="text-sm font-semibold mb-4" style={{ color: "#d7dcec" }}>Allocazione Budget</h3>
               <div className="space-y-4">
                 {CATEGORIES.map((cat) => {
                   const alloc = allocations.find((a) => a.category === cat.key);
@@ -211,12 +211,12 @@ export default function BudgetPage() {
                       <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center gap-2">
                           <cat.Icon size={13} style={{ color: cat.color }} />
-                          <span className="text-xs font-medium" style={{ color: "#94a3b8" }}>{cat.label}</span>
+                          <span className="text-xs font-medium" style={{ color: "#bdc8f0" }}>{cat.label}</span>
                           <span className="badge" style={{ fontSize: "10px", padding: "1px 6px", background: `${cat.color}15`, color: cat.color, borderColor: `${cat.color}30` }}>{pct}%</span>
                         </div>
                         <div className="text-right">
-                          <span className="text-xs font-semibold" style={{ color: usedPct >= 100 ? "#f87171" : "#e2e8f0" }}>{formatCurrency(spent)}</span>
-                          <span className="text-xs ml-1" style={{ color: "#334155" }}>/ {formatCurrency(allocated)}</span>
+                          <span className="text-xs font-semibold" style={{ color: usedPct >= 100 ? "#ef9a9a" : "#d7dcec" }}>{formatCurrency(spent)}</span>
+                          <span className="text-xs ml-1" style={{ color: "#8492c4" }}>/ {formatCurrency(allocated)}</span>
                         </div>
                       </div>
                       <ProgressBar value={usedPct} color={barColor} />
@@ -235,23 +235,23 @@ export default function BudgetPage() {
           {/* Fonti */}
           <div className="card p-5">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-semibold text-white">Fonti di Reddito</h3>
+              <h3 className="text-sm font-semibold" style={{ color: "#d7dcec" }}>Fonti di Reddito</h3>
               <button onClick={() => setModal("source")} className="btn-primary flex items-center gap-1.5" style={{ padding: "7px 14px", fontSize: "12px" }}>
                 <Plus size={12} /> Aggiungi
               </button>
             </div>
             {sources.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-sm mb-1" style={{ color: "#475569" }}>Nessuna fonte</p>
-                <p className="text-xs" style={{ color: "#334155" }}>Crea la prima fonte di reddito</p>
+                <p className="text-sm mb-1" style={{ color: "#8492c4" }}>Nessuna fonte</p>
+                <p className="text-xs" style={{ color: "#8492c4" }}>Crea la prima fonte di reddito</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {sources.map((s, i) => (
-                  <div key={s.id} className="rounded-xl p-3 animate-fade-in" style={{ animationDelay: `${i * 50}ms`, background: "#080c14", border: "1px solid #1a2332" }}>
+                  <div key={s.id} className="rounded-xl p-3 animate-fade-in" style={{ animationDelay: `${i * 50}ms`, background: "#212946", border: "1px solid #29314f" }}>
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: s.color, boxShadow: `0 0 6px ${s.color}60` }} />
-                      <span className="text-sm font-medium text-white truncate">{s.name}</span>
+                      <span className="text-sm font-medium truncate" style={{ color: "#d7dcec" }}>{s.name}</span>
                     </div>
                     {s.isTaxed
                       ? <span className="badge badge-red" style={{ fontSize: "10px" }}>Tassato {s.taxRate}%</span>
@@ -265,43 +265,43 @@ export default function BudgetPage() {
           {/* Entrate lista */}
           <div className="card p-5">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-semibold text-white">Entrate <span className="text-slate-600 font-normal capitalize">· {monthName}</span></h3>
+              <h3 className="text-sm font-semibold" style={{ color: "#d7dcec" }}>Entrate <span className="font-normal capitalize" style={{ color: "#8492c4" }}>· {monthName}</span></h3>
               <button onClick={() => setModal("entry")} className="btn-primary flex items-center gap-1.5" style={{ padding: "7px 14px", fontSize: "12px" }}>
                 <Plus size={12} /> Aggiungi
               </button>
             </div>
             {entries.length === 0 ? (
               <div className="text-center py-8">
-                <TrendingUp size={28} className="mx-auto mb-2" style={{ color: "#1e3a5f" }} />
-                <p className="text-sm" style={{ color: "#475569" }}>Nessuna entrata per questo mese</p>
+                <TrendingUp size={28} className="mx-auto mb-2" style={{ color: "#29314f" }} />
+                <p className="text-sm" style={{ color: "#8492c4" }}>Nessuna entrata per questo mese</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {entries.map((e, i) => (
                   <div key={e.id} className="group flex items-center gap-3 rounded-xl p-3 transition-all duration-150 animate-fade-in"
-                    style={{ animationDelay: `${i * 60}ms`, background: "#080c14", border: "1px solid #1a2332" }}
-                    onMouseEnter={(el) => (el.currentTarget.style.borderColor = "#2d3f55")}
-                    onMouseLeave={(el) => (el.currentTarget.style.borderColor = "#1a2332")}>
+                    style={{ animationDelay: `${i * 60}ms`, background: "#212946", border: "1px solid #29314f" }}
+                    onMouseEnter={(el) => (el.currentTarget.style.borderColor = "#3d4f7c")}
+                    onMouseLeave={(el) => (el.currentTarget.style.borderColor = "#29314f")}>
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: e.source.color, boxShadow: `0 0 6px ${e.source.color}60` }} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white">{e.source.name}</p>
-                      {e.description && <p className="text-xs truncate" style={{ color: "#475569" }}>{e.description}</p>}
+                      <p className="text-sm font-medium" style={{ color: "#d7dcec" }}>{e.source.name}</p>
+                      {e.description && <p className="text-xs truncate" style={{ color: "#8492c4" }}>{e.description}</p>}
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-semibold text-white">{formatCurrency(e.grossAmount)}</p>
-                      {e.taxAmount > 0 && <p className="text-xs text-red-400">-{formatCurrency(e.taxAmount)}</p>}
-                      {e.taxAmount > 0 && <p className="text-xs font-medium text-emerald-400">{formatCurrency(e.netAmount)} netto</p>}
+                      <p className="text-sm font-semibold" style={{ color: "#d7dcec" }}>{formatCurrency(e.grossAmount)}</p>
+                      {e.taxAmount > 0 && <p className="text-xs" style={{ color: "#ef9a9a" }}>-{formatCurrency(e.taxAmount)}</p>}
+                      {e.taxAmount > 0 && <p className="text-xs font-medium" style={{ color: "#69f0ae" }}>{formatCurrency(e.netAmount)} netto</p>}
                     </div>
-                    <button onClick={() => deleteEntry(e.id)} className="opacity-0 group-hover:opacity-100 w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition cursor-pointer">
+                    <button onClick={() => deleteEntry(e.id)} className="opacity-0 group-hover:opacity-100 w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-500/10 transition cursor-pointer" style={{ color: "#8492c4" }}>
                       <Trash2 size={13} />
                     </button>
                   </div>
                 ))}
-                <div className="flex justify-between items-center pt-3" style={{ borderTop: "1px solid #1a2332" }}>
-                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#334155" }}>Totale</span>
+                <div className="flex justify-between items-center pt-3" style={{ borderTop: "1px solid #29314f" }}>
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Totale</span>
                   <div className="text-right">
-                    <p className="text-sm font-bold text-white">{formatCurrency(totalGross)} lordo</p>
-                    {totalTax > 0 && <><p className="text-xs text-red-400">-{formatCurrency(totalTax)} tasse</p><p className="text-sm font-bold text-emerald-400">{formatCurrency(totalNet)} netto</p></>}
+                    <p className="text-sm font-bold" style={{ color: "#d7dcec" }}>{formatCurrency(totalGross)} lordo</p>
+                    {totalTax > 0 && <><p className="text-xs" style={{ color: "#ef9a9a" }}>-{formatCurrency(totalTax)} tasse</p><p className="text-sm font-bold" style={{ color: "#69f0ae" }}>{formatCurrency(totalNet)} netto</p></>}
                   </div>
                 </div>
               </div>
@@ -315,15 +315,15 @@ export default function BudgetPage() {
         <div className="space-y-4 animate-fade-in-scale">
           <div className="card p-5">
             <div className="flex justify-between items-center mb-5">
-              <h3 className="text-sm font-semibold text-white">Spese <span className="text-slate-600 font-normal capitalize">· {monthName}</span></h3>
+              <h3 className="text-sm font-semibold" style={{ color: "#d7dcec" }}>Spese <span className="font-normal capitalize" style={{ color: "#8492c4" }}>· {monthName}</span></h3>
               <button onClick={() => setModal("expense")} className="btn-primary flex items-center gap-1.5" style={{ padding: "7px 14px", fontSize: "12px" }}>
                 <Plus size={12} /> Aggiungi
               </button>
             </div>
             {expenses.length === 0 ? (
               <div className="text-center py-8">
-                <ShoppingCart size={28} className="mx-auto mb-2" style={{ color: "#1e3a5f" }} />
-                <p className="text-sm" style={{ color: "#475569" }}>Nessuna spesa per questo mese</p>
+                <ShoppingCart size={28} className="mx-auto mb-2" style={{ color: "#29314f" }} />
+                <p className="text-sm" style={{ color: "#8492c4" }}>Nessuna spesa per questo mese</p>
               </div>
             ) : (
               <>
@@ -343,15 +343,15 @@ export default function BudgetPage() {
                       <div className="space-y-1.5">
                         {catExp.map((e, i) => (
                           <div key={e.id} className="group flex items-center gap-3 rounded-xl p-3 animate-fade-in"
-                            style={{ animationDelay: `${i * 50}ms`, background: "#080c14", border: "1px solid #1a2332" }}
+                            style={{ animationDelay: `${i * 50}ms`, background: "#212946", border: "1px solid #29314f" }}
                             onMouseEnter={(el) => (el.currentTarget.style.borderColor = "#2d3f55")}
-                            onMouseLeave={(el) => (el.currentTarget.style.borderColor = "#1a2332")}>
+                            onMouseLeave={(el) => (el.currentTarget.style.borderColor = "#29314f")}>
                             <div className="flex-1">
-                              <p className="text-sm text-white">{e.description || "—"}</p>
-                              <p className="text-xs" style={{ color: "#334155" }}>{new Date(e.date).toLocaleDateString("it-IT")}</p>
+                              <p className="text-sm" style={{ color: "#d7dcec" }}>{e.description || "—"}</p>
+                              <p className="text-xs" style={{ color: "#8492c4" }}>{new Date(e.date).toLocaleDateString("it-IT")}</p>
                             </div>
-                            <span className="text-sm font-semibold text-white">{formatCurrency(e.amount)}</span>
-                            <button onClick={() => deleteExpense(e.id)} className="opacity-0 group-hover:opacity-100 w-7 h-7 flex items-center justify-center rounded-lg text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition cursor-pointer">
+                            <span className="text-sm font-semibold" style={{ color: "#d7dcec" }}>{formatCurrency(e.amount)}</span>
+                            <button onClick={() => deleteExpense(e.id)} className="opacity-0 group-hover:opacity-100 w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-500/10 transition cursor-pointer" style={{ color: "#8492c4" }}>
                               <Trash2 size={13} />
                             </button>
                           </div>
@@ -360,9 +360,9 @@ export default function BudgetPage() {
                     </div>
                   );
                 })}
-                <div className="flex justify-between items-center pt-3" style={{ borderTop: "1px solid #1a2332" }}>
-                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#334155" }}>Totale spese</span>
-                  <span className="text-sm font-bold text-white">{formatCurrency(totalExpenses)}</span>
+                <div className="flex justify-between items-center pt-3" style={{ borderTop: "1px solid #29314f" }}>
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Totale spese</span>
+                  <span className="text-sm font-bold" style={{ color: "#d7dcec" }}>{formatCurrency(totalExpenses)}</span>
                 </div>
               </>
             )}
@@ -375,8 +375,8 @@ export default function BudgetPage() {
         <div className="space-y-4 animate-fade-in-scale">
           <div className="card p-5">
             <div className="mb-4">
-              <h3 className="text-sm font-semibold text-white">Allocazione Budget</h3>
-              <p className="text-xs mt-0.5" style={{ color: "#334155" }}>Distribuisci il netto mensile · {formatCurrency(totalNet)}</p>
+              <h3 className="text-sm font-semibold" style={{ color: "#d7dcec" }}>Allocazione Budget</h3>
+              <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>Distribuisci il netto mensile · {formatCurrency(totalNet)}</p>
             </div>
             <div className="space-y-3">
               {CATEGORIES.map((cat, i) => {
@@ -391,7 +391,7 @@ export default function BudgetPage() {
                         <span className="text-sm font-medium" style={{ color: cat.color }}>{cat.label}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-sm font-bold text-white">{formatCurrency(amount)}</span>
+                        <span className="text-sm font-bold" style={{ color: "#d7dcec" }}>{formatCurrency(amount)}</span>
                         <span className="text-xs ml-1.5 font-bold" style={{ color: cat.color }}>{pct}%</span>
                       </div>
                     </div>
@@ -407,9 +407,9 @@ export default function BudgetPage() {
             </div>
 
             <div className="mt-4 flex justify-between items-center p-3 rounded-xl"
-              style={{ background: Math.round(allocTotal) === 100 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)", border: `1px solid ${Math.round(allocTotal) === 100 ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)"}` }}>
-              <span className="text-sm font-medium" style={{ color: "#94a3b8" }}>Totale allocato</span>
-              <span className="text-lg font-bold" style={{ color: Math.round(allocTotal) === 100 ? "#34d399" : "#f87171" }}>{allocTotal.toFixed(0)}%</span>
+              style={{ background: Math.round(allocTotal) === 100 ? "rgba(0,230,118,0.08)" : "rgba(244,67,54,0.08)", border: `1px solid ${Math.round(allocTotal) === 100 ? "rgba(0,230,118,0.2)" : "rgba(244,67,54,0.2)"}` }}>
+              <span className="text-sm font-medium" style={{ color: "#bdc8f0" }}>Totale allocato</span>
+              <span className="text-lg font-bold" style={{ color: Math.round(allocTotal) === 100 ? "#69f0ae" : "#ef9a9a" }}>{allocTotal.toFixed(0)}%</span>
             </div>
 
             {Math.round(allocTotal) !== 100 && (
@@ -433,42 +433,42 @@ export default function BudgetPage() {
         <div className="space-y-4 animate-fade-in-scale">
           <div className="grid grid-cols-3 gap-3">
             {[
-              { label: "Lordo", value: formatCurrency(totalGross), color: "#e2e8f0" },
-              { label: "Tasse", value: `-${formatCurrency(totalTax)}`, color: "#f87171" },
-              { label: "Netto", value: formatCurrency(totalNet), color: "#34d399" },
+              { label: "Lordo", value: formatCurrency(totalGross), color: "#d7dcec" },
+              { label: "Tasse", value: `-${formatCurrency(totalTax)}`, color: "#ef9a9a" },
+              { label: "Netto", value: formatCurrency(totalNet), color: "#69f0ae" },
             ].map((k, i) => (
               <div key={k.label} className="card p-4 animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
-                <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "#334155" }}>{k.label}</p>
+                <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "#8492c4" }}>{k.label}</p>
                 <p className="text-lg font-bold" style={{ color: k.color }}>{k.value}</p>
               </div>
             ))}
           </div>
 
           <div className="card p-5 animate-fade-in delay-200">
-            <h3 className="text-sm font-semibold text-white mb-4">Dettaglio per Fonte</h3>
+            <h3 className="text-sm font-semibold mb-4" style={{ color: "#d7dcec" }}>Dettaglio per Fonte</h3>
             {entries.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-sm" style={{ color: "#475569" }}>Nessuna entrata per questo mese</p>
+                <p className="text-sm" style={{ color: "#8492c4" }}>Nessuna entrata per questo mese</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {entries.map((e, i) => (
-                  <div key={e.id} className="rounded-xl p-4 animate-fade-in" style={{ animationDelay: `${i * 60}ms`, background: "#080c14", border: "1px solid #1a2332" }}>
+                  <div key={e.id} className="rounded-xl p-4 animate-fade-in" style={{ animationDelay: `${i * 60}ms`, background: "#212946", border: "1px solid #29314f" }}>
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full mt-1 flex-shrink-0" style={{ background: e.source.color, boxShadow: `0 0 6px ${e.source.color}60` }} />
                         <div>
-                          <p className="text-sm font-medium text-white">{e.source.name}</p>
-                          {e.description && <p className="text-xs" style={{ color: "#475569" }}>{e.description}</p>}
-                          <p className="text-xs" style={{ color: "#334155" }}>{new Date(e.date).toLocaleDateString("it-IT")}</p>
+                          <p className="text-sm font-medium" style={{ color: "#d7dcec" }}>{e.source.name}</p>
+                          {e.description && <p className="text-xs" style={{ color: "#8492c4" }}>{e.description}</p>}
+                          <p className="text-xs" style={{ color: "#8492c4" }}>{new Date(e.date).toLocaleDateString("it-IT")}</p>
                         </div>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <p className="text-sm text-white">Lordo: <span className="font-semibold">{formatCurrency(e.grossAmount)}</span></p>
+                        <p className="text-sm" style={{ color: "#d7dcec" }}>Lordo: <span className="font-semibold">{formatCurrency(e.grossAmount)}</span></p>
                         {e.taxAmount > 0
                           ? <>
-                              <p className="text-xs text-red-400">Tasse ({e.taxRate}%): -{formatCurrency(e.taxAmount)}</p>
-                              <p className="text-sm font-bold text-emerald-400">Netto: {formatCurrency(e.netAmount)}</p>
+                              <p className="text-xs" style={{ color: "#ef9a9a" }}>Tasse ({e.taxRate}%): -{formatCurrency(e.taxAmount)}</p>
+                              <p className="text-sm font-bold" style={{ color: "#69f0ae" }}>Netto: {formatCurrency(e.netAmount)}</p>
                             </>
                           : <p className="badge badge-green text-xs mt-1">Non tassato</p>
                         }
@@ -478,11 +478,11 @@ export default function BudgetPage() {
                 ))}
                 {totalTax > 0 && (
                   <div className="flex items-center gap-3 mt-3 p-4 rounded-xl animate-fade-in"
-                    style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)" }}>
-                    <AlertTriangle size={16} className="text-red-400 flex-shrink-0" />
+                    style={{ background: "rgba(244,67,54,0.06)", border: "1px solid rgba(244,67,54,0.2)" }}>
+                    <AlertTriangle size={16} className="flex-shrink-0" style={{ color: "#ef9a9a" }} />
                     <div>
-                      <p className="text-sm font-semibold text-red-400">Da accantonare per le tasse</p>
-                      <p className="text-xl font-bold text-red-300 mt-0.5">{formatCurrency(totalTax)}</p>
+                      <p className="text-sm font-semibold" style={{ color: "#ef9a9a" }}>Da accantonare per le tasse</p>
+                      <p className="text-xl font-bold mt-0.5" style={{ color: "#ef9a9a" }}>{formatCurrency(totalTax)}</p>
                     </div>
                   </div>
                 )}
@@ -498,40 +498,40 @@ export default function BudgetPage() {
       <Modal open={modal === "source"} onClose={() => setModal(null)} title="Nuova Fonte di Reddito">
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Nome</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Nome</label>
             <input value={sourceForm.name} onChange={(e) => setSourceForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="es. Stipendio, Prop Firm FTMO, Stripe..." className="input-dark" />
           </div>
           <div className="flex items-center gap-3 p-3 rounded-xl cursor-pointer"
-            style={{ background: "#080c14", border: "1px solid #1a2332" }}
+            style={{ background: "#212946", border: "1px solid #29314f" }}
             onClick={() => setSourceForm((f) => ({ ...f, isTaxed: !f.isTaxed }))}>
-            <div className={`w-10 h-5 rounded-full transition-all duration-200 flex items-center ${sourceForm.isTaxed ? "bg-blue-500 justify-end" : "bg-slate-700 justify-start"}`}>
+            <div className={`w-10 h-5 rounded-full transition-all duration-200 flex items-center ${sourceForm.isTaxed ? "justify-end" : "justify-start"}`} style={{ background: sourceForm.isTaxed ? "#2196f3" : "#29314f" }}>
               <div className="w-4 h-4 bg-white rounded-full mx-0.5 shadow transition-all" />
             </div>
-            <span className="text-sm text-slate-300">Reddito tassato</span>
+            <span className="text-sm" style={{ color: "#bdc8f0" }}>Reddito tassato</span>
           </div>
           {sourceForm.isTaxed && (
             <div className="animate-fade-in">
-              <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Aliquota fiscale (%)</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Aliquota fiscale (%)</label>
               <input type="number" min={0} max={100} value={sourceForm.taxRate}
                 onChange={(e) => setSourceForm((f) => ({ ...f, taxRate: Number(e.target.value) }))}
                 className="input-dark" />
               {sourceForm.taxRate > 0 && (
-                <div className="mt-2 p-3 rounded-xl animate-fade-in" style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
-                  <p className="text-xs" style={{ color: "#94a3b8" }}>Su <span className="text-white font-semibold">€1.000</span> lordi:</p>
-                  <p className="text-xs text-red-400 mt-0.5">Tasse: -{formatCurrency(1000 * sourceForm.taxRate / 100)}</p>
-                  <p className="text-sm font-bold text-emerald-400">Netto: {formatCurrency(1000 * (1 - sourceForm.taxRate / 100))}</p>
+                <div className="mt-2 p-3 rounded-xl animate-fade-in" style={{ background: "rgba(244,67,54,0.06)", border: "1px solid rgba(244,67,54,0.15)" }}>
+                  <p className="text-xs" style={{ color: "#bdc8f0" }}>Su <span className="font-semibold" style={{ color: "#d7dcec" }}>€1.000</span> lordi:</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#ef9a9a" }}>Tasse: -{formatCurrency(1000 * sourceForm.taxRate / 100)}</p>
+                  <p className="text-sm font-bold" style={{ color: "#69f0ae" }}>Netto: {formatCurrency(1000 * (1 - sourceForm.taxRate / 100))}</p>
                 </div>
               )}
             </div>
           )}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Colore</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Colore</label>
             <div className="flex gap-2 flex-wrap">
               {PALETTE.map((c) => (
                 <button key={c} onClick={() => setSourceForm((f) => ({ ...f, color: c }))}
                   className="w-7 h-7 rounded-full cursor-pointer transition-all duration-150"
-                  style={{ background: c, boxShadow: sourceForm.color === c ? `0 0 0 2px #080c14, 0 0 0 4px ${c}` : "none" }} />
+                  style={{ background: c, boxShadow: sourceForm.color === c ? `0 0 0 2px #1a223f, 0 0 0 4px ${c}` : "none" }} />
               ))}
             </div>
           </div>
@@ -548,9 +548,9 @@ export default function BudgetPage() {
       <Modal open={modal === "entry"} onClose={() => setModal(null)} title="Nuova Entrata">
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Fonte</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Fonte</label>
             {sources.length === 0 ? (
-              <p className="text-sm p-3 rounded-xl" style={{ color: "#475569", background: "#080c14", border: "1px solid #1a2332" }}>
+              <p className="text-sm p-3 rounded-xl" style={{ color: "#8492c4", background: "#212946", border: "1px solid #29314f" }}>
                 Prima crea una fonte di reddito nel tab Entrate.
               </p>
             ) : (
@@ -562,25 +562,25 @@ export default function BudgetPage() {
             )}
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Importo lordo (€)</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Importo lordo (€)</label>
             <input type="number" min={0} value={entryForm.grossAmount}
               onChange={(e) => setEntryForm((f) => ({ ...f, grossAmount: e.target.value }))}
               placeholder="0.00" className="input-dark" />
             {previewG > 0 && previewSrc && (
-              <div className="mt-2 p-3 rounded-xl animate-fade-in" style={{ background: previewT > 0 ? "rgba(239,68,68,0.06)" : "rgba(16,185,129,0.06)", border: `1px solid ${previewT > 0 ? "rgba(239,68,68,0.15)" : "rgba(16,185,129,0.15)"}` }}>
+              <div className="mt-2 p-3 rounded-xl animate-fade-in" style={{ background: previewT > 0 ? "rgba(244,67,54,0.06)" : "rgba(0,230,118,0.06)", border: `1px solid ${previewT > 0 ? "rgba(244,67,54,0.15)" : "rgba(0,230,118,0.15)"}` }}>
                 {previewT > 0
-                  ? <><p className="text-xs text-red-400">Tasse ({previewSrc.taxRate}%): -{formatCurrency(previewT)}</p><p className="text-sm font-bold text-emerald-400">Netto: {formatCurrency(previewN)}</p></>
-                  : <p className="text-sm font-bold text-emerald-400">Non tassato → netto {formatCurrency(previewG)}</p>
+                  ? <><p className="text-xs" style={{ color: "#ef9a9a" }}>Tasse ({previewSrc.taxRate}%): -{formatCurrency(previewT)}</p><p className="text-sm font-bold" style={{ color: "#69f0ae" }}>Netto: {formatCurrency(previewN)}</p></>
+                  : <p className="text-sm font-bold" style={{ color: "#69f0ae" }}>Non tassato → netto {formatCurrency(previewG)}</p>
                 }
               </div>
             )}
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Data</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Data</label>
             <input type="date" value={entryForm.date} onChange={(e) => setEntryForm((f) => ({ ...f, date: e.target.value }))} className="input-dark" />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Descrizione (opzionale)</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Descrizione (opzionale)</label>
             <input value={entryForm.description} onChange={(e) => setEntryForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="es. Payout FTMO, stipendio marzo..." className="input-dark" />
           </div>
@@ -597,14 +597,14 @@ export default function BudgetPage() {
       <Modal open={modal === "expense"} onClose={() => setModal(null)} title="Nuova Spesa">
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Categoria</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Categoria</label>
             <div className="space-y-1.5">
               {CATEGORIES.map((cat) => (
                 <button key={cat.key} onClick={() => setExpenseForm((f) => ({ ...f, category: cat.key }))}
                   className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-all duration-150 cursor-pointer"
                   style={expenseForm.category === cat.key
                     ? { background: cat.bg, border: `1px solid ${cat.border}`, color: cat.color }
-                    : { background: "#080c14", border: "1px solid #1a2332", color: "#475569" }}>
+                    : { background: "#212946", border: "1px solid #29314f", color: "#8492c4" }}>
                   <cat.Icon size={14} />
                   {cat.label}
                 </button>
@@ -612,18 +612,18 @@ export default function BudgetPage() {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Importo (€)</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Importo (€)</label>
             <input type="number" min={0} value={expenseForm.amount}
               onChange={(e) => setExpenseForm((f) => ({ ...f, amount: e.target.value }))}
               placeholder="0.00" className="input-dark" />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Descrizione</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Descrizione</label>
             <input value={expenseForm.description} onChange={(e) => setExpenseForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="es. Affitto, spesa supermercato..." className="input-dark" />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>Data</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8492c4" }}>Data</label>
             <input type="date" value={expenseForm.date} onChange={(e) => setExpenseForm((f) => ({ ...f, date: e.target.value }))} className="input-dark" />
           </div>
           <div className="flex gap-2 pt-1">

@@ -14,7 +14,7 @@ interface TabBarProps<T extends string> {
 
 export function TabBar<T extends string>({ tabs, active, onChange }: TabBarProps<T>) {
   return (
-    <div className="flex gap-1 p-1 rounded-xl" style={{ background: "#0d1117", border: "1px solid #1a2332" }}>
+    <div className="flex gap-1 p-1 rounded-xl" style={{ background: "#212946", border: "1px solid #29314f" }}>
       {tabs.map((tab) => (
         <button
           key={tab.key}
@@ -23,20 +23,19 @@ export function TabBar<T extends string>({ tabs, active, onChange }: TabBarProps
           style={
             active === tab.key
               ? {
-                  background: "rgba(59,130,246,0.15)",
-                  color: "#60a5fa",
-                  border: "1px solid rgba(59,130,246,0.2)",
-                  boxShadow: "0 0 12px rgba(59,130,246,0.1)",
+                  background: "rgba(33,150,243,0.15)",
+                  color: "#90caf9",
+                  border: "1px solid rgba(33,150,243,0.25)",
                 }
-              : { color: "#475569", border: "1px solid transparent" }
+              : { color: "#8492c4", border: "1px solid transparent" }
           }
           onMouseEnter={(e) => {
             if (active !== tab.key)
-              (e.currentTarget as HTMLButtonElement).style.color = "#94a3b8";
+              (e.currentTarget as HTMLButtonElement).style.color = "#bdc8f0";
           }}
           onMouseLeave={(e) => {
             if (active !== tab.key)
-              (e.currentTarget as HTMLButtonElement).style.color = "#475569";
+              (e.currentTarget as HTMLButtonElement).style.color = "#8492c4";
           }}
         >
           {tab.icon && <span className="[&>svg]:w-3.5 [&>svg]:h-3.5">{tab.icon}</span>}

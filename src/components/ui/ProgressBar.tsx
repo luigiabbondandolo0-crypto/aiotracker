@@ -8,19 +8,19 @@ interface ProgressBarProps {
 }
 
 const colorMap: Record<string, string> = {
-  blue:   "linear-gradient(90deg, #2563eb, #3b82f6)",
-  green:  "linear-gradient(90deg, #059669, #10b981)",
-  red:    "linear-gradient(90deg, #dc2626, #ef4444)",
-  yellow: "linear-gradient(90deg, #d97706, #f59e0b)",
-  purple: "linear-gradient(90deg, #7c3aed, #8b5cf6)",
+  blue:   "linear-gradient(90deg, #1565c0, #2196f3)",
+  green:  "linear-gradient(90deg, #00b248, #00e676)",
+  red:    "linear-gradient(90deg, #c62828, #f44336)",
+  yellow: "linear-gradient(90deg, #f9a825, #ffc107)",
+  purple: "linear-gradient(90deg, #4527a0, #7c4dff)",
 };
 
 const glowMap: Record<string, string> = {
-  blue:   "rgba(59,130,246,0.5)",
-  green:  "rgba(16,185,129,0.5)",
-  red:    "rgba(239,68,68,0.5)",
-  yellow: "rgba(245,158,11,0.5)",
-  purple: "rgba(139,92,246,0.5)",
+  blue:   "rgba(33,150,243,0.5)",
+  green:  "rgba(0,230,118,0.5)",
+  red:    "rgba(244,67,54,0.5)",
+  yellow: "rgba(255,193,7,0.5)",
+  purple: "rgba(124,77,255,0.5)",
 };
 
 export function ProgressBar({ value, color = "blue", height = 6, showGlow = true }: ProgressBarProps) {

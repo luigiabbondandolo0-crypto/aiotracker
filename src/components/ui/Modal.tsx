@@ -29,11 +29,14 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
       <div className="modal-content">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5"
-          style={{ borderBottom: "1px solid #1a2332" }}>
-          <h3 className="text-white font-semibold text-base">{title}</h3>
+          style={{ borderBottom: "1px solid #29314f" }}>
+          <h3 className="font-semibold text-base" style={{ color: "#d7dcec" }}>{title}</h3>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/5 transition cursor-pointer"
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition cursor-pointer"
+            style={{ color: "#8492c4" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.05)"; (e.currentTarget as HTMLButtonElement).style.color = "#d7dcec"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#8492c4"; }}
           >
             <X size={16} />
           </button>
