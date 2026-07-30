@@ -8,8 +8,12 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/login");
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) redirect("/login");
+  } catch {
+    redirect("/login");
+  }
 
   return (
     <div className="flex min-h-screen">
