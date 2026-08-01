@@ -24,11 +24,11 @@ const borderGlowMap = {
 };
 
 const iconBgMap = {
-  blue:   { bg: "rgba(59,130,246,0.1)",  border: "rgba(59,130,246,0.2)" },
-  green:  { bg: "rgba(16,185,129,0.1)",  border: "rgba(16,185,129,0.2)" },
-  red:    { bg: "rgba(239,68,68,0.1)",   border: "rgba(239,68,68,0.2)" },
-  purple: { bg: "rgba(124,58,237,0.1)",  border: "rgba(124,58,237,0.2)" },
-  yellow: { bg: "rgba(245,158,11,0.1)",  border: "rgba(245,158,11,0.2)" },
+  blue:   { bg: "rgba(59,130,246,0.08)",  border: "rgba(59,130,246,0.15)" },
+  green:  { bg: "rgba(16,185,129,0.08)",  border: "rgba(16,185,129,0.15)" },
+  red:    { bg: "rgba(239,68,68,0.08)",   border: "rgba(239,68,68,0.15)" },
+  purple: { bg: "rgba(124,58,237,0.08)",  border: "rgba(124,58,237,0.15)" },
+  yellow: { bg: "rgba(245,158,11,0.08)",  border: "rgba(245,158,11,0.15)" },
 };
 
 export function StatCard({
@@ -45,11 +45,8 @@ export function StatCard({
 
   return (
     <div
-      className={cn(
-        "card p-5 cursor-default transition-all duration-300",
-        visible ? "animate-fade-in" : "opacity-0",
-      )}
-      style={{ animationDelay: `${delay}ms` }}
+      className={cn("card cursor-default transition-all duration-300", visible ? "animate-fade-in" : "opacity-0")}
+      style={{ animationDelay: `${delay}ms`, padding: "16px", overflow: "hidden" }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = borderGlowMap[glowColor];
         (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px ${borderGlowMap[glowColor]}22`;
@@ -59,35 +56,50 @@ export function StatCard({
         (e.currentTarget as HTMLDivElement).style.boxShadow = "";
       }}
     >
-      <div className="flex items-start justify-between mb-4">
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#64748B" }}>
+      {/* Label row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+        <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", lineHeight: 1 }}>
           {label}
         </p>
         {icon && (
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: iconColors.bg, border: `1px solid ${iconColors.border}` }}
-          >
-            <span style={{ color: accentColor }} className="[&>svg]:w-4 [&>svg]:h-4">{icon}</span>
+          <div style={{ width: "28px", height: "28px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", background: iconColors.bg, border: `1px solid ${iconColors.border}`, flexShrink: 0 }}>
+            <span style={{ color: accentColor }} className="[&>svg]:w-3.5 [&>svg]:h-3.5">{icon}</span>
           </div>
         )}
       </div>
 
+      {/* Value */}
       <p
-        className="text-2xl font-bold tracking-tight mb-1 animate-count-up"
-        style={{ color: accentColor, animationDelay: `${delay + 100}ms`, letterSpacing: "-0.03em" }}
+        className="animate-count-up"
+        style={{
+          fontSize: "18px",
+          fontWeight: 700,
+          color: accentColor,
+          letterSpacing: "-0.02em",
+          lineHeight: 1.2,
+          animationDelay: `${delay + 100}ms`,
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          marginBottom: "6px",
+        }}
       >
         {value}
       </p>
 
-      <div className="flex items-center justify-between">
-        {sub && <p className="text-xs" style={{ color: "#64748B" }}>{sub}</p>}
+      {/* Sub / trend */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px" }}>
+        {sub && (
+          <p style={{ fontSize: "11px", color: "#64748B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
+            {sub}
+          </p>
+        )}
         {trend !== undefined && (
           <div className={cn(
             "flex items-center gap-1 text-xs font-medium badge",
             trend > 0 ? "badge-green" : trend < 0 ? "badge-red" : "badge-blue"
-          )}>
-            {trend > 0 ? <TrendingUp size={10} /> : trend < 0 ? <TrendingDown size={10} /> : <Minus size={10} />}
+          )} style={{ flexShrink: 0 }}>
+            {trend > 0 ? <TrendingUp size={9} /> : trend < 0 ? <TrendingDown size={9} /> : <Minus size={9} />}
             {trend > 0 ? "+" : ""}{trend.toFixed(1)}%
           </div>
         )}

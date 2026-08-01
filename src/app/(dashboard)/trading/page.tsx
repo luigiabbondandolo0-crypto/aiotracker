@@ -140,14 +140,15 @@ export default function TradingPage() {
         <div style={{ position: "absolute", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%)", bottom: "-40px", left: "30%", pointerEvents: "none" }} />
         <div style={{ position: "relative" }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
-            <div>
-              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.16em", color: "#64748B", marginBottom: "8px" }}>Trading</p>
-              <p style={{ fontSize: "40px", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.04em", lineHeight: 1 }}>{loading ? "—" : formatCurrency(totalBalance, "USD")}</p>
-              <p style={{ fontSize: "13px", color: "#64748B", marginTop: "6px" }}>Balance totale account attivi</p>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <p style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#3B82F6", marginBottom: "6px" }}>Trading</p>
+              <h1 style={{ fontSize: "clamp(20px, 4vw, 30px)", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "4px" }}>Account Trading</h1>
+              <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "14px" }}>Balance totale</p>
+              <p style={{ fontSize: "clamp(24px, 5vw, 38px)", fontWeight: 700, color: "#93C5FD", letterSpacing: "-0.04em", lineHeight: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{loading ? "—" : formatCurrency(totalBalance, "USD")}</p>
             </div>
             <div style={{ display: "flex", gap: "8px", flexShrink: 0, flexWrap: "wrap" }}>
               {accounts.length > 0 && (
-                <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 18px", borderRadius: "12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#CBD5E1", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "all 0.15s" }}
+                <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 18px", borderRadius: "12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#CBD5E1", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "all 0.15s", whiteSpace: "nowrap", fontFamily: "inherit" }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)"; }}>
                   <Plus size={14} /> Trade
@@ -180,12 +181,12 @@ export default function TradingPage() {
           { label: "Conti Attivi", value: String(accounts.filter((a) => a.isActive).length), icon: <Activity size={16} />, color: "#6EE7B7" },
           { label: "Trade Registrati", value: String(allTrades.length), icon: <Activity size={16} />, color: "#C4B5FD" },
         ].map((s) => (
-          <div key={s.label} className="card p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span style={{ color: s.color }}>{s.icon}</span>
-              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#64748B" }}>{s.label}</p>
+          <div key={s.label} className="card" style={{ padding: "14px 16px", overflow: "hidden" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", lineHeight: 1 }}>{s.label}</p>
+              <span style={{ color: s.color, opacity: 0.75 }} className="[&>svg]:w-3.5 [&>svg]:h-3.5">{s.icon}</span>
             </div>
-            <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
+            <p style={{ fontSize: "16px", fontWeight: 700, color: s.color, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", letterSpacing: "-0.02em" }}>{s.value}</p>
             {s.label === "P&L Totale" && (
               <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{totalPnLPct >= 0 ? "+" : ""}{totalPnLPct.toFixed(2)}%</p>
             )}

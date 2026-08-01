@@ -155,9 +155,10 @@ export default function BudgetPage() {
             <div style={{ position: "relative" }}>
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
                 <div>
-                  <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.16em", color: "#64748B", marginBottom: "8px" }}>Budget & Spese</p>
-                  <p style={{ fontSize: "40px", fontWeight: 700, color: positive ? "#6EE7B7" : "#FCA5A5", letterSpacing: "-0.04em", lineHeight: 1 }}>{loading ? "—" : formatCurrency(saldo)}</p>
-                  <p style={{ fontSize: "13px", color: "#64748B", marginTop: "6px" }}>Saldo {positive ? "positivo" : "negativo"} — {monthName}</p>
+                  <p style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: positive ? "#10B981" : "#EF4444", marginBottom: "6px" }}>Budget & Spese</p>
+                  <h1 style={{ fontSize: "clamp(20px, 4vw, 30px)", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "4px" }}>Riepilogo Mensile</h1>
+                  <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "14px", textTransform: "capitalize" }}>{monthName}</p>
+                  <p style={{ fontSize: "clamp(24px, 5vw, 38px)", fontWeight: 700, color: positive ? "#6EE7B7" : "#FCA5A5", letterSpacing: "-0.04em", lineHeight: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{loading ? "—" : formatCurrency(saldo)}</p>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "4px", padding: "4px", borderRadius: "12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", flexShrink: 0 }}>
                   <button onClick={prevMonth} style={{ width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "8px", background: "transparent", border: "none", color: "#64748B", cursor: "pointer", transition: "all 0.15s" }}
@@ -198,14 +199,14 @@ export default function BudgetPage() {
           {/* KPI */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { label: "Entrate Lorde", value: formatCurrency(totalGross), color: "#F1F5F9", border: "#1E2D42" },
+              { label: "Entrate Lorde", value: formatCurrency(totalGross), color: "#F1F5F9",  border: "#1E2D42" },
               { label: "Tasse",         value: `-${formatCurrency(totalTax)}`, color: "#FCA5A5", border: "rgba(239,68,68,0.2)" },
-              { label: "Netto",         value: formatCurrency(totalNet),   color: "#6EE7B7", border: "rgba(16,185,129,0.2)" },
+              { label: "Netto",         value: formatCurrency(totalNet),   color: "#6EE7B7",  border: "rgba(16,185,129,0.2)" },
               { label: "Spese",         value: formatCurrency(totalExpenses), color: totalExpenses > totalNet ? "#FCA5A5" : "#FCD34D", border: "#1E2D42" },
             ].map((k, i) => (
-              <div key={k.label} className="card p-4 animate-fade-in" style={{ animationDelay: `${i * 60}ms`, borderColor: k.border }}>
-                <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#64748B" }}>{k.label}</p>
-                <p className="text-xl font-bold" style={{ color: k.color }}>{k.value}</p>
+              <div key={k.label} className="card animate-fade-in" style={{ padding: "14px 16px", overflow: "hidden", animationDelay: `${i * 60}ms`, borderColor: k.border }}>
+                <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "10px", lineHeight: 1 }}>{k.label}</p>
+                <p style={{ fontSize: "16px", fontWeight: 700, color: k.color, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", letterSpacing: "-0.02em" }}>{k.value}</p>
               </div>
             ))}
           </div>
