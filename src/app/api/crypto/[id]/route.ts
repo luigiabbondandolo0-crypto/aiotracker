@@ -3,12 +3,13 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
   const body = await req.json();
   const updated = await prisma.cryptoHolding.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       symbol: body.symbol,
       name: body.name ?? null,
@@ -25,9 +26,10 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   return NextResponse.json(updated);
 }
 
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  await prisma.cryptoHolding.delete({ where: { id: params.id } });
+  const { id } = await params;
+  await prisma.cryptoHolding.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

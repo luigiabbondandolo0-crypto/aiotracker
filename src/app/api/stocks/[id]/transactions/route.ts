@@ -3,13 +3,14 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
   const body = await req.json();
   const tx = await prisma.stockTransaction.create({
     data: {
-      holdingId: params.id,
+      holdingId: id,
       type: body.type,
       date: new Date(body.date),
       units: parseFloat(body.units),

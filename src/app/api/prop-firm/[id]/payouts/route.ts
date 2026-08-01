@@ -3,16 +3,17 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
   const body = await req.json();
   const amount = parseFloat(body.amount);
 
   const [payout] = await prisma.$transaction([
     prisma.propPayout.create({
       data: {
-        accountId: params.id,
+        accountId: id,
         amount,
         date: new Date(body.date),
         status: body.status ?? "PENDING",
@@ -20,7 +21,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       },
     }),
     prisma.propFirmAccount.update({
-      where: { id: params.id },
+      where: { id },
       data: { totalPayout: { increment: amount } },
     }),
   ]);
@@ -28,9 +29,10 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   return NextResponse.json(payout);
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
   const { payoutId } = await req.json();
   const payout = await prisma.propPayout.findUnique({ where: { id: payoutId } });
   if (!payout) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -38,7 +40,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
   await prisma.$transaction([
     prisma.propPayout.delete({ where: { id: payoutId } }),
     prisma.propFirmAccount.update({
-      where: { id: params.id },
+      where: { id },
       data: { totalPayout: { decrement: payout.amount } },
     }),
   ]);

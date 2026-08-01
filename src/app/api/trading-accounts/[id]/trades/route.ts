@@ -3,13 +3,14 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
   const body = await req.json();
   const trade = await prisma.trade.create({
     data: {
-      accountId: params.id,
+      accountId: id,
       symbol: body.symbol,
       direction: body.direction,
       openDate: new Date(body.openDate),
@@ -26,7 +27,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   return NextResponse.json(trade);
 }
 
-export async function DELETE(req: Request, { params: _ }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params: _ }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { tradeId } = await req.json();
