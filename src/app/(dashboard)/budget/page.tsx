@@ -144,20 +144,48 @@ export default function BudgetPage() {
 
   return (
     <div className="space-y-5 pb-8">
-      {/* Page hero + month navigator */}
-      <div className="page-hero animate-fade-in">
-        <div className="page-hero-text">
-          <h1 className="page-hero-title">Budget & Spese</h1>
-          <p className="page-hero-sub">Entrate, uscite e saldo mensile</p>
-        </div>
-        <div className="page-hero-actions">
-          <div className="flex items-center gap-1 rounded-xl p-1" style={{ background: "#0C1220", border: "1px solid #1E2D42" }}>
-            <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center rounded-lg transition cursor-pointer hover:bg-white/5" style={{ color: "#64748B" }}><ChevronLeft size={14} /></button>
-            <span className="text-sm font-medium capitalize px-2 min-w-[130px] text-center" style={{ color: "#CBD5E1" }}>{monthName}</span>
-            <button onClick={nextMonth} className="w-8 h-8 flex items-center justify-center rounded-lg transition cursor-pointer hover:bg-white/5" style={{ color: "#64748B" }}><ChevronRight size={14} /></button>
+      {/* ── Premium Hero ──────────────────────────────────────────────────── */}
+      {(() => {
+        const saldo = totalNet - totalExpenses;
+        const positive = saldo >= 0;
+        return (
+          <div className="animate-fade-in" style={{ borderRadius: "20px", padding: "28px 32px", position: "relative", overflow: "hidden", background: positive ? "linear-gradient(135deg, #051a12 0%, #0a1f18 40%, #07090F 100%)" : "linear-gradient(135deg, #1a0505 0%, #1a0808 40%, #07090F 100%)", border: `1px solid ${positive ? "rgba(16,185,129,0.18)" : "rgba(239,68,68,0.18)"}`, boxShadow: `0 0 60px ${positive ? "rgba(16,185,129,0.06)" : "rgba(239,68,68,0.06)"}, 0 24px 48px rgba(0,0,0,0.4)` }}>
+            <div style={{ position: "absolute", width: "280px", height: "280px", borderRadius: "50%", background: `radial-gradient(circle, ${positive ? "rgba(16,185,129,0.12)" : "rgba(239,68,68,0.1)"} 0%, transparent 70%)`, top: "-100px", right: "-60px", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)", bottom: "-40px", left: "30%", pointerEvents: "none" }} />
+            <div style={{ position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+                <div>
+                  <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.16em", color: "#64748B", marginBottom: "8px" }}>Budget & Spese</p>
+                  <p style={{ fontSize: "40px", fontWeight: 700, color: positive ? "#6EE7B7" : "#FCA5A5", letterSpacing: "-0.04em", lineHeight: 1 }}>{loading ? "—" : formatCurrency(saldo)}</p>
+                  <p style={{ fontSize: "13px", color: "#64748B", marginTop: "6px" }}>Saldo {positive ? "positivo" : "negativo"} — {monthName}</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "4px", padding: "4px", borderRadius: "12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", flexShrink: 0 }}>
+                  <button onClick={prevMonth} style={{ width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "8px", background: "transparent", border: "none", color: "#64748B", cursor: "pointer", transition: "all 0.15s" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)"; (e.currentTarget as HTMLButtonElement).style.color = "#CBD5E1"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#64748B"; }}>
+                    <ChevronLeft size={14} />
+                  </button>
+                  <span style={{ fontSize: "13px", fontWeight: 500, color: "#CBD5E1", padding: "0 8px", minWidth: "120px", textAlign: "center", textTransform: "capitalize" }}>{monthName}</span>
+                  <button onClick={nextMonth} style={{ width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "8px", background: "transparent", border: "none", color: "#64748B", cursor: "pointer", transition: "all 0.15s" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)"; (e.currentTarget as HTMLButtonElement).style.color = "#CBD5E1"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#64748B"; }}>
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "16px" }}>
+                {[
+                  { label: `Netto: ${loading ? "—" : formatCurrency(totalNet)}`, color: "#6EE7B7" },
+                  { label: `Spese: ${loading ? "—" : formatCurrency(totalExpenses)}`, color: "#FCA5A5" },
+                  { label: `Lordo: ${loading ? "—" : formatCurrency(totalGross)}`, color: "#CBD5E1" },
+                ].map(b => (
+                  <span key={b.label} style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: "99px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontSize: "11px", fontWeight: 500, color: b.color }}>{b.label}</span>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+      })()}
 
       {/* Tabs */}
       <div className="animate-fade-in delay-100">

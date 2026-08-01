@@ -126,15 +126,32 @@ export default function ETFPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="page-hero animate-fade-in">
-        <div className="page-hero-text">
-          <h1 className="page-hero-title">ETF & PAC</h1>
-          <p className="page-hero-sub">Piani di accumulo e investimento passivo</p>
-        </div>
-        <div className="page-hero-actions">
-          <button onClick={() => { setForm(emptyPlanForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
-            <Plus size={15} /> Nuovo PAC
-          </button>
+      {/* ── Premium Hero ──────────────────────────────────────────────────── */}
+      <div className="animate-fade-in" style={{ borderRadius: "20px", padding: "28px 32px", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #051a12 0%, #0a1f18 40%, #07090F 100%)", border: "1px solid rgba(16,185,129,0.18)", boxShadow: "0 0 60px rgba(16,185,129,0.06), 0 24px 48px rgba(0,0,0,0.4)" }}>
+        <div style={{ position: "absolute", width: "280px", height: "280px", borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)", top: "-100px", right: "-60px", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)", bottom: "-40px", left: "30%", pointerEvents: "none" }} />
+        <div style={{ position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+            <div>
+              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.16em", color: "#64748B", marginBottom: "8px" }}>ETF & PAC</p>
+              <p style={{ fontSize: "40px", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.04em", lineHeight: 1 }}>{loading ? "—" : formatCurrency(totalValue)}</p>
+              <p style={{ fontSize: "13px", color: "#64748B", marginTop: "6px" }}>Valore attuale dei piani</p>
+            </div>
+            <button onClick={() => { setForm(emptyPlanForm); setShowAdd(true); }} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", color: "#6EE7B7", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "all 0.15s", flexShrink: 0 }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(16,185,129,0.22)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(16,185,129,0.12)"; }}>
+              <Plus size={14} /> Nuovo PAC
+            </button>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "16px" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "4px 12px", borderRadius: "99px", background: totalGain >= 0 ? "rgba(16,185,129,0.1)" : "rgba(239,68,68,0.1)", border: `1px solid ${totalGain >= 0 ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)"}`, fontSize: "11px", fontWeight: 600, color: totalGain >= 0 ? "#6EE7B7" : "#FCA5A5" }}>
+              {totalGain >= 0 ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+              {loading ? "—" : formatCurrency(totalGain)} ({totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(1)}%)
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "4px 12px", borderRadius: "99px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontSize: "11px", fontWeight: 500, color: "#64748B" }}>
+              Investito: {loading ? "—" : formatCurrency(totalInvested)} · {plans.filter(p => p.isActive).length} piani attivi
+            </span>
+          </div>
         </div>
       </div>
 

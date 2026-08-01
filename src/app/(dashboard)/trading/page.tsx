@@ -134,20 +134,41 @@ export default function TradingPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="page-hero animate-fade-in">
-        <div className="page-hero-text">
-          <h1 className="page-hero-title">Trading</h1>
-          <p className="page-hero-sub">Account trading personali e log operazioni</p>
-        </div>
-        <div className="page-hero-actions">
-          {accounts.length > 0 && (
-            <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} className="btn-ghost flex items-center gap-2">
-              <Plus size={15} /> Trade
-            </button>
-          )}
-          <button onClick={() => { setAccForm(emptyAccForm); setShowAddAcc(true); }} className="btn-primary flex items-center gap-2">
-            <Plus size={15} /> Conto
-          </button>
+      {/* ── Premium Hero ──────────────────────────────────────────────────── */}
+      <div className="animate-fade-in" style={{ borderRadius: "20px", padding: "28px 32px", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #071829 0%, #0d1a2e 40%, #07090F 100%)", border: "1px solid rgba(59,130,246,0.2)", boxShadow: "0 0 60px rgba(30,80,180,0.08), 0 24px 48px rgba(0,0,0,0.4)" }}>
+        <div style={{ position: "absolute", width: "280px", height: "280px", borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.14) 0%, transparent 70%)", top: "-100px", right: "-60px", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%)", bottom: "-40px", left: "30%", pointerEvents: "none" }} />
+        <div style={{ position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+            <div>
+              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.16em", color: "#64748B", marginBottom: "8px" }}>Trading</p>
+              <p style={{ fontSize: "40px", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.04em", lineHeight: 1 }}>{loading ? "—" : formatCurrency(totalBalance, "USD")}</p>
+              <p style={{ fontSize: "13px", color: "#64748B", marginTop: "6px" }}>Balance totale account attivi</p>
+            </div>
+            <div style={{ display: "flex", gap: "8px", flexShrink: 0, flexWrap: "wrap" }}>
+              {accounts.length > 0 && (
+                <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 18px", borderRadius: "12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#CBD5E1", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "all 0.15s" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)"; }}>
+                  <Plus size={14} /> Trade
+                </button>
+              )}
+              <button onClick={() => { setAccForm(emptyAccForm); setShowAddAcc(true); }} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", background: "rgba(59,130,246,0.15)", border: "1px solid rgba(59,130,246,0.3)", color: "#93C5FD", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "all 0.15s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(59,130,246,0.25)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(59,130,246,0.15)"; }}>
+                <Plus size={14} /> Conto
+              </button>
+            </div>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "16px" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "4px 12px", borderRadius: "99px", background: totalPnL >= 0 ? "rgba(16,185,129,0.1)" : "rgba(239,68,68,0.1)", border: `1px solid ${totalPnL >= 0 ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)"}`, fontSize: "11px", fontWeight: 600, color: totalPnL >= 0 ? "#6EE7B7" : "#FCA5A5" }}>
+              {totalPnL >= 0 ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+              P&L: {loading ? "—" : formatCurrency(totalPnL, "USD")} ({totalPnLPct >= 0 ? "+" : ""}{totalPnLPct.toFixed(1)}%)
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "4px 12px", borderRadius: "99px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontSize: "11px", fontWeight: 500, color: "#64748B" }}>
+              {accounts.filter(a => a.isActive).length} conti · {allTrades.length} trade
+            </span>
+          </div>
         </div>
       </div>
 

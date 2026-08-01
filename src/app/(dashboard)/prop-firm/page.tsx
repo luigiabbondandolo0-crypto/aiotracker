@@ -210,16 +210,32 @@ export default function PropFirmPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="page-hero animate-fade-in">
-        <div className="page-hero-text">
-          <h1 className="page-hero-title">Prop Firm</h1>
-          <p className="page-hero-sub">Account finanziati e challenge</p>
-        </div>
-        <div className="page-hero-actions">
-          <button onClick={openAdd} className="btn-primary flex items-center gap-2">
-            <Plus size={15} />
-            Aggiungi Account
-          </button>
+      {/* ── Premium Hero ──────────────────────────────────────────────────── */}
+      <div className="animate-fade-in" style={{ borderRadius: "20px", padding: "28px 32px", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #1a0a3c 0%, #100d2a 40%, #07090F 100%)", border: "1px solid rgba(124,58,237,0.2)", boxShadow: "0 0 60px rgba(109,40,217,0.08), 0 24px 48px rgba(0,0,0,0.4)" }}>
+        <div style={{ position: "absolute", width: "280px", height: "280px", borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.14) 0%, transparent 70%)", top: "-100px", right: "-60px", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)", bottom: "-40px", left: "30%", pointerEvents: "none" }} />
+        <div style={{ position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+            <div>
+              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.16em", color: "#64748B", marginBottom: "8px" }}>Prop Firm</p>
+              <p style={{ fontSize: "40px", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.04em", lineHeight: 1 }}>{loading ? "—" : formatCurrency(totalEquity, "USD")}</p>
+              <p style={{ fontSize: "13px", color: "#64748B", marginTop: "6px" }}>Equity totale account attivi</p>
+            </div>
+            <button onClick={openAdd} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.3)", color: "#C4B5FD", fontSize: "13px", fontWeight: 600, cursor: "pointer", transition: "all 0.15s", flexShrink: 0 }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(124,58,237,0.25)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(124,58,237,0.15)"; }}>
+              <Plus size={14} /> Aggiungi Account
+            </button>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "16px" }}>
+            {[
+              { label: `Balance: ${loading ? "—" : formatCurrency(totalBalance, "USD")}`, color: "#93C5FD" },
+              { label: `${activeCount} attivi`, color: "#6EE7B7" },
+              { label: `Payout: ${loading ? "—" : formatCurrency(totalPayouts, "USD")}`, color: "#FCD34D" },
+            ].map(b => (
+              <span key={b.label} style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "4px 12px", borderRadius: "99px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontSize: "11px", fontWeight: 500, color: b.color }}>{b.label}</span>
+            ))}
+          </div>
         </div>
       </div>
 
