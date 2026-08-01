@@ -72,7 +72,7 @@ export default function BudgetPage() {
 
   // ── forms
   const [sourceForm, setSourceForm] = useState({ name: "", taxRate: 0, isTaxed: false, color: PALETTE[0] });
-  const [entryForm, setEntryForm]   = useState({ sourceId: "", grossAmount: "", date: now.toISOString().split("T")[0], description: "" });
+  const [entryForm, setEntryForm]   = useState({ sourceId: "", grossAmount: "", date: now.toISOString().split("T")[0], description: "", currency: "EUR" as "EUR" | "USD", eurUsdRate: "" });
   const [expenseForm, setExpenseForm] = useState({ category: "SPESE_NECESSARIE", amount: "", description: "", date: now.toISOString().split("T")[0] });
 
   const fetchAll = useCallback(async () => {
@@ -104,7 +104,9 @@ export default function BudgetPage() {
 
   // ── preview entrata
   const previewSrc = sources.find((s) => s.id === entryForm.sourceId);
-  const previewG   = Number(entryForm.grossAmount) || 0;
+  const previewRawG = Number(entryForm.grossAmount) || 0;
+  const previewRate = Number(entryForm.eurUsdRate) || 0;
+  const previewG    = entryForm.currency === "USD" && previewRate > 0 ? previewRawG / previewRate : previewRawG;
   const previewT   = previewSrc?.isTaxed ? previewG * (previewSrc.taxRate / 100) : 0;
   const previewN   = previewG - previewT;
 
@@ -117,8 +119,13 @@ export default function BudgetPage() {
   }
   async function addEntry() {
     setLoading(true);
-    await fetch("/api/income-entries", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(entryForm) });
-    setModal(null); setEntryForm({ sourceId: "", grossAmount: "", date: now.toISOString().split("T")[0], description: "" });
+    let grossAmount = Number(entryForm.grossAmount);
+    if (entryForm.currency === "USD" && entryForm.eurUsdRate) {
+      const rate = Number(entryForm.eurUsdRate);
+      if (rate > 0) grossAmount = grossAmount / rate;
+    }
+    await fetch("/api/income-entries", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...entryForm, grossAmount }) });
+    setModal(null); setEntryForm({ sourceId: "", grossAmount: "", date: now.toISOString().split("T")[0], description: "", currency: "EUR", eurUsdRate: "" });
     await fetchAll(); setLoading(false);
   }
   async function addExpense() {
@@ -129,6 +136,7 @@ export default function BudgetPage() {
   }
   async function deleteEntry(id: string) { await fetch(`/api/income-entries/${id}`, { method: "DELETE" }); fetchAll(); }
   async function deleteExpense(id: string) { await fetch(`/api/expenses/${id}`, { method: "DELETE" }); fetchAll(); }
+  async function deleteSource(id: string) { await fetch(`/api/income-sources/${id}`, { method: "DELETE" }); fetchAll(); }
   async function saveAllocations() {
     if (Math.round(allocTotal) !== 100) return;
     setLoading(true);
@@ -279,10 +287,15 @@ export default function BudgetPage() {
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {sources.map((s, i) => (
-                  <div key={s.id} className="rounded-xl p-3 animate-fade-in" style={{ animationDelay: `${i * 50}ms`, background: "#162032", border: "1px solid #1E2D42" }}>
+                  <div key={s.id} className="group rounded-xl p-3 animate-fade-in" style={{ animationDelay: `${i * 50}ms`, background: "#162032", border: "1px solid #1E2D42" }}>
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: s.color, boxShadow: `0 0 6px ${s.color}60` }} />
-                      <span className="text-sm font-medium truncate" style={{ color: "#F1F5F9" }}>{s.name}</span>
+                      <span className="text-sm font-medium truncate flex-1 min-w-0" style={{ color: "#F1F5F9" }}>{s.name}</span>
+                      <button onClick={() => deleteSource(s.id)} className="opacity-0 group-hover:opacity-100 w-6 h-6 flex items-center justify-center rounded-lg transition-all cursor-pointer flex-shrink-0" style={{ color: "#64748B" }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(239,68,68,0.1)"; (e.currentTarget as HTMLButtonElement).style.color = "#FCA5A5"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#64748B"; }}>
+                        <Trash2 size={11} />
+                      </button>
                     </div>
                     {s.isTaxed
                       ? <span className="badge badge-red" style={{ fontSize: "10px" }}>Tassato {s.taxRate}%</span>
@@ -592,13 +605,47 @@ export default function BudgetPage() {
               </select>
             )}
           </div>
+          {/* Currency toggle */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#64748B" }}>Importo lordo (€)</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#64748B" }}>Valuta</label>
+            <div className="flex gap-2">
+              {(["EUR", "USD"] as const).map((cur) => (
+                <button key={cur} type="button"
+                  onClick={() => setEntryForm((f) => ({ ...f, currency: cur }))}
+                  className="flex-1 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer"
+                  style={entryForm.currency === cur
+                    ? { background: cur === "EUR" ? "rgba(59,130,246,0.15)" : "rgba(16,185,129,0.15)", border: `1px solid ${cur === "EUR" ? "rgba(59,130,246,0.4)" : "rgba(16,185,129,0.4)"}`, color: cur === "EUR" ? "#93C5FD" : "#6EE7B7" }
+                    : { background: "#162032", border: "1px solid #1E2D42", color: "#64748B" }}>
+                  {cur === "EUR" ? "€ EUR" : "$ USD"}
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* Exchange rate if USD */}
+          {entryForm.currency === "USD" && (
+            <div className="animate-fade-in">
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#64748B" }}>Tasso EUR/USD</label>
+              <input type="number" min={0} step="0.0001" value={entryForm.eurUsdRate}
+                onChange={(e) => setEntryForm((f) => ({ ...f, eurUsdRate: e.target.value }))}
+                placeholder="es. 1.08" className="input-dark" />
+              <p className="text-xs mt-1" style={{ color: "#64748B" }}>1 EUR = {entryForm.eurUsdRate || "?"} USD · es. tasso odierno da Google</p>
+            </div>
+          )}
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#64748B" }}>
+              Importo lordo {entryForm.currency === "USD" ? "($)" : "(€)"}
+            </label>
             <input type="number" min={0} value={entryForm.grossAmount}
               onChange={(e) => setEntryForm((f) => ({ ...f, grossAmount: e.target.value }))}
               placeholder="0.00" className="input-dark" />
-            {previewG > 0 && previewSrc && (
-              <div className="mt-2 p-3 rounded-xl animate-fade-in" style={{ background: previewT > 0 ? "rgba(239,68,68,0.06)" : "rgba(16,185,129,0.06)", border: `1px solid ${previewT > 0 ? "rgba(239,68,68,0.15)" : "rgba(16,185,129,0.15)"}` }}>
+            {previewRawG > 0 && previewSrc && (
+              <div className="mt-2 p-3 rounded-xl animate-fade-in space-y-1" style={{ background: previewT > 0 ? "rgba(239,68,68,0.06)" : "rgba(16,185,129,0.06)", border: `1px solid ${previewT > 0 ? "rgba(239,68,68,0.15)" : "rgba(16,185,129,0.15)"}` }}>
+                {entryForm.currency === "USD" && previewRate > 0 && (
+                  <p className="text-xs" style={{ color: "#93C5FD" }}>$ {previewRawG.toFixed(2)} ÷ {previewRate} = {formatCurrency(previewG)}</p>
+                )}
+                {entryForm.currency === "USD" && !previewRate && (
+                  <p className="text-xs" style={{ color: "#F59E0B" }}>Inserisci il tasso EUR/USD per la conversione</p>
+                )}
                 {previewT > 0
                   ? <><p className="text-xs" style={{ color: "#FCA5A5" }}>Tasse ({previewSrc.taxRate}%): -{formatCurrency(previewT)}</p><p className="text-sm font-bold" style={{ color: "#6EE7B7" }}>Netto: {formatCurrency(previewN)}</p></>
                   : <p className="text-sm font-bold" style={{ color: "#6EE7B7" }}>Non tassato → netto {formatCurrency(previewG)}</p>
