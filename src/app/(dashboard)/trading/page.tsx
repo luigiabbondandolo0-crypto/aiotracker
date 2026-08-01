@@ -316,9 +316,9 @@ export default function TradingPage() {
               <div><label style={labelStyle}>Balance Attuale</label><input style={inputStyle} type="number" placeholder="0.00" value={accForm.balance} onChange={(e) => fa("balance", e.target.value)} /></div>
               <div className="col-span-2"><label style={labelStyle}>Note</label><input style={inputStyle} value={accForm.notes} onChange={(e) => fa("notes", e.target.value)} /></div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
-              <button className="btn-ghost" onClick={() => { setShowAddAcc(false); setEditingAcc(null); }}>Annulla</button>
-              <button className="btn-primary" onClick={handleSaveAcc} disabled={saving || !accForm.brokerName || !accForm.balance}>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => { setShowAddAcc(false); setEditingAcc(null); }}>Annulla</button>
+              <button className="btn-primary flex-1" onClick={handleSaveAcc} disabled={saving || !accForm.brokerName || !accForm.balance}>
                 {saving ? "Salvo..." : editingAcc ? "Aggiorna" : "Aggiungi"}
               </button>
             </div>
@@ -353,9 +353,9 @@ export default function TradingPage() {
               <div><label style={labelStyle}>Commissioni</label><input style={inputStyle} type="number" step="any" placeholder="0.00" value={tradeForm.fees} onChange={(e) => ft("fees", e.target.value)} /></div>
               <div className="col-span-2"><label style={labelStyle}>Note</label><input style={inputStyle} value={tradeForm.notes} onChange={(e) => ft("notes", e.target.value)} /></div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
-              <button className="btn-ghost" onClick={() => setShowAddTrade(false)}>Annulla</button>
-              <button className="btn-primary" onClick={handleSaveTrade}
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setShowAddTrade(false)}>Annulla</button>
+              <button className="btn-primary flex-1" onClick={handleSaveTrade}
                 disabled={saving || !tradeForm.accountId || !tradeForm.symbol || !tradeForm.openPrice || !tradeForm.size}>
                 {saving ? "Salvo..." : "Aggiungi Trade"}
               </button>
@@ -374,12 +374,9 @@ export default function TradingPage() {
                 Elimina <strong style={{ color: "#F1F5F9" }}>{deletingAcc.brokerName} — {deletingAcc.accountName}</strong> e tutti i suoi trade. Azione irreversibile.
               </p>
             </div>
-            <div className="flex gap-2 justify-end">
-              <button className="btn-ghost" onClick={() => setDeletingAcc(null)}>Annulla</button>
-              <button onClick={handleDeleteAcc} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
-                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
-                Elimina
-              </button>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setDeletingAcc(null)}>Annulla</button>
+              <button onClick={handleDeleteAcc} className="btn-red flex-1">Elimina</button>
             </div>
           </div>
         </Modal>

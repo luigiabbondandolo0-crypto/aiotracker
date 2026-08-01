@@ -224,11 +224,19 @@ export default function BudgetPage() {
             const saldo = totalNet - totalExpenses;
             const positive = saldo >= 0;
             return (
-              <div className="rounded-2xl p-5 animate-fade-in delay-200"
-                style={{ background: positive ? "rgba(16,185,129,0.06)" : "rgba(239,68,68,0.06)", border: `1px solid ${positive ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)"}` }}>
-                <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "#64748B" }}>Saldo del Mese</p>
-                <p className="text-3xl font-bold" style={{ color: positive ? "#6EE7B7" : "#FCA5A5" }}>{formatCurrency(saldo)}</p>
-                <p className="text-xs mt-2" style={{ color: "#64748B" }}>Netto {formatCurrency(totalNet)} − Spese {formatCurrency(totalExpenses)}</p>
+              <div className="rounded-2xl animate-fade-in delay-200"
+                style={{ padding: "20px 24px", background: positive ? "rgba(16,185,129,0.06)" : "rgba(239,68,68,0.06)", border: `1px solid ${positive ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)"}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
+                <div>
+                  <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "8px" }}>Saldo del Mese</p>
+                  <p style={{ fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 700, color: positive ? "#6EE7B7" : "#FCA5A5", letterSpacing: "-0.03em", lineHeight: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{formatCurrency(saldo)}</p>
+                  <p style={{ fontSize: "12px", color: "#64748B", marginTop: "6px" }}>Netto {formatCurrency(totalNet)} − Spese {formatCurrency(totalExpenses)}</p>
+                </div>
+                <div style={{ width: "44px", height: "44px", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", background: positive ? "rgba(16,185,129,0.12)" : "rgba(239,68,68,0.12)", flexShrink: 0 }}>
+                  {positive
+                    ? <TrendingUp size={20} style={{ color: "#6EE7B7" }} />
+                    : <TrendingDown size={20} style={{ color: "#FCA5A5" }} />
+                  }
+                </div>
               </div>
             );
           })()}
@@ -464,7 +472,7 @@ export default function BudgetPage() {
             )}
 
             <button onClick={saveAllocations} disabled={Math.round(allocTotal) !== 100 || loading}
-              className="btn-primary w-full mt-4 flex items-center justify-center gap-2">
+              className="btn-green w-full mt-4 flex items-center justify-center gap-2">
               {loading ? <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : null}
               {loading ? "Salvataggio..." : "Salva Allocazione"}
             </button>
@@ -579,7 +587,7 @@ export default function BudgetPage() {
               ))}
             </div>
           </div>
-          <div className="flex gap-2 pt-1">
+          <div className="flex gap-3 pt-4">
             <button onClick={() => setModal(null)} className="btn-ghost flex-1">Annulla</button>
             <button onClick={addSource} disabled={!sourceForm.name || loading} className="btn-primary flex-1">
               {loading ? "..." : "Salva Fonte"}
@@ -662,7 +670,7 @@ export default function BudgetPage() {
             <input value={entryForm.description} onChange={(e) => setEntryForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="es. Payout FTMO, stipendio marzo..." className="input-dark" />
           </div>
-          <div className="flex gap-2 pt-1">
+          <div className="flex gap-3 pt-4">
             <button onClick={() => setModal(null)} className="btn-ghost flex-1">Annulla</button>
             <button onClick={addEntry} disabled={!entryForm.sourceId || !entryForm.grossAmount || loading} className="btn-primary flex-1">
               {loading ? "..." : "Aggiungi"}
@@ -704,7 +712,7 @@ export default function BudgetPage() {
             <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#64748B" }}>Data</label>
             <input type="date" value={expenseForm.date} onChange={(e) => setExpenseForm((f) => ({ ...f, date: e.target.value }))} className="input-dark" />
           </div>
-          <div className="flex gap-2 pt-1">
+          <div className="flex gap-3 pt-4">
             <button onClick={() => setModal(null)} className="btn-ghost flex-1">Annulla</button>
             <button onClick={addExpense} disabled={!expenseForm.amount || loading} className="btn-primary flex-1">
               {loading ? "..." : "Aggiungi"}

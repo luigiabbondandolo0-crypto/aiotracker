@@ -472,9 +472,9 @@ export default function PropFirmPage() {
                 <textarea style={{ ...inputStyle, minHeight: "70px", resize: "vertical" }} value={form.notes} onChange={(e) => f("notes", e.target.value)} />
               </div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
-              <button className="btn-ghost" onClick={() => { setShowAdd(false); setEditing(null); }}>Annulla</button>
-              <button className="btn-primary" onClick={handleSave} disabled={saving || !form.firmName || !form.balance || !form.equity}>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => { setShowAdd(false); setEditing(null); }}>Annulla</button>
+              <button className="btn-purple flex-1" onClick={handleSave} disabled={saving || !form.firmName || !form.balance || !form.equity}>
                 {saving ? "Salvo..." : editing ? "Aggiorna" : "Aggiungi"}
               </button>
             </div>
@@ -512,9 +512,9 @@ export default function PropFirmPage() {
                   onChange={(e) => setPayoutForm((p) => ({ ...p, notes: e.target.value }))} />
               </div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
-              <button className="btn-ghost" onClick={() => setPayoutTarget(null)}>Annulla</button>
-              <button className="btn-primary" onClick={handlePayout} disabled={saving || !payoutForm.amount}>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setPayoutTarget(null)}>Annulla</button>
+              <button className="btn-purple flex-1" onClick={handlePayout} disabled={saving || !payoutForm.amount}>
                 {saving ? "Salvo..." : "Aggiungi Payout"}
               </button>
             </div>
@@ -526,19 +526,15 @@ export default function PropFirmPage() {
       {deleting && (
         <Modal title="Elimina Account" onClose={() => setDeleting(null)}>
           <div className="space-y-4">
-            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+            <div className="flex items-start gap-3 rounded-xl p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
               <AlertCircle size={18} style={{ color: "#EF4444", flexShrink: 0, marginTop: 1 }} />
               <p className="text-sm" style={{ color: "#CBD5E1" }}>
                 Stai per eliminare <strong style={{ color: "#F1F5F9" }}>{deleting.firmName}</strong>. Questa azione è irreversibile.
               </p>
             </div>
-            <div className="flex gap-2 justify-end">
-              <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
-              <button onClick={handleDelete}
-                className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer"
-                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
-                Elimina
-              </button>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setDeleting(null)}>Annulla</button>
+              <button onClick={handleDelete} className="btn-red flex-1">Elimina</button>
             </div>
           </div>
         </Modal>

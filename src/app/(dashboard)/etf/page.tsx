@@ -287,9 +287,9 @@ export default function ETFPage() {
               <div><label style={labelStyle}>Data Inizio</label><input style={inputStyle} type="date" value={form.startDate} onChange={(e) => f("startDate", e.target.value)} /></div>
               <div className="col-span-2"><label style={labelStyle}>Note</label><input style={inputStyle} value={form.notes} onChange={(e) => f("notes", e.target.value)} /></div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
-              <button className="btn-ghost" onClick={() => { setShowAdd(false); setEditing(null); }}>Annulla</button>
-              <button className="btn-primary" onClick={handleSave} disabled={saving || !form.name || !form.ticker || !form.amount}>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => { setShowAdd(false); setEditing(null); }}>Annulla</button>
+              <button className="btn-green flex-1" onClick={handleSave} disabled={saving || !form.name || !form.ticker || !form.amount}>
                 {saving ? "Salvo..." : editing ? "Aggiorna" : "Crea PAC"}
               </button>
             </div>
@@ -309,9 +309,9 @@ export default function ETFPage() {
               <div><label style={labelStyle}>Commissioni</label><input style={inputStyle} type="number" step="any" placeholder="0.00" value={contribForm.fees} onChange={(e) => fc("fees", e.target.value)} /></div>
               <div><label style={labelStyle}>Note</label><input style={inputStyle} value={contribForm.notes} onChange={(e) => fc("notes", e.target.value)} /></div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
-              <button className="btn-ghost" onClick={() => setContribTarget(null)}>Annulla</button>
-              <button className="btn-primary" onClick={handleContrib}
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setContribTarget(null)}>Annulla</button>
+              <button className="btn-green flex-1" onClick={handleContrib}
                 disabled={saving || !contribForm.amount || !contribForm.units || !contribForm.price}>
                 {saving ? "Salvo..." : "Aggiungi Contributo"}
               </button>
@@ -330,12 +330,9 @@ export default function ETFPage() {
                 Elimina piano <strong style={{ color: "#F1F5F9" }}>{deleting.name} ({deleting.ticker})</strong> e tutti i contributi. Azione irreversibile.
               </p>
             </div>
-            <div className="flex gap-2 justify-end">
-              <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
-              <button onClick={handleDelete} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
-                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
-                Elimina
-              </button>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setDeleting(null)}>Annulla</button>
+              <button onClick={handleDelete} className="btn-red flex-1">Elimina</button>
             </div>
           </div>
         </Modal>

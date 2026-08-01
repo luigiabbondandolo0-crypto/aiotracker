@@ -244,9 +244,9 @@ export default function StocksPage() {
               <div><label style={labelStyle}>Paese</label><input style={inputStyle} placeholder="es. USA" value={form.country} onChange={(e) => f("country", e.target.value)} /></div>
               <div className="col-span-2"><label style={labelStyle}>Note</label><input style={inputStyle} value={form.notes} onChange={(e) => f("notes", e.target.value)} /></div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
-              <button className="btn-ghost" onClick={() => { setShowAdd(false); setEditing(null); }}>Annulla</button>
-              <button className="btn-primary" onClick={handleSave} disabled={saving || !form.ticker || !form.units || !form.avgPrice}>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => { setShowAdd(false); setEditing(null); }}>Annulla</button>
+              <button className="btn-amber flex-1" onClick={handleSave} disabled={saving || !form.ticker || !form.units || !form.avgPrice}>
                 {saving ? "Salvo..." : editing ? "Aggiorna" : "Aggiungi"}
               </button>
             </div>
@@ -263,9 +263,9 @@ export default function StocksPage() {
               <input style={inputStyle} type="number" step="any" placeholder="0.00" value={newPrice}
                 onChange={(e) => setNewPrice(e.target.value)} autoFocus />
             </div>
-            <div className="flex gap-2 justify-end">
-              <button className="btn-ghost" onClick={() => setUpdatingPrice(null)}>Annulla</button>
-              <button className="btn-primary" onClick={handleUpdatePrice} disabled={saving || !newPrice}>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setUpdatingPrice(null)}>Annulla</button>
+              <button className="btn-amber flex-1" onClick={handleUpdatePrice} disabled={saving || !newPrice}>
                 {saving ? "Salvo..." : "Aggiorna"}
               </button>
             </div>
@@ -283,12 +283,9 @@ export default function StocksPage() {
                 Elimina <strong style={{ color: "#F1F5F9" }}>{deleting.ticker}</strong>{deleting.companyName ? ` (${deleting.companyName})` : ""}. Azione irreversibile.
               </p>
             </div>
-            <div className="flex gap-2 justify-end">
-              <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
-              <button onClick={handleDelete} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
-                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
-                Elimina
-              </button>
+            <div className="flex gap-3 pt-4">
+              <button className="btn-ghost flex-1" onClick={() => setDeleting(null)}>Annulla</button>
+              <button onClick={handleDelete} className="btn-red flex-1">Elimina</button>
             </div>
           </div>
         </Modal>
