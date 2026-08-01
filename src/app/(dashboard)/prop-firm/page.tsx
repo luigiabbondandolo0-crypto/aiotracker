@@ -344,7 +344,7 @@ export default function PropFirmPage() {
                     <p className="text-xs" style={{ color: "#8492c4" }}>Payout Totale</p>
                     <p className="font-semibold text-sm" style={{ color: "#69f0ae" }}>{formatCurrency(acc.totalPayout, acc.currency)}</p>
                   </div>
-                  {(acc.status === "FUNDED" || acc.status === "ACTIVE" || acc.status === "PAYOUT_REQUESTED") && (
+                  {(acc.status === "PASSED" || acc.status === "ACTIVE" || acc.status === "PAYOUT_REQUESTED") && (
                     <button
                       onClick={() => { setPayoutTarget(acc); setPayoutForm(emptyPayoutForm); }}
                       className="btn-ghost text-xs flex items-center gap-1.5"
