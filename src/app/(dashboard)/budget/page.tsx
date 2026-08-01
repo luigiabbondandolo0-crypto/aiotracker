@@ -144,12 +144,8 @@ export default function BudgetPage() {
 
   return (
     <div className="space-y-5 pb-8">
-      {/* Header */}
-      <div className="flex items-center justify-between animate-fade-in">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>Budget & Spese</h1>
-          <p className="text-sm capitalize mt-0.5" style={{ color: "#8492c4" }}>{monthName}</p>
-        </div>
+      {/* Month navigator */}
+      <div className="flex justify-end animate-fade-in">
         <div className="flex items-center gap-1 rounded-xl p-1" style={{ background: "#212946", border: "1px solid #29314f" }}>
           <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center rounded-lg transition cursor-pointer hover:bg-white/5" style={{ color: "#8492c4" }}><ChevronLeft size={14} /></button>
           <span className="text-sm font-medium capitalize px-2 min-w-[130px] text-center" style={{ color: "#bdc8f0" }}>{monthName}</span>

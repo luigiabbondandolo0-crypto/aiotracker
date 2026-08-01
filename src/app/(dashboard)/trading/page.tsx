@@ -134,21 +134,15 @@ export default function TradingPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>Trading Personale</h1>
-          <p className="text-sm mt-0.5" style={{ color: "#8492c4" }}>Broker personali e trade log</p>
-        </div>
-        <div className="flex gap-2">
-          {accounts.length > 0 && (
-            <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} className="btn-ghost flex items-center gap-2">
-              <Plus size={15} /> Aggiungi Trade
-            </button>
-          )}
-          <button onClick={() => { setAccForm(emptyAccForm); setShowAddAcc(true); }} className="btn-primary flex items-center gap-2">
-            <Plus size={15} /> Aggiungi Conto
+      <div className="flex gap-2 justify-end">
+        {accounts.length > 0 && (
+          <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} className="btn-ghost flex items-center gap-2">
+            <Plus size={15} /> Aggiungi Trade
           </button>
-        </div>
+        )}
+        <button onClick={() => { setAccForm(emptyAccForm); setShowAddAcc(true); }} className="btn-primary flex items-center gap-2">
+          <Plus size={15} /> Aggiungi Conto
+        </button>
       </div>
 
       {/* Stats */}

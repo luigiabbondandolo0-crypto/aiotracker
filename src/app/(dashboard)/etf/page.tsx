@@ -126,11 +126,7 @@ export default function ETFPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>ETF & PAC</h1>
-          <p className="text-sm mt-0.5" style={{ color: "#8492c4" }}>Piani di accumulo su ETF</p>
-        </div>
+      <div className="flex justify-end">
         <button onClick={() => { setForm(emptyPlanForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
           <Plus size={15} /> Nuovo PAC
         </button>

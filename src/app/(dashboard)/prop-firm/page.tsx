@@ -210,12 +210,7 @@ export default function PropFirmPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#d7dcec" }}>Prop Firm</h1>
-          <p className="text-sm mt-0.5" style={{ color: "#8492c4" }}>Gestisci i tuoi account prop firm</p>
-        </div>
+      <div className="flex justify-end">
         <button onClick={openAdd} className="btn-primary flex items-center gap-2">
           <Plus size={15} />
           Aggiungi Account

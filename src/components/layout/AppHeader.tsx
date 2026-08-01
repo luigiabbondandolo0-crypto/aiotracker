@@ -1,61 +1,42 @@
 "use client";
-
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { CHeader, CHeaderToggler, CHeaderNav, CContainer } from "@coreui/react";
 import { Menu } from "lucide-react";
 import { useSidebar } from "./SidebarContext";
 
-const PAGE_TITLES: Record<string, string> = {
-  "/dashboard": "Dashboard",
-  "/prop-firm": "Prop Firm",
-  "/trading": "Trading",
-  "/etf": "ETF & PAC",
-  "/stocks": "Azioni",
-  "/crypto": "Crypto",
-  "/budget": "Budget & Spese",
-};
-
-const PAGE_SUBS: Record<string, string> = {
-  "/dashboard": "Panoramica portfolio",
-  "/prop-firm": "Account finanziati",
-  "/trading": "Account trading",
-  "/etf": "Piani di accumulo",
-  "/stocks": "Portfolio azionario",
-  "/crypto": "Holdings crypto",
-  "/budget": "Entrate e spese",
+const PAGE_INFO: Record<string, { title: string; sub: string }> = {
+  "/dashboard": { title: "Dashboard", sub: "Panoramica portfolio" },
+  "/prop-firm": { title: "Prop Firm", sub: "Account finanziati" },
+  "/trading":   { title: "Trading", sub: "Account trading personali" },
+  "/etf":       { title: "ETF & PAC", sub: "Piani di accumulo" },
+  "/stocks":    { title: "Azioni", sub: "Portfolio azionario" },
+  "/crypto":    { title: "Crypto", sub: "Holdings crypto" },
+  "/budget":    { title: "Budget & Spese", sub: "Entrate e spese mensili" },
 };
 
 export function AppHeader() {
   const { toggleSidebar } = useSidebar();
   const { data: session } = useSession();
   const pathname = usePathname();
-  const title = PAGE_TITLES[pathname] ?? "Dashboard";
-  const sub = PAGE_SUBS[pathname] ?? "";
+  const info = PAGE_INFO[pathname] ?? { title: "Dashboard", sub: "" };
 
   return (
-    <CHeader position="sticky" className="app-header">
-      <CContainer fluid>
-        <CHeaderToggler className="header-toggler-btn" onClick={toggleSidebar}>
-          <Menu size={18} />
-        </CHeaderToggler>
-
-        <div className="header-page-info">
-          <h2 className="header-page-title">{title}</h2>
-          {sub && <p className="header-page-sub">{sub}</p>}
+    <header className="app-header">
+      <button className="header-hamburger" onClick={toggleSidebar} aria-label="Toggle sidebar">
+        <Menu size={18} />
+      </button>
+      <div className="header-page-info">
+        <span className="header-page-title">{info.title}</span>
+        {info.sub && <span className="header-page-sub">{info.sub}</span>}
+      </div>
+      {session?.user && (
+        <div className="header-user-pill">
+          <div className="header-user-avatar">
+            {session.user.name?.[0]?.toUpperCase() ?? "U"}
+          </div>
+          <span className="header-user-name">{session.user.name}</span>
         </div>
-
-        <CHeaderNav className="header-actions">
-          {session?.user && (
-            <div className="header-user-pill">
-              <div className="header-user-avatar">
-                {session.user.name?.[0]?.toUpperCase() ?? "U"}
-              </div>
-              <span className="header-user-name">{session.user.name}</span>
-            </div>
-          )}
-        </CHeaderNav>
-      </CContainer>
-    </CHeader>
+      )}
+    </header>
   );
 }
