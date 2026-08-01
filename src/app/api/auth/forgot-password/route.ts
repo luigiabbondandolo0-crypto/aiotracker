@@ -3,8 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { Resend } from "resend";
 import crypto from "crypto";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
@@ -24,6 +22,8 @@ export async function POST(req: NextRequest) {
 
     const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
 
+    const { Resend } = await import("resend");
+    const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: "AIO Tracker <noreply@aiotracker.app>",
       to: email,

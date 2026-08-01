@@ -14,7 +14,13 @@
       "Bash(git commit -m 'feat: full CRUD for prop firm, trading, ETF, stocks and crypto modules *)",
       "Bash(git push *)",
       "Bash(git commit -m ' *)",
-      "Bash(DATABASE_URL=\"postgresql://postgres.xbvdiuliclrfclalqfgg:OaFWNv4fhCqH994S@aws-0-eu-west-1.pooler.supabase.com:5432/postgres\" node --input-type=module)"
+      "Bash(DATABASE_URL=\"postgresql://postgres.xbvdiuliclrfclalqfgg:OaFWNv4fhCqH994S@aws-0-eu-west-1.pooler.supabase.com:5432/postgres\" node --input-type=module)",
+      "Bash(ls *.zip)",
+      "Bash(unzip -o coreui-free-react-admin-template-main.zip -d /tmp/coreui)",
+      "Read(//tmp/coreui/coreui-free-react-admin-template-main/**)",
+      "Read(//tmp/coreui/coreui-free-react-admin-template-main/src/**)",
+      "Bash(npx tsc *)",
+      "Bash(npx next *)"
     ]
   }
 }

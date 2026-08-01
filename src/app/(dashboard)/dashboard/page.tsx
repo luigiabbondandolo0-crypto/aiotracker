@@ -38,23 +38,24 @@ async function getDashboardData(userId: string) {
   return { netWorth, breakdown: { propFirmTotal, tradingTotal, etfTotal, stocksTotal, cryptoTotal }, monthlyNet, monthlyExpenses };
 }
 
+const BREAKDOWN = [
+  { key: "propFirmTotal"  as const, label: "Prop Firm", color: "blue"   as const },
+  { key: "tradingTotal"   as const, label: "Trading",   color: "purple" as const },
+  { key: "etfTotal"       as const, label: "ETF",       color: "green"  as const },
+  { key: "stocksTotal"    as const, label: "Azioni",    color: "yellow" as const },
+  { key: "cryptoTotal"    as const, label: "Crypto",    color: "red"    as const },
+];
+
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   const data = await getDashboardData(session!.user.id);
   const monthName = new Date().toLocaleString("it-IT", { month: "long", year: "numeric" });
   const firstName = session?.user?.name?.split(" ")[0] ?? "Utente";
-
-  const breakdown = [
-    { label: "Prop Firm", value: data.breakdown.propFirmTotal, color: "blue" as const, pct: data.netWorth > 0 ? (data.breakdown.propFirmTotal / data.netWorth) * 100 : 0 },
-    { label: "Trading", value: data.breakdown.tradingTotal, color: "purple" as const, pct: data.netWorth > 0 ? (data.breakdown.tradingTotal / data.netWorth) * 100 : 0 },
-    { label: "ETF", value: data.breakdown.etfTotal, color: "green" as const, pct: data.netWorth > 0 ? (data.breakdown.etfTotal / data.netWorth) * 100 : 0 },
-    { label: "Azioni", value: data.breakdown.stocksTotal, color: "yellow" as const, pct: data.netWorth > 0 ? (data.breakdown.stocksTotal / data.netWorth) * 100 : 0 },
-    { label: "Crypto", value: data.breakdown.cryptoTotal, color: "red" as const, pct: data.netWorth > 0 ? (data.breakdown.cryptoTotal / data.netWorth) * 100 : 0 },
-  ];
+  const saldo = data.monthlyNet - data.monthlyExpenses;
 
   return (
     <div className="space-y-6 pb-8">
-      {/* Header */}
+      {/* Greeting */}
       <div className="animate-fade-in">
         <div className="flex items-center gap-2 mb-1">
           <div className="dot-live" />
@@ -66,10 +67,9 @@ export default async function DashboardPage() {
         <p className="text-sm capitalize mt-0.5" style={{ color: "#8492c4" }}>{monthName}</p>
       </div>
 
-      {/* Net Worth Hero — Berry EarningCard style */}
+      {/* Net Worth Hero */}
       <div className="animate-fade-in delay-100 rounded-2xl p-6 relative overflow-hidden"
         style={{ background: "linear-gradient(135deg, #5e35b1 0%, #7c4dff 100%)" }}>
-        {/* Decorative circles */}
         <div className="absolute pointer-events-none" style={{ width: "210px", height: "210px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", top: "-80px", right: "-60px" }} />
         <div className="absolute pointer-events-none" style={{ width: "210px", height: "210px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", top: "20px", right: "60px" }} />
         <p className="text-xs font-semibold uppercase tracking-widest mb-2 relative" style={{ color: "rgba(255,255,255,0.7)" }}>Net Worth Totale</p>
@@ -94,43 +94,60 @@ export default async function DashboardPage() {
         <StatCard label="Budget Mese" value={formatCurrency(data.monthlyNet)} sub="Netto disponibile" accentColor="#69f0ae" delay={400} icon={<Wallet />} glowColor="green" />
       </div>
 
-      {/* Asset Allocation */}
-      <div className="card p-5 animate-fade-in delay-400">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-sm font-semibold" style={{ color: "#d7dcec" }}>Asset Allocation</h2>
-          <span className="badge badge-blue">{formatCurrency(data.netWorth)}</span>
-        </div>
-        <div className="space-y-4">
-          {breakdown.map((item) => (
-            <div key={item.label}>
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs font-medium" style={{ color: "#bdc8f0" }}>{item.label}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs" style={{ color: "#8492c4" }}>{formatCurrency(item.value)}</span>
-                  <span className="text-xs font-semibold" style={{ color: "#90caf9" }}>{item.pct.toFixed(1)}%</span>
-                </div>
-              </div>
-              <ProgressBar value={item.pct} color={item.color} />
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Bottom row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 animate-fade-in delay-400">
 
-      {/* Mese overview */}
-      <div className="grid grid-cols-2 gap-3 animate-fade-in delay-500">
-        <div className="card p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingUp size={14} style={{ color: "#69f0ae" }} />
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Netto Mese</p>
+        {/* Asset Allocation — 2 cols */}
+        <div className="card p-5 lg:col-span-2">
+          <div className="card-header" style={{ padding: "0 0 16px", marginBottom: "16px", borderBottom: "1px solid #29314f" }}>
+            <span className="text-sm font-semibold" style={{ color: "#d7dcec" }}>Asset Allocation</span>
+            <span className="badge badge-blue">{formatCurrency(data.netWorth)}</span>
           </div>
-          <p className="text-xl font-bold" style={{ color: "#69f0ae" }}>{formatCurrency(data.monthlyNet)}</p>
+          <div className="space-y-4">
+            {BREAKDOWN.map((item) => {
+              const value = data.breakdown[item.key];
+              const pct = data.netWorth > 0 ? (value / data.netWorth) * 100 : 0;
+              return (
+                <div key={item.key}>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-xs font-medium" style={{ color: "#bdc8f0" }}>{item.label}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs" style={{ color: "#8492c4" }}>{formatCurrency(value)}</span>
+                      <span className="text-xs font-semibold" style={{ color: "#90caf9" }}>{pct.toFixed(1)}%</span>
+                    </div>
+                  </div>
+                  <ProgressBar value={pct} color={item.color} />
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className="card p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingDown size={14} style={{ color: "#ef9a9a" }} />
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Spese Mese</p>
+
+        {/* Monthly summary */}
+        <div className="space-y-3">
+          <div className="card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp size={14} style={{ color: "#69f0ae" }} />
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Netto Mese</p>
+            </div>
+            <p className="text-xl font-bold" style={{ color: "#69f0ae" }}>{formatCurrency(data.monthlyNet)}</p>
           </div>
-          <p className="text-xl font-bold" style={{ color: "#ef9a9a" }}>{formatCurrency(data.monthlyExpenses)}</p>
+          <div className="card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingDown size={14} style={{ color: "#ef9a9a" }} />
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Spese Mese</p>
+            </div>
+            <p className="text-xl font-bold" style={{ color: "#ef9a9a" }}>{formatCurrency(data.monthlyExpenses)}</p>
+          </div>
+          <div className="card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <BarChart2 size={14} style={{ color: "#90caf9" }} />
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Saldo</p>
+            </div>
+            <p className="text-xl font-bold" style={{ color: saldo >= 0 ? "#69f0ae" : "#ef9a9a" }}>
+              {formatCurrency(saldo)}
+            </p>
+          </div>
         </div>
       </div>
     </div>

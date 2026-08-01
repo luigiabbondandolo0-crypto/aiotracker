@@ -1,7 +1,9 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
+import { AppHeader } from "@/components/layout/AppHeader";
+import { SidebarProvider } from "@/components/layout/SidebarContext";
 import { prisma } from "@/lib/prisma";
 
 export default async function DashboardLayout({
@@ -17,7 +19,6 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  // Check onboarding
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: { onboardingCompleted: true },
@@ -25,11 +26,16 @@ export default async function DashboardLayout({
   if (!user?.onboardingCompleted) redirect("/onboarding");
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 overflow-auto">
-        <div className="p-6 max-w-7xl mx-auto">{children}</div>
-      </main>
-    </div>
+    <SidebarProvider>
+      <div className="app-wrapper">
+        <AppSidebar />
+        <div className="app-body">
+          <AppHeader />
+          <main className="app-main">
+            <div className="app-container">{children}</div>
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }
