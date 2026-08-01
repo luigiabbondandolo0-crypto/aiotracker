@@ -15,11 +15,11 @@ function getStrength(pw: string) {
   };
   const score = Object.values(checks).filter(Boolean).length;
   const map: Record<number, { label: string; color: string }> = {
-    0: { label: "", color: "#29314f" },
-    1: { label: "Molto debole", color: "#f44336" },
+    0: { label: "", color: "#1E2D42" },
+    1: { label: "Molto debole", color: "#EF4444" },
     2: { label: "Debole", color: "#ff9800" },
-    3: { label: "Buona", color: "#ffc107" },
-    4: { label: "Forte", color: "#00e676" },
+    3: { label: "Buona", color: "#F59E0B" },
+    4: { label: "Forte", color: "#10B981" },
   };
   return { score, checks, ...map[score] };
 }
@@ -62,36 +62,36 @@ export default function RegisterPage() {
     <AuthCard>
       <AuthLeftPanel subtitle="Crea il tuo account gratuito" />
       <AuthRight>
-        <h1 style={{ color: "#d7dcec", fontSize: "24px", fontWeight: 700, margin: "0 0 4px" }}>Crea Account</h1>
-        <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 24px" }}>Inizia a tracciare le tue finanze oggi</p>
+        <h1 style={{ color: "#F1F5F9", fontSize: "24px", fontWeight: 700, margin: "0 0 4px" }}>Crea Account</h1>
+        <p style={{ color: "#64748B", fontSize: "13px", margin: "0 0 24px" }}>Inizia a tracciare le tue finanze oggi</p>
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
-            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Nome</label>
+            <label style={{ display: "block", color: "#64748B", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Nome</label>
             <div style={{ position: "relative" }}>
-              <User size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
+              <User size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#64748B", pointerEvents: "none" }} />
               <input type="text" value={name} onChange={(e) => setName(e.target.value)}
                 placeholder="Mario Rossi" required className="input-dark pl-icon" />
             </div>
           </div>
 
           <div>
-            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Email</label>
+            <label style={{ display: "block", color: "#64748B", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Email</label>
             <div style={{ position: "relative" }}>
-              <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
+              <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#64748B", pointerEvents: "none" }} />
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                 placeholder="nome@email.com" required className="input-dark pl-icon" />
             </div>
           </div>
 
           <div>
-            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Password</label>
+            <label style={{ display: "block", color: "#64748B", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Password</label>
             <div style={{ position: "relative" }}>
-              <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
+              <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#64748B", pointerEvents: "none" }} />
               <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
                 placeholder="Minimo 8 caratteri" required className="input-dark pl-icon-pr" />
               <button type="button" onClick={() => setShowPassword((v) => !v)}
-                style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+                style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "#64748B", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
                 tabIndex={-1}>
                 {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
@@ -101,15 +101,15 @@ export default function RegisterPage() {
               <div style={{ marginTop: "10px" }}>
                 <div style={{ display: "flex", gap: "4px", marginBottom: "6px" }}>
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} style={{ height: "3px", flex: 1, borderRadius: "2px", transition: "background 0.3s", background: strength.score >= i ? strength.color : "#29314f" }} />
+                    <div key={i} style={{ height: "3px", flex: 1, borderRadius: "2px", transition: "background 0.3s", background: strength.score >= i ? strength.color : "#1E2D42" }} />
                   ))}
                 </div>
                 {strength.label && <p style={{ color: strength.color, fontSize: "11px", fontWeight: 600, margin: "0 0 6px" }}>{strength.label}</p>}
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                   {CHECKS.map(({ key, label }) => (
                     <div key={key} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <CheckCircle size={11} style={{ color: strength.checks[key] ? "#00e676" : "#29314f", flexShrink: 0 }} />
-                      <span style={{ fontSize: "11px", color: strength.checks[key] ? "#8492c4" : "#4a5280" }}>{label}</span>
+                      <CheckCircle size={11} style={{ color: strength.checks[key] ? "#10B981" : "#1E2D42", flexShrink: 0 }} />
+                      <span style={{ fontSize: "11px", color: strength.checks[key] ? "#64748B" : "#475569" }}>{label}</span>
                     </div>
                   ))}
                 </div>
@@ -118,9 +118,9 @@ export default function RegisterPage() {
           </div>
 
           {error && (
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 16px", borderRadius: "10px", background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={14} style={{ color: "#ef9a9a", flexShrink: 0 }} />
-              <p style={{ color: "#ef9a9a", fontSize: "13px", margin: 0 }}>{error}</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 16px", borderRadius: "10px", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+              <AlertCircle size={14} style={{ color: "#FCA5A5", flexShrink: 0 }} />
+              <p style={{ color: "#FCA5A5", fontSize: "13px", margin: 0 }}>{error}</p>
             </div>
           )}
 
@@ -128,7 +128,7 @@ export default function RegisterPage() {
             className="btn-primary"
             style={{
               display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "4px",
-              background: "linear-gradient(135deg, #5e35b1, #7c4dff)",
+              background: "linear-gradient(135deg, #6D28D9, #7C3AED)",
               boxShadow: loading || !isValid ? "none" : "0 4px 16px rgba(94,53,177,0.4)",
               opacity: !isValid && password.length > 0 ? 0.5 : 1,
             }}>
@@ -138,18 +138,18 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid #29314f", display: "flex", flexDirection: "column", gap: "8px" }}>
+        <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid #1E2D42", display: "flex", flexDirection: "column", gap: "8px" }}>
           {["Dati protetti e privati", "Nessuna carta di credito richiesta", "Cancella quando vuoi"].map((item) => (
             <div key={item} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <CheckCircle size={12} style={{ color: "#00e676", flexShrink: 0 }} />
-              <p style={{ fontSize: "12px", color: "#8492c4", margin: 0 }}>{item}</p>
+              <CheckCircle size={12} style={{ color: "#10B981", flexShrink: 0 }} />
+              <p style={{ fontSize: "12px", color: "#64748B", margin: 0 }}>{item}</p>
             </div>
           ))}
         </div>
 
-        <p style={{ textAlign: "center", fontSize: "13px", color: "#8492c4", marginTop: "16px" }}>
+        <p style={{ textAlign: "center", fontSize: "13px", color: "#64748B", marginTop: "16px" }}>
           Hai già un account?{" "}
-          <Link href="/login" style={{ color: "#90caf9", fontWeight: 500, textDecoration: "none" }}>Accedi</Link>
+          <Link href="/login" style={{ color: "#93C5FD", fontWeight: 500, textDecoration: "none" }}>Accedi</Link>
         </p>
       </AuthRight>
     </AuthCard>

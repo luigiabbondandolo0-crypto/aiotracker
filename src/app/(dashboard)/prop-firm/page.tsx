@@ -198,51 +198,57 @@ export default function PropFirmPage() {
   const totalPayouts = accounts.reduce((s, a) => s + a.totalPayout, 0);
 
   const inputStyle = {
-    background: "#212946",
-    border: "1px solid #29314f",
-    color: "#bdc8f0",
+    background: "#162032",
+    border: "1px solid #1E2D42",
+    color: "#CBD5E1",
     borderRadius: "8px",
     padding: "8px 12px",
     width: "100%",
     outline: "none",
   };
-  const labelStyle = { display: "block", fontSize: "12px", fontWeight: 500, color: "#8492c4", marginBottom: "6px" };
+  const labelStyle = { display: "block", fontSize: "12px", fontWeight: 500, color: "#64748B", marginBottom: "6px" };
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="flex justify-end">
-        <button onClick={openAdd} className="btn-primary flex items-center gap-2">
-          <Plus size={15} />
-          Aggiungi Account
-        </button>
+      <div className="page-hero animate-fade-in">
+        <div className="page-hero-text">
+          <h1 className="page-hero-title">Prop Firm</h1>
+          <p className="page-hero-sub">Account finanziati e challenge</p>
+        </div>
+        <div className="page-hero-actions">
+          <button onClick={openAdd} className="btn-primary flex items-center gap-2">
+            <Plus size={15} />
+            Aggiungi Account
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: "Equity Totale", value: formatCurrency(totalEquity, "USD"), icon: <TrendingUp size={16} />, color: "#90caf9" },
-          { label: "Balance Totale", value: formatCurrency(totalBalance, "USD"), icon: <DollarSign size={16} />, color: "#b39ddb" },
-          { label: "Account Attivi", value: String(activeCount), icon: <Activity size={16} />, color: "#69f0ae" },
-          { label: "Payout Totali", value: formatCurrency(totalPayouts, "USD"), icon: <Trophy size={16} />, color: "#ffe57f" },
+          { label: "Equity Totale", value: formatCurrency(totalEquity, "USD"), icon: <TrendingUp size={16} />, color: "#93C5FD" },
+          { label: "Balance Totale", value: formatCurrency(totalBalance, "USD"), icon: <DollarSign size={16} />, color: "#C4B5FD" },
+          { label: "Account Attivi", value: String(activeCount), icon: <Activity size={16} />, color: "#6EE7B7" },
+          { label: "Payout Totali", value: formatCurrency(totalPayouts, "USD"), icon: <Trophy size={16} />, color: "#FCD34D" },
         ].map((s) => (
           <div key={s.label} className="card p-4">
             <div className="flex items-center gap-2 mb-2">
               <span style={{ color: s.color }}>{s.icon}</span>
-              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>{s.label}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#64748B" }}>{s.label}</p>
             </div>
-            <p className="text-xl font-bold" style={{ color: "#d7dcec" }}>{s.value}</p>
+            <p className="text-xl font-bold" style={{ color: "#F1F5F9" }}>{s.value}</p>
           </div>
         ))}
       </div>
 
       {/* Account List */}
       {loading ? (
-        <div className="card p-8 text-center" style={{ color: "#8492c4" }}>Caricamento...</div>
+        <div className="card p-8 text-center" style={{ color: "#64748B" }}>Caricamento...</div>
       ) : accounts.length === 0 ? (
         <div className="card p-10 text-center">
-          <Trophy size={40} style={{ color: "#8492c4", margin: "0 auto 12px" }} />
-          <p className="font-medium" style={{ color: "#d7dcec" }}>Nessun account prop firm</p>
-          <p className="text-sm mt-1" style={{ color: "#8492c4" }}>Aggiungi il tuo primo account</p>
+          <Trophy size={40} style={{ color: "#64748B", margin: "0 auto 12px" }} />
+          <p className="font-medium" style={{ color: "#F1F5F9" }}>Nessun account prop firm</p>
+          <p className="text-sm mt-1" style={{ color: "#64748B" }}>Aggiungi il tuo primo account</p>
           <button onClick={openAdd} className="btn-primary mt-4">Aggiungi Account</button>
         </div>
       ) : (
@@ -266,8 +272,8 @@ export default function PropFirmPage() {
                       <span className={typeBadge(acc.accountType)}>{TYPE_LABELS[acc.accountType]}</span>
                       <span className={statusBadge(acc.status)}>{STATUS_LABELS[acc.status]}</span>
                     </div>
-                    <h3 className="font-semibold text-base" style={{ color: "#d7dcec" }}>{acc.firmName}</h3>
-                    <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>
+                    <h3 className="font-semibold text-base" style={{ color: "#F1F5F9" }}>{acc.firmName}</h3>
+                    <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>
                       {formatCurrency(acc.accountSize, acc.currency)} — dal {formatDate(acc.startDate)}
                     </p>
                   </div>
@@ -276,7 +282,7 @@ export default function PropFirmPage() {
                       <Edit2 size={13} />
                     </button>
                     <button onClick={() => setDeleting(acc)} className="btn-ghost p-1.5" title="Elimina"
-                      style={{ color: "#ef9a9a" }}>
+                      style={{ color: "#FCA5A5" }}>
                       <Trash2 size={13} />
                     </button>
                   </div>
@@ -284,13 +290,13 @@ export default function PropFirmPage() {
 
                 {/* Balance / Equity */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg p-3" style={{ background: "#212946" }}>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Balance</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#bdc8f0" }}>{formatCurrency(acc.balance, acc.currency)}</p>
+                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Balance</p>
+                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{formatCurrency(acc.balance, acc.currency)}</p>
                   </div>
-                  <div className="rounded-lg p-3" style={{ background: "#212946" }}>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Equity</p>
-                    <p className="font-semibold mt-0.5" style={{ color: pnl >= 0 ? "#00e676" : "#f44336" }}>
+                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Equity</p>
+                    <p className="font-semibold mt-0.5" style={{ color: pnl >= 0 ? "#10B981" : "#EF4444" }}>
                       {formatCurrency(acc.equity, acc.currency)}
                       <span className="text-xs ml-1" style={{ opacity: 0.8 }}>({pnl >= 0 ? "+" : ""}{pnlPct.toFixed(1)}%)</span>
                     </p>
@@ -301,14 +307,14 @@ export default function PropFirmPage() {
                 {profitPct !== null && (
                   <div>
                     <div className="flex justify-between mb-1">
-                      <span className="text-xs" style={{ color: "#8492c4" }}>Profit Target</span>
-                      <span className="text-xs" style={{ color: "#90caf9" }}>{profitPct.toFixed(1)}%</span>
+                      <span className="text-xs" style={{ color: "#64748B" }}>Profit Target</span>
+                      <span className="text-xs" style={{ color: "#93C5FD" }}>{profitPct.toFixed(1)}%</span>
                     </div>
                     <div className="progress-track">
                       <div className="progress-fill" style={{
                         width: `${Math.max(profitPct, 0)}%`,
-                        background: "linear-gradient(90deg, #1565c0, #2196f3)",
-                        boxShadow: "0 0 8px rgba(33,150,243,0.5)",
+                        background: "linear-gradient(90deg, #1D4ED8, #3B82F6)",
+                        boxShadow: "0 0 8px rgba(59,130,246,0.5)",
                       }} />
                     </div>
                   </div>
@@ -316,8 +322,8 @@ export default function PropFirmPage() {
                 {drawdownPct !== null && (
                   <div>
                     <div className="flex justify-between mb-1">
-                      <span className="text-xs" style={{ color: "#8492c4" }}>Drawdown Corrente</span>
-                      <span className="text-xs" style={{ color: drawdownPct > 70 ? "#f44336" : "#ffe57f" }}>
+                      <span className="text-xs" style={{ color: "#64748B" }}>Drawdown Corrente</span>
+                      <span className="text-xs" style={{ color: drawdownPct > 70 ? "#EF4444" : "#FCD34D" }}>
                         {acc.currentDrawdown?.toFixed(1)}% / {acc.maxDrawdown}%
                       </span>
                     </div>
@@ -325,25 +331,25 @@ export default function PropFirmPage() {
                       <div className="progress-fill" style={{
                         width: `${Math.min(drawdownPct, 100)}%`,
                         background: drawdownPct > 70
-                          ? "linear-gradient(90deg, #c62828, #f44336)"
-                          : "linear-gradient(90deg, #f9a825, #ffc107)",
-                        boxShadow: drawdownPct > 70 ? "0 0 8px rgba(244,67,54,0.5)" : "0 0 8px rgba(255,193,7,0.5)",
+                          ? "linear-gradient(90deg, #B91C1C, #EF4444)"
+                          : "linear-gradient(90deg, #B45309, #F59E0B)",
+                        boxShadow: drawdownPct > 70 ? "0 0 8px rgba(239,68,68,0.5)" : "0 0 8px rgba(255,193,7,0.5)",
                       }} />
                     </div>
                   </div>
                 )}
 
                 {/* Payouts */}
-                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #29314f" }}>
+                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #1E2D42" }}>
                   <div>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Payout Totale</p>
-                    <p className="font-semibold text-sm" style={{ color: "#69f0ae" }}>{formatCurrency(acc.totalPayout, acc.currency)}</p>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Payout Totale</p>
+                    <p className="font-semibold text-sm" style={{ color: "#6EE7B7" }}>{formatCurrency(acc.totalPayout, acc.currency)}</p>
                   </div>
                   {(acc.status === "PASSED" || acc.status === "ACTIVE" || acc.status === "PAYOUT_REQUESTED") && (
                     <button
                       onClick={() => { setPayoutTarget(acc); setPayoutForm(emptyPayoutForm); }}
                       className="btn-ghost text-xs flex items-center gap-1.5"
-                      style={{ color: "#90caf9" }}
+                      style={{ color: "#93C5FD" }}
                     >
                       <Plus size={12} />
                       Aggiungi Payout
@@ -356,13 +362,13 @@ export default function PropFirmPage() {
                   <div className="space-y-1.5">
                     {acc.payouts.slice(0, 3).map((p) => (
                       <div key={p.id} className="flex items-center justify-between rounded-lg px-3 py-2"
-                        style={{ background: "#212946" }}>
+                        style={{ background: "#162032" }}>
                         <div className="flex items-center gap-2">
-                          <ChevronRight size={12} style={{ color: "#8492c4" }} />
-                          <span className="text-xs" style={{ color: "#bdc8f0" }}>{formatDate(p.date)}</span>
+                          <ChevronRight size={12} style={{ color: "#64748B" }} />
+                          <span className="text-xs" style={{ color: "#CBD5E1" }}>{formatDate(p.date)}</span>
                           <span className={payoutBadge(p.status)}>{PAYOUT_STATUS_LABELS[p.status]}</span>
                         </div>
-                        <span className="text-xs font-semibold" style={{ color: "#69f0ae" }}>
+                        <span className="text-xs font-semibold" style={{ color: "#6EE7B7" }}>
                           {formatCurrency(p.amount, acc.currency)}
                         </span>
                       </div>
@@ -503,17 +509,17 @@ export default function PropFirmPage() {
       {deleting && (
         <Modal title="Elimina Account" onClose={() => setDeleting(null)}>
           <div className="space-y-4">
-            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={18} style={{ color: "#f44336", flexShrink: 0, marginTop: 1 }} />
-              <p className="text-sm" style={{ color: "#bdc8f0" }}>
-                Stai per eliminare <strong style={{ color: "#d7dcec" }}>{deleting.firmName}</strong>. Questa azione è irreversibile.
+            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+              <AlertCircle size={18} style={{ color: "#EF4444", flexShrink: 0, marginTop: 1 }} />
+              <p className="text-sm" style={{ color: "#CBD5E1" }}>
+                Stai per eliminare <strong style={{ color: "#F1F5F9" }}>{deleting.firmName}</strong>. Questa azione è irreversibile.
               </p>
             </div>
             <div className="flex gap-2 justify-end">
               <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
               <button onClick={handleDelete}
                 className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer"
-                style={{ background: "rgba(244,67,54,0.15)", color: "#f44336", border: "1px solid rgba(244,67,54,0.3)" }}>
+                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
                 Elimina
               </button>
             </div>

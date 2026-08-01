@@ -56,11 +56,11 @@ const emptyContribForm = {
 };
 
 const inputStyle = {
-  background: "#212946", border: "1px solid #29314f", color: "#bdc8f0",
+  background: "#162032", border: "1px solid #1E2D42", color: "#CBD5E1",
   borderRadius: "8px", padding: "8px 12px", width: "100%", outline: "none",
 };
 const labelStyle: React.CSSProperties = {
-  display: "block", fontSize: "12px", fontWeight: 500, color: "#8492c4", marginBottom: "6px",
+  display: "block", fontSize: "12px", fontWeight: 500, color: "#64748B", marginBottom: "6px",
 };
 
 export default function ETFPage() {
@@ -126,40 +126,46 @@ export default function ETFPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="flex justify-end">
-        <button onClick={() => { setForm(emptyPlanForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
-          <Plus size={15} /> Nuovo PAC
-        </button>
+      <div className="page-hero animate-fade-in">
+        <div className="page-hero-text">
+          <h1 className="page-hero-title">ETF & PAC</h1>
+          <p className="page-hero-sub">Piani di accumulo e investimento passivo</p>
+        </div>
+        <div className="page-hero-actions">
+          <button onClick={() => { setForm(emptyPlanForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
+            <Plus size={15} /> Nuovo PAC
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: "Totale Investito", value: formatCurrency(totalInvested), icon: <DollarSign size={16} />, color: "#90caf9" },
-          { label: "Valore Attuale", value: formatCurrency(totalValue), icon: <BarChart2 size={16} />, color: "#b39ddb" },
-          { label: "Guadagno", value: formatCurrency(totalGain), icon: totalGain >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalGain >= 0 ? "#00e676" : "#f44336" },
-          { label: "Piani Attivi", value: String(plans.filter((p) => p.isActive).length), icon: <BarChart2 size={16} />, color: "#69f0ae" },
+          { label: "Totale Investito", value: formatCurrency(totalInvested), icon: <DollarSign size={16} />, color: "#93C5FD" },
+          { label: "Valore Attuale", value: formatCurrency(totalValue), icon: <BarChart2 size={16} />, color: "#C4B5FD" },
+          { label: "Guadagno", value: formatCurrency(totalGain), icon: totalGain >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalGain >= 0 ? "#10B981" : "#EF4444" },
+          { label: "Piani Attivi", value: String(plans.filter((p) => p.isActive).length), icon: <BarChart2 size={16} />, color: "#6EE7B7" },
         ].map((s) => (
           <div key={s.label} className="card p-4">
             <div className="flex items-center gap-2 mb-2">
               <span style={{ color: s.color }}>{s.icon}</span>
-              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>{s.label}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#64748B" }}>{s.label}</p>
             </div>
             <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
             {s.label === "Guadagno" && (
-              <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>{totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(2)}%</p>
+              <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(2)}%</p>
             )}
           </div>
         ))}
       </div>
 
       {loading ? (
-        <div className="card p-8 text-center" style={{ color: "#8492c4" }}>Caricamento...</div>
+        <div className="card p-8 text-center" style={{ color: "#64748B" }}>Caricamento...</div>
       ) : plans.length === 0 ? (
         <div className="card p-10 text-center">
-          <BarChart2 size={40} style={{ color: "#8492c4", margin: "0 auto 12px" }} />
-          <p className="font-medium" style={{ color: "#d7dcec" }}>Nessun piano PAC</p>
-          <p className="text-sm mt-1" style={{ color: "#8492c4" }}>Crea il tuo primo piano di accumulo su ETF</p>
+          <BarChart2 size={40} style={{ color: "#64748B", margin: "0 auto 12px" }} />
+          <p className="font-medium" style={{ color: "#F1F5F9" }}>Nessun piano PAC</p>
+          <p className="text-sm mt-1" style={{ color: "#64748B" }}>Crea il tuo primo piano di accumulo su ETF</p>
           <button onClick={() => setShowAdd(true)} className="btn-primary mt-4">Nuovo PAC</button>
         </div>
       ) : (
@@ -178,56 +184,56 @@ export default function ETFPage() {
                       <span className={FREQ_BADGE[plan.frequency]}>{FREQ_LABELS[plan.frequency]}</span>
                       {!plan.isActive && <span className="badge">Inattivo</span>}
                     </div>
-                    <h3 className="font-semibold text-base" style={{ color: "#d7dcec" }}>{plan.name}</h3>
-                    <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>
+                    <h3 className="font-semibold text-base" style={{ color: "#F1F5F9" }}>{plan.name}</h3>
+                    <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>
                       {plan.ticker}{plan.broker ? ` — ${plan.broker}` : ""} — dal {formatDate(plan.startDate)}
                     </p>
                   </div>
                   <div className="flex gap-1">
                     <button onClick={() => openEdit(plan)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
-                    <button onClick={() => setDeleting(plan)} className="btn-ghost p-1.5" style={{ color: "#ef9a9a" }}><Trash2 size={13} /></button>
+                    <button onClick={() => setDeleting(plan)} className="btn-ghost p-1.5" style={{ color: "#FCA5A5" }}><Trash2 size={13} /></button>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg p-3" style={{ background: "#212946" }}>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Investito</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#bdc8f0" }}>{formatCurrency(plan.totalInvested, plan.currency)}</p>
+                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Investito</p>
+                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{formatCurrency(plan.totalInvested, plan.currency)}</p>
                   </div>
-                  <div className="rounded-lg p-3" style={{ background: "#212946" }}>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Valore Attuale</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#bdc8f0" }}>{formatCurrency(value, plan.currency)}</p>
+                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Valore Attuale</p>
+                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{formatCurrency(value, plan.currency)}</p>
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between mb-1">
-                    <span className="text-xs" style={{ color: "#8492c4" }}>Performance</span>
-                    <span className="text-xs font-semibold" style={{ color: gain >= 0 ? "#00e676" : "#f44336" }}>
+                    <span className="text-xs" style={{ color: "#64748B" }}>Performance</span>
+                    <span className="text-xs font-semibold" style={{ color: gain >= 0 ? "#10B981" : "#EF4444" }}>
                       {gain >= 0 ? "+" : ""}{formatCurrency(gain, plan.currency)} ({gainPct >= 0 ? "+" : ""}{gainPct.toFixed(2)}%)
                     </span>
                   </div>
                   <div className="progress-track">
                     <div className="progress-fill" style={{
                       width: `${Math.min(Math.max(progressPct - 100, 0) + (progressPct < 100 ? progressPct : 0), 100)}%`,
-                      background: gain >= 0 ? "linear-gradient(90deg, #00b248, #00e676)" : "linear-gradient(90deg, #c62828, #f44336)",
-                      boxShadow: gain >= 0 ? "0 0 8px rgba(0,230,118,0.5)" : "0 0 8px rgba(244,67,54,0.5)",
+                      background: gain >= 0 ? "linear-gradient(90deg, #059669, #10B981)" : "linear-gradient(90deg, #B91C1C, #EF4444)",
+                      boxShadow: gain >= 0 ? "0 0 8px rgba(16,185,129,0.5)" : "0 0 8px rgba(239,68,68,0.5)",
                     }} />
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #29314f" }}>
+                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #1E2D42" }}>
                   <div className="flex gap-3">
                     <div>
-                      <span className="text-xs" style={{ color: "#8492c4" }}>Quota mensile: </span>
-                      <span className="text-xs font-semibold" style={{ color: "#bdc8f0" }}>{formatCurrency(plan.amount, plan.currency)}</span>
+                      <span className="text-xs" style={{ color: "#64748B" }}>Quota mensile: </span>
+                      <span className="text-xs font-semibold" style={{ color: "#CBD5E1" }}>{formatCurrency(plan.amount, plan.currency)}</span>
                     </div>
                     <div>
-                      <span className="text-xs" style={{ color: "#8492c4" }}>{plan.contributions.length} contributi</span>
+                      <span className="text-xs" style={{ color: "#64748B" }}>{plan.contributions.length} contributi</span>
                     </div>
                   </div>
                   <button onClick={() => { setContribTarget(plan); setContribForm(emptyContribForm); }}
-                    className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#90caf9" }}>
+                    className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#93C5FD" }}>
                     <Plus size={12} /> Contributo
                   </button>
                 </div>
@@ -300,16 +306,16 @@ export default function ETFPage() {
       {deleting && (
         <Modal title="Elimina Piano" onClose={() => setDeleting(null)}>
           <div className="space-y-4">
-            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={18} style={{ color: "#f44336", flexShrink: 0, marginTop: 1 }} />
-              <p className="text-sm" style={{ color: "#bdc8f0" }}>
-                Elimina piano <strong style={{ color: "#d7dcec" }}>{deleting.name} ({deleting.ticker})</strong> e tutti i contributi. Azione irreversibile.
+            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+              <AlertCircle size={18} style={{ color: "#EF4444", flexShrink: 0, marginTop: 1 }} />
+              <p className="text-sm" style={{ color: "#CBD5E1" }}>
+                Elimina piano <strong style={{ color: "#F1F5F9" }}>{deleting.name} ({deleting.ticker})</strong> e tutti i contributi. Azione irreversibile.
               </p>
             </div>
             <div className="flex gap-2 justify-end">
               <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
               <button onClick={handleDelete} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
-                style={{ background: "rgba(244,67,54,0.15)", color: "#f44336", border: "1px solid rgba(244,67,54,0.3)" }}>
+                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
                 Elimina
               </button>
             </div>

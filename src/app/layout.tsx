@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
-const inter = Inter({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
+  variable: "--font-ibm",
 });
 
 export const metadata: Metadata = {
@@ -21,9 +23,9 @@ export default function RootLayout({
   return (
     <html
       lang="it"
-      className={`${inter.className} h-full`}
+      className={`${ibmPlexSans.variable} h-full`}
     >
-      <body className="min-h-full" style={{ background: "#111936", color: "#bdc8f0" }}>
+      <body className="min-h-full">
         <Providers>{children}</Providers>
       </body>
     </html>

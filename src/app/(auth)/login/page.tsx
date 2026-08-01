@@ -15,8 +15,8 @@ function SuccessBanner({ icon, title, subtitle }: { icon: string; title: string;
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: "spring", stiffness: 300, damping: 28 }}
       style={{
-        background: "linear-gradient(135deg, rgba(0,230,118,0.08) 0%, rgba(0,230,118,0.04) 100%)",
-        border: "1px solid rgba(0,230,118,0.25)",
+        background: "linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.04) 100%)",
+        border: "1px solid rgba(16,185,129,0.25)",
         borderRadius: "12px",
         padding: "14px 16px",
         marginBottom: "20px",
@@ -27,8 +27,8 @@ function SuccessBanner({ icon, title, subtitle }: { icon: string; title: string;
     >
       <span style={{ fontSize: "22px", lineHeight: 1 }}>{icon}</span>
       <div>
-        <p style={{ color: "#69f0ae", fontWeight: 600, fontSize: "13px", margin: 0 }}>{title}</p>
-        <p style={{ color: "#8492c4", fontSize: "12px", margin: "2px 0 0" }}>{subtitle}</p>
+        <p style={{ color: "#6EE7B7", fontWeight: 600, fontSize: "13px", margin: 0 }}>{title}</p>
+        <p style={{ color: "#64748B", fontSize: "12px", margin: "2px 0 0" }}>{subtitle}</p>
       </div>
     </motion.div>
   );
@@ -64,8 +64,8 @@ function LoginForm() {
     <AuthCard>
       <AuthLeftPanel subtitle="Accedi al tuo workspace finanziario" />
       <AuthRight>
-        <h1 style={{ color: "#d7dcec", fontSize: "24px", fontWeight: 700, margin: "0 0 4px" }}>Bentornato</h1>
-        <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 24px" }}>Inserisci le tue credenziali per accedere</p>
+        <h1 style={{ color: "#F1F5F9", fontSize: "24px", fontWeight: 700, margin: "0 0 4px" }}>Bentornato</h1>
+        <p style={{ color: "#64748B", fontSize: "13px", margin: "0 0 24px" }}>Inserisci le tue credenziali per accedere</p>
 
         {registered && (
           <SuccessBanner icon="🎉" title="Account creato con successo!" subtitle="Effettua l'accesso per iniziare." />
@@ -76,11 +76,11 @@ function LoginForm() {
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
-            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>
+            <label style={{ display: "block", color: "#64748B", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>
               Email
             </label>
             <div style={{ position: "relative" }}>
-              <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
+              <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#64748B", pointerEvents: "none" }} />
               <input
                 type="email"
                 value={email}
@@ -94,15 +94,15 @@ function LoginForm() {
 
           <div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
-              <label style={{ color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              <label style={{ color: "#64748B", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>
                 Password
               </label>
-              <Link href="/forgot-password" style={{ color: "#90caf9", fontSize: "12px", textDecoration: "none" }}>
+              <Link href="/forgot-password" style={{ color: "#93C5FD", fontSize: "12px", textDecoration: "none" }}>
                 Password dimenticata?
               </Link>
             </div>
             <div style={{ position: "relative" }}>
-              <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
+              <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#64748B", pointerEvents: "none" }} />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -114,7 +114,7 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+                style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "#64748B", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -123,9 +123,9 @@ function LoginForm() {
           </div>
 
           {error && (
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 16px", borderRadius: "10px", background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={14} style={{ color: "#ef9a9a", flexShrink: 0 }} />
-              <p style={{ color: "#ef9a9a", fontSize: "13px", margin: 0 }}>{error}</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 16px", borderRadius: "10px", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+              <AlertCircle size={14} style={{ color: "#FCA5A5", flexShrink: 0 }} />
+              <p style={{ color: "#FCA5A5", fontSize: "13px", margin: 0 }}>{error}</p>
             </div>
           )}
 
@@ -143,9 +143,9 @@ function LoginForm() {
           </button>
         </form>
 
-        <p style={{ textAlign: "center", fontSize: "13px", color: "#8492c4", marginTop: "24px" }}>
+        <p style={{ textAlign: "center", fontSize: "13px", color: "#64748B", marginTop: "24px" }}>
           Non hai un account?{" "}
-          <Link href="/register" style={{ color: "#90caf9", fontWeight: 500, textDecoration: "none" }}>Registrati gratis</Link>
+          <Link href="/register" style={{ color: "#93C5FD", fontWeight: 500, textDecoration: "none" }}>Registrati gratis</Link>
         </p>
       </AuthRight>
     </AuthCard>

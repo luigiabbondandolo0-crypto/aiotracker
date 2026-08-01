@@ -22,10 +22,10 @@ const TOTAL_STEPS = 4;
 
 /* ── Section options ────────────────────────────────────────────────── */
 const SECTIONS = [
-  { id: "propFirm", label: "Prop Firm", desc: "Challenge e account finanziati", icon: Briefcase, color: "#7c4dff" },
-  { id: "trading", label: "Trading Personale", desc: "Forex, indici, materie prime", icon: TrendingUp, color: "#2196f3" },
-  { id: "etf", label: "ETF & Fondi", desc: "Investimento passivo a lungo termine", icon: BarChart2, color: "#00e676" },
-  { id: "stocks", label: "Azioni", desc: "Portafoglio azionario", icon: PieChart, color: "#ffc107" },
+  { id: "propFirm", label: "Prop Firm", desc: "Challenge e account finanziati", icon: Briefcase, color: "#7C3AED" },
+  { id: "trading", label: "Trading Personale", desc: "Forex, indici, materie prime", icon: TrendingUp, color: "#3B82F6" },
+  { id: "etf", label: "ETF & Fondi", desc: "Investimento passivo a lungo termine", icon: BarChart2, color: "#10B981" },
+  { id: "stocks", label: "Azioni", desc: "Portafoglio azionario", icon: PieChart, color: "#F59E0B" },
   { id: "crypto", label: "Criptovalute", desc: "BTC, ETH e altcoin", icon: Bitcoin, color: "#ff9800" },
   { id: "budget", label: "Budget & Spese", desc: "Entrate, uscite e risparmio", icon: Wallet, color: "#e91e63" },
 ];
@@ -42,14 +42,14 @@ function StepWelcome({ onNext }: { onNext: () => void }) {
     <div style={{ textAlign: "center" }}>
       <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 260, damping: 22 }}
         style={{ fontSize: "56px", marginBottom: "20px" }}>👋</motion.div>
-      <h2 style={{ color: "#d7dcec", fontSize: "26px", fontWeight: 700, margin: "0 0 10px" }}>
+      <h2 style={{ color: "#F1F5F9", fontSize: "26px", fontWeight: 700, margin: "0 0 10px" }}>
         Benvenuto in AIO Tracker!
       </h2>
-      <p style={{ color: "#8492c4", fontSize: "14px", lineHeight: 1.7, margin: "0 0 32px", maxWidth: "360px", marginInline: "auto" }}>
-        Ci vogliono <strong style={{ color: "#90caf9" }}>2 minuti</strong> per personalizzare la tua esperienza
+      <p style={{ color: "#64748B", fontSize: "14px", lineHeight: 1.7, margin: "0 0 32px", maxWidth: "360px", marginInline: "auto" }}>
+        Ci vogliono <strong style={{ color: "#93C5FD" }}>2 minuti</strong> per personalizzare la tua esperienza
         e configurare le sezioni che ti interessano.
       </p>
-      <button onClick={onNext} style={btnStyle("#7c4dff")}>
+      <button onClick={onNext} style={btnStyle("#7C3AED")}>
         Iniziamo <ArrowRight size={16} />
       </button>
     </div>
@@ -66,8 +66,8 @@ function StepSections({ prefs, setPrefs, onNext, onBack }: StepProps) {
 
   return (
     <div>
-      <h2 style={{ color: "#d7dcec", fontSize: "20px", fontWeight: 700, margin: "0 0 6px" }}>Cosa vuoi tracciare?</h2>
-      <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 20px" }}>Seleziona una o più sezioni. Puoi cambiarle in qualsiasi momento.</p>
+      <h2 style={{ color: "#F1F5F9", fontSize: "20px", fontWeight: 700, margin: "0 0 6px" }}>Cosa vuoi tracciare?</h2>
+      <p style={{ color: "#64748B", fontSize: "13px", margin: "0 0 20px" }}>Seleziona una o più sezioni. Puoi cambiarle in qualsiasi momento.</p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "28px" }}>
         {SECTIONS.map((s) => {
@@ -77,7 +77,7 @@ function StepSections({ prefs, setPrefs, onNext, onBack }: StepProps) {
             <button key={s.id} onClick={() => toggle(s.id)} style={{
               padding: "14px",
               borderRadius: "12px",
-              border: active ? `1.5px solid ${s.color}` : "1.5px solid #29314f",
+              border: active ? `1.5px solid ${s.color}` : "1.5px solid #1E2D42",
               background: active ? `${s.color}14` : "#131b35",
               cursor: "pointer",
               textAlign: "left",
@@ -92,8 +92,8 @@ function StepSections({ prefs, setPrefs, onNext, onBack }: StepProps) {
               <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: `${s.color}22`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "8px" }}>
                 <Icon size={16} color={s.color} />
               </div>
-              <p style={{ color: active ? "#d7dcec" : "#8492c4", fontSize: "13px", fontWeight: 600, margin: "0 0 2px" }}>{s.label}</p>
-              <p style={{ color: "#4a5280", fontSize: "11px", margin: 0 }}>{s.desc}</p>
+              <p style={{ color: active ? "#F1F5F9" : "#64748B", fontSize: "13px", fontWeight: 600, margin: "0 0 2px" }}>{s.label}</p>
+              <p style={{ color: "#475569", fontSize: "11px", margin: 0 }}>{s.desc}</p>
             </button>
           );
         })}
@@ -107,15 +107,15 @@ function StepSections({ prefs, setPrefs, onNext, onBack }: StepProps) {
 function StepTax({ prefs, setPrefs, onNext, onBack }: StepProps) {
   return (
     <div>
-      <h2 style={{ color: "#d7dcec", fontSize: "20px", fontWeight: 700, margin: "0 0 6px" }}>Fiscalità</h2>
-      <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 20px" }}>Questi dati ci aiutano a calcolare il netto dai tuoi profitti.</p>
+      <h2 style={{ color: "#F1F5F9", fontSize: "20px", fontWeight: 700, margin: "0 0 6px" }}>Fiscalità</h2>
+      <p style={{ color: "#64748B", fontSize: "13px", margin: "0 0 20px" }}>Questi dati ci aiutano a calcolare il netto dai tuoi profitti.</p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "28px" }}>
         {/* Country */}
         <div>
           <label style={labelStyle}>Paese di residenza fiscale</label>
           <div style={{ position: "relative" }}>
-            <Globe size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4" }} />
+            <Globe size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#64748B" }} />
             <select value={prefs.taxRegion} onChange={(e) => setPrefs((p) => ({ ...p, taxRegion: e.target.value }))}
               className="input-dark pl-icon" style={{ appearance: "none", cursor: "pointer" }}>
               <option value="IT">🇮🇹 Italia</option>
@@ -132,12 +132,12 @@ function StepTax({ prefs, setPrefs, onNext, onBack }: StepProps) {
         <div>
           <label style={labelStyle}>Aliquota fiscale sulle plusvalenze</label>
           <div style={{ position: "relative" }}>
-            <Percent size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4" }} />
+            <Percent size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#64748B" }} />
             <input type="number" min={0} max={100} value={prefs.taxRate}
               onChange={(e) => setPrefs((p) => ({ ...p, taxRate: Number(e.target.value) }))}
               className="input-dark pl-icon" placeholder="26" />
           </div>
-          <p style={{ color: "#4a5280", fontSize: "11px", margin: "6px 0 0" }}>
+          <p style={{ color: "#475569", fontSize: "11px", margin: "6px 0 0" }}>
             In Italia: 26% regime dichiarativo, 12.5% titoli di stato
           </p>
         </div>
@@ -155,8 +155,8 @@ function StepBudget({ prefs, setPrefs, onNext, onBack, onSubmit, submitting }: S
 
   return (
     <div>
-      <h2 style={{ color: "#d7dcec", fontSize: "20px", fontWeight: 700, margin: "0 0 6px" }}>Regola di budgeting</h2>
-      <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 20px" }}>Come vuoi allocare le tue entrate mensili?</p>
+      <h2 style={{ color: "#F1F5F9", fontSize: "20px", fontWeight: 700, margin: "0 0 6px" }}>Regola di budgeting</h2>
+      <p style={{ color: "#64748B", fontSize: "13px", margin: "0 0 20px" }}>Come vuoi allocare le tue entrate mensili?</p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
         {BUDGET_RULES.map((r) => {
@@ -171,8 +171,8 @@ function StepBudget({ prefs, setPrefs, onNext, onBack, onSubmit, submitting }: S
             }} style={{
               padding: "14px 16px",
               borderRadius: "12px",
-              border: active ? "1.5px solid #7c4dff" : "1.5px solid #29314f",
-              background: active ? "rgba(124,77,255,0.1)" : "#131b35",
+              border: active ? "1.5px solid #7C3AED" : "1.5px solid #1E2D42",
+              background: active ? "rgba(124,58,237,0.1)" : "#131b35",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -180,25 +180,25 @@ function StepBudget({ prefs, setPrefs, onNext, onBack, onSubmit, submitting }: S
               transition: "all 0.18s",
             }}>
               <div style={{ textAlign: "left" }}>
-                <p style={{ color: active ? "#d7dcec" : "#8492c4", fontSize: "14px", fontWeight: 700, margin: "0 0 2px" }}>{r.label}</p>
-                <p style={{ color: "#4a5280", fontSize: "12px", margin: 0 }}>{r.desc}</p>
+                <p style={{ color: active ? "#F1F5F9" : "#64748B", fontSize: "14px", fontWeight: 700, margin: "0 0 2px" }}>{r.label}</p>
+                <p style={{ color: "#475569", fontSize: "12px", margin: 0 }}>{r.desc}</p>
               </div>
-              {active && <CheckCircle size={18} color="#7c4dff" />}
+              {active && <CheckCircle size={18} color="#7C3AED" />}
             </button>
           );
         })}
       </div>
 
       {isCustom && (
-        <div style={{ background: "#131b35", borderRadius: "12px", padding: "16px", marginBottom: "20px", border: "1px solid #29314f" }}>
+        <div style={{ background: "#131b35", borderRadius: "12px", padding: "16px", marginBottom: "20px", border: "1px solid #1E2D42" }}>
           {[
-            { key: "needs" as const, label: "Necessità", color: "#2196f3" },
-            { key: "wants" as const, label: "Desideri", color: "#ffc107" },
-            { key: "savings" as const, label: "Risparmio", color: "#00e676" },
+            { key: "needs" as const, label: "Necessità", color: "#3B82F6" },
+            { key: "wants" as const, label: "Desideri", color: "#F59E0B" },
+            { key: "savings" as const, label: "Risparmio", color: "#10B981" },
           ].map(({ key, label, color }) => (
             <div key={key} style={{ marginBottom: "12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
-                <label style={{ color: "#8492c4", fontSize: "12px", fontWeight: 600 }}>{label}</label>
+                <label style={{ color: "#64748B", fontSize: "12px", fontWeight: 600 }}>{label}</label>
                 <span style={{ color, fontSize: "12px", fontWeight: 700 }}>{prefs.budgetCustom[key]}%</span>
               </div>
               <input type="range" min={0} max={100} value={prefs.budgetCustom[key]}
@@ -207,7 +207,7 @@ function StepBudget({ prefs, setPrefs, onNext, onBack, onSubmit, submitting }: S
             </div>
           ))}
           {total !== 100 && (
-            <p style={{ color: "#ef9a9a", fontSize: "11px", margin: "4px 0 0", textAlign: "center" }}>
+            <p style={{ color: "#FCA5A5", fontSize: "11px", margin: "4px 0 0", textAlign: "center" }}>
               Totale: {total}% — deve essere 100%
             </p>
           )}
@@ -219,7 +219,7 @@ function StepBudget({ prefs, setPrefs, onNext, onBack, onSubmit, submitting }: S
         onNext={onSubmit}
         nextLabel={submitting ? "Salvataggio..." : "Vai alla Dashboard →"}
         nextDisabled={submitting || (isCustom && total !== 100)}
-        nextColor="#00e676"
+        nextColor="#10B981"
         nextTextColor="#000"
       />
     </div>
@@ -234,7 +234,7 @@ interface StepProps {
   onBack: () => void;
 }
 
-function NavRow({ onBack, onNext, nextLabel = "Continua", nextDisabled = false, nextColor = "#7c4dff", nextTextColor = "#fff" }: {
+function NavRow({ onBack, onNext, nextLabel = "Continua", nextDisabled = false, nextColor = "#7C3AED", nextTextColor = "#fff" }: {
   onBack: () => void;
   onNext: () => void;
   nextLabel?: string;
@@ -247,9 +247,9 @@ function NavRow({ onBack, onNext, nextLabel = "Continua", nextDisabled = false, 
       <button onClick={onBack} style={{
         padding: "11px 18px",
         borderRadius: "10px",
-        border: "1px solid #29314f",
+        border: "1px solid #1E2D42",
         background: "transparent",
-        color: "#8492c4",
+        color: "#64748B",
         fontSize: "13px",
         cursor: "pointer",
         display: "flex",
@@ -301,7 +301,7 @@ function btnStyle(bg: string): React.CSSProperties {
 
 const labelStyle: React.CSSProperties = {
   display: "block",
-  color: "#8492c4",
+  color: "#64748B",
   fontSize: "11px",
   fontWeight: 600,
   letterSpacing: "0.08em",
@@ -315,16 +315,16 @@ function ProgressBar({ step }: { step: number }) {
   return (
     <div style={{ marginBottom: "32px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-        <span style={{ color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+        <span style={{ color: "#64748B", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>
           Configurazione
         </span>
-        <span style={{ color: "#7c4dff", fontSize: "11px", fontWeight: 700 }}>{Math.round(pct)}%</span>
+        <span style={{ color: "#7C3AED", fontSize: "11px", fontWeight: 700 }}>{Math.round(pct)}%</span>
       </div>
-      <div style={{ height: "4px", background: "#29314f", borderRadius: "2px", overflow: "hidden" }}>
+      <div style={{ height: "4px", background: "#1E2D42", borderRadius: "2px", overflow: "hidden" }}>
         <motion.div
           animate={{ width: `${pct}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 18 }}
-          style={{ height: "100%", background: "linear-gradient(90deg, #5e35b1, #7c4dff)", borderRadius: "2px" }}
+          style={{ height: "100%", background: "linear-gradient(90deg, #6D28D9, #7C3AED)", borderRadius: "2px" }}
         />
       </div>
       <div style={{ display: "flex", gap: "6px", marginTop: "10px", justifyContent: "center" }}>
@@ -333,7 +333,7 @@ function ProgressBar({ step }: { step: number }) {
             width: i < step ? "20px" : "6px",
             height: "6px",
             borderRadius: "3px",
-            background: i < step ? "#7c4dff" : "#29314f",
+            background: i < step ? "#7C3AED" : "#1E2D42",
             transition: "all 0.3s ease",
           }} />
         ))}
@@ -383,14 +383,14 @@ export default function OnboardingPage() {
       alignItems: "center",
       justifyContent: "center",
       padding: "16px",
-      background: "#111936",
+      background: "#07090F",
       position: "relative",
       overflow: "hidden",
     }}>
       {/* Ambient */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-        <div style={{ position: "absolute", top: "20%", left: "10%", width: "500px", height: "500px", borderRadius: "50%", background: "radial-gradient(circle, #7c4dff, transparent)", filter: "blur(100px)", opacity: 0.05 }} />
-        <div style={{ position: "absolute", bottom: "10%", right: "10%", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle, #2196f3, transparent)", filter: "blur(100px)", opacity: 0.05 }} />
+        <div style={{ position: "absolute", top: "20%", left: "10%", width: "500px", height: "500px", borderRadius: "50%", background: "radial-gradient(circle, #7C3AED, transparent)", filter: "blur(100px)", opacity: 0.05 }} />
+        <div style={{ position: "absolute", bottom: "10%", right: "10%", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle, #3B82F6, transparent)", filter: "blur(100px)", opacity: 0.05 }} />
       </div>
 
       <motion.div
@@ -400,8 +400,8 @@ export default function OnboardingPage() {
         style={{
           width: "100%",
           maxWidth: "480px",
-          background: "#1a223f",
-          border: "1px solid #29314f",
+          background: "#0F172A",
+          border: "1px solid #1E2D42",
           borderRadius: "20px",
           padding: "36px 40px",
           boxShadow: "0 24px 64px rgba(0,0,0,0.4)",
@@ -410,10 +410,10 @@ export default function OnboardingPage() {
       >
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "28px" }}>
-          <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "linear-gradient(135deg, #5e35b1, #7c4dff)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "linear-gradient(135deg, #6D28D9, #7C3AED)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <Zap size={18} color="white" />
           </div>
-          <span style={{ color: "#d7dcec", fontWeight: 700, fontSize: "15px" }}>AIO Tracker</span>
+          <span style={{ color: "#F1F5F9", fontWeight: 700, fontSize: "15px" }}>AIO Tracker</span>
         </div>
 
         {step > 0 && <ProgressBar step={step} />}

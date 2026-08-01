@@ -49,11 +49,11 @@ const emptyTxForm = {
 };
 
 const inputStyle = {
-  background: "#212946", border: "1px solid #29314f", color: "#bdc8f0",
+  background: "#162032", border: "1px solid #1E2D42", color: "#CBD5E1",
   borderRadius: "8px", padding: "8px 12px", width: "100%", outline: "none",
 };
 const labelStyle: React.CSSProperties = {
-  display: "block", fontSize: "12px", fontWeight: 500, color: "#8492c4", marginBottom: "6px",
+  display: "block", fontSize: "12px", fontWeight: 500, color: "#64748B", marginBottom: "6px",
 };
 
 export default function CryptoPage() {
@@ -138,40 +138,46 @@ export default function CryptoPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="flex justify-end">
-        <button onClick={() => { setForm(emptyForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
-          <Plus size={15} /> Aggiungi Crypto
-        </button>
+      <div className="page-hero animate-fade-in">
+        <div className="page-hero-text">
+          <h1 className="page-hero-title">Crypto</h1>
+          <p className="page-hero-sub">Holdings crypto e asset digitali</p>
+        </div>
+        <div className="page-hero-actions">
+          <button onClick={() => { setForm(emptyForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
+            <Plus size={15} /> Aggiungi Crypto
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: "Valore Portfolio", value: formatCurrency(totalValue, "USD"), icon: <DollarSign size={16} />, color: "#90caf9" },
-          { label: "Costo Totale", value: formatCurrency(totalCost, "USD"), icon: <DollarSign size={16} />, color: "#b39ddb" },
-          { label: "P&L Non Realizzato", value: formatCurrency(totalGain, "USD"), icon: totalGain >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalGain >= 0 ? "#00e676" : "#f44336" },
-          { label: "Asset", value: String(holdings.length), icon: <Bitcoin size={16} />, color: "#ffe57f" },
+          { label: "Valore Portfolio", value: formatCurrency(totalValue, "USD"), icon: <DollarSign size={16} />, color: "#93C5FD" },
+          { label: "Costo Totale", value: formatCurrency(totalCost, "USD"), icon: <DollarSign size={16} />, color: "#C4B5FD" },
+          { label: "P&L Non Realizzato", value: formatCurrency(totalGain, "USD"), icon: totalGain >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalGain >= 0 ? "#10B981" : "#EF4444" },
+          { label: "Asset", value: String(holdings.length), icon: <Bitcoin size={16} />, color: "#FCD34D" },
         ].map((s) => (
           <div key={s.label} className="card p-4">
             <div className="flex items-center gap-2 mb-2">
               <span style={{ color: s.color }}>{s.icon}</span>
-              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>{s.label}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#64748B" }}>{s.label}</p>
             </div>
             <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
             {s.label === "P&L Non Realizzato" && (
-              <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>{totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(2)}%</p>
+              <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(2)}%</p>
             )}
           </div>
         ))}
       </div>
 
       {loading ? (
-        <div className="card p-8 text-center" style={{ color: "#8492c4" }}>Caricamento...</div>
+        <div className="card p-8 text-center" style={{ color: "#64748B" }}>Caricamento...</div>
       ) : holdings.length === 0 ? (
         <div className="card p-10 text-center">
-          <Bitcoin size={40} style={{ color: "#8492c4", margin: "0 auto 12px" }} />
-          <p className="font-medium" style={{ color: "#d7dcec" }}>Nessuna crypto</p>
-          <p className="text-sm mt-1" style={{ color: "#8492c4" }}>Aggiungi le tue criptovalute al portfolio</p>
+          <Bitcoin size={40} style={{ color: "#64748B", margin: "0 auto 12px" }} />
+          <p className="font-medium" style={{ color: "#F1F5F9" }}>Nessuna crypto</p>
+          <p className="text-sm mt-1" style={{ color: "#64748B" }}>Aggiungi le tue criptovalute al portfolio</p>
           <button onClick={() => setShowAdd(true)} className="btn-primary mt-4">Aggiungi Crypto</button>
         </div>
       ) : (
@@ -191,52 +197,52 @@ export default function CryptoPage() {
                       {h.exchange && <span className="badge badge-purple">{h.exchange}</span>}
                       {h.wallet && <span className="badge">{h.wallet}</span>}
                     </div>
-                    <h3 className="font-bold text-xl" style={{ color: "#d7dcec" }}>{h.symbol}</h3>
-                    {h.name && <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>{h.name}</p>}
+                    <h3 className="font-bold text-xl" style={{ color: "#F1F5F9" }}>{h.symbol}</h3>
+                    {h.name && <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{h.name}</p>}
                   </div>
                   <div className="flex gap-1">
                     <button onClick={() => openEdit(h)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
-                    <button onClick={() => setDeleting(h)} className="btn-ghost p-1.5" style={{ color: "#ef9a9a" }}><Trash2 size={13} /></button>
+                    <button onClick={() => setDeleting(h)} className="btn-ghost p-1.5" style={{ color: "#FCA5A5" }}><Trash2 size={13} /></button>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="rounded-lg p-3" style={{ background: "#212946" }}>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Quantità</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#bdc8f0" }}>{h.amount}</p>
+                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Quantità</p>
+                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{h.amount}</p>
                   </div>
-                  <div className="rounded-lg p-3" style={{ background: "#212946" }}>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Valore</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#d7dcec" }}>{formatCurrency(value, h.currency)}</p>
+                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Valore</p>
+                    <p className="font-semibold mt-0.5" style={{ color: "#F1F5F9" }}>{formatCurrency(value, h.currency)}</p>
                   </div>
-                  <div className="rounded-lg p-3" style={{ background: "#212946" }}>
-                    <p className="text-xs" style={{ color: "#8492c4" }}>Prezzo Medio</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#8492c4" }}>{formatCurrency(h.avgBuyPrice, h.currency)}</p>
+                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
+                    <p className="text-xs" style={{ color: "#64748B" }}>Prezzo Medio</p>
+                    <p className="font-semibold mt-0.5" style={{ color: "#64748B" }}>{formatCurrency(h.avgBuyPrice, h.currency)}</p>
                   </div>
-                  <div className="rounded-lg p-3 cursor-pointer" style={{ background: "#212946" }}
+                  <div className="rounded-lg p-3 cursor-pointer" style={{ background: "#162032" }}
                     onClick={() => { setUpdatingPrice(h); setNewPrice(h.currentPrice ? String(h.currentPrice) : ""); }}
                     title="Clicca per aggiornare">
                     <div className="flex items-center gap-1">
-                      <p className="text-xs" style={{ color: "#8492c4" }}>Prezzo Attuale</p>
-                      <RefreshCw size={10} style={{ color: "#8492c4", opacity: 0.6 }} />
+                      <p className="text-xs" style={{ color: "#64748B" }}>Prezzo Attuale</p>
+                      <RefreshCw size={10} style={{ color: "#64748B", opacity: 0.6 }} />
                     </div>
-                    <p className="font-semibold mt-0.5" style={{ color: "#bdc8f0" }}>
+                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>
                       {h.currentPrice ? formatCurrency(h.currentPrice, h.currency) : "—"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #29314f" }}>
+                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #1E2D42" }}>
                   <div>
-                    <p style={{ color: pnl >= 0 ? "#00e676" : "#f44336", fontWeight: 600, fontSize: "14px" }}>
+                    <p style={{ color: pnl >= 0 ? "#10B981" : "#EF4444", fontWeight: 600, fontSize: "14px" }}>
                       {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, h.currency)}
                     </p>
-                    <p className="text-xs" style={{ color: pnlPct >= 0 ? "#00e676" : "#f44336" }}>
+                    <p className="text-xs" style={{ color: pnlPct >= 0 ? "#10B981" : "#EF4444" }}>
                       {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
                     </p>
                   </div>
                   <button onClick={() => { setTxTarget(h); setTxForm(emptyTxForm); }}
-                    className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#90caf9" }}>
+                    className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#93C5FD" }}>
                     <Plus size={12} /> Aggiungi TX
                   </button>
                 </div>
@@ -324,16 +330,16 @@ export default function CryptoPage() {
       {deleting && (
         <Modal title="Elimina Holding" onClose={() => setDeleting(null)}>
           <div className="space-y-4">
-            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={18} style={{ color: "#f44336", flexShrink: 0, marginTop: 1 }} />
-              <p className="text-sm" style={{ color: "#bdc8f0" }}>
-                Elimina <strong style={{ color: "#d7dcec" }}>{deleting.symbol}{deleting.name ? ` (${deleting.name})` : ""}</strong>. Azione irreversibile.
+            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+              <AlertCircle size={18} style={{ color: "#EF4444", flexShrink: 0, marginTop: 1 }} />
+              <p className="text-sm" style={{ color: "#CBD5E1" }}>
+                Elimina <strong style={{ color: "#F1F5F9" }}>{deleting.symbol}{deleting.name ? ` (${deleting.name})` : ""}</strong>. Azione irreversibile.
               </p>
             </div>
             <div className="flex gap-2 justify-end">
               <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
               <button onClick={handleDelete} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
-                style={{ background: "rgba(244,67,54,0.15)", color: "#f44336", border: "1px solid rgba(244,67,54,0.3)" }}>
+                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
                 Elimina
               </button>
             </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
@@ -15,28 +15,28 @@ interface StatCardProps {
   glowColor?: "blue" | "green" | "red" | "purple" | "yellow";
 }
 
-const glowMap = {
-  blue:   "hover:shadow-blue-500/10",
-  green:  "hover:shadow-emerald-500/10",
-  red:    "hover:shadow-red-500/10",
-  purple: "hover:shadow-purple-500/10",
-  yellow: "hover:shadow-yellow-500/10",
+const borderGlowMap = {
+  blue:   "rgba(59,130,246,0.35)",
+  green:  "rgba(16,185,129,0.35)",
+  red:    "rgba(239,68,68,0.35)",
+  purple: "rgba(124,58,237,0.35)",
+  yellow: "rgba(245,158,11,0.35)",
 };
 
-const borderGlowMap = {
-  blue:   "rgba(33,150,243,0.3)",
-  green:  "rgba(0,230,118,0.3)",
-  red:    "rgba(244,67,54,0.3)",
-  purple: "rgba(124,77,255,0.3)",
-  yellow: "rgba(255,193,7,0.3)",
+const iconBgMap = {
+  blue:   { bg: "rgba(59,130,246,0.1)",  border: "rgba(59,130,246,0.2)" },
+  green:  { bg: "rgba(16,185,129,0.1)",  border: "rgba(16,185,129,0.2)" },
+  red:    { bg: "rgba(239,68,68,0.1)",   border: "rgba(239,68,68,0.2)" },
+  purple: { bg: "rgba(124,58,237,0.1)",  border: "rgba(124,58,237,0.2)" },
+  yellow: { bg: "rgba(245,158,11,0.1)",  border: "rgba(245,158,11,0.2)" },
 };
 
 export function StatCard({
-  label, value, sub, trend, accentColor = "#90caf9",
+  label, value, sub, trend, accentColor = "#93C5FD",
   delay = 0, icon, glowColor = "blue",
 }: StatCardProps) {
   const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const iconColors = iconBgMap[glowColor];
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), delay);
@@ -45,43 +45,43 @@ export function StatCard({
 
   return (
     <div
-      ref={ref}
       className={cn(
         "card p-5 cursor-default transition-all duration-300",
-        `hover:shadow-lg ${glowMap[glowColor]}`,
         visible ? "animate-fade-in" : "opacity-0",
       )}
-      style={{
-        animationDelay: `${delay}ms`,
-        // @ts-expect-error CSS var
-        "--hover-border": borderGlowMap[glowColor],
-      }}
+      style={{ animationDelay: `${delay}ms` }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = borderGlowMap[glowColor];
+        (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px ${borderGlowMap[glowColor]}22`;
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "#29314f";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "";
+        (e.currentTarget as HTMLDivElement).style.boxShadow = "";
       }}
     >
-      <div className="flex items-start justify-between mb-3">
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#8492c4" }}>
+      <div className="flex items-start justify-between mb-4">
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#64748B" }}>
           {label}
         </p>
         {icon && (
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: `${accentColor}18`, border: `1px solid ${accentColor}28`, borderRadius: "8px" }}>
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ background: iconColors.bg, border: `1px solid ${iconColors.border}` }}
+          >
             <span style={{ color: accentColor }} className="[&>svg]:w-4 [&>svg]:h-4">{icon}</span>
           </div>
         )}
       </div>
 
-      <p className="text-2xl font-bold tracking-tight mb-1 animate-count-up"
-        style={{ color: accentColor, animationDelay: `${delay + 100}ms` }}>
+      <p
+        className="text-2xl font-bold tracking-tight mb-1 animate-count-up"
+        style={{ color: accentColor, animationDelay: `${delay + 100}ms`, letterSpacing: "-0.03em" }}
+      >
         {value}
       </p>
 
       <div className="flex items-center justify-between">
-        {sub && <p className="text-xs" style={{ color: "#8492c4" }}>{sub}</p>}
+        {sub && <p className="text-xs" style={{ color: "#64748B" }}>{sub}</p>}
         {trend !== undefined && (
           <div className={cn(
             "flex items-center gap-1 text-xs font-medium badge",

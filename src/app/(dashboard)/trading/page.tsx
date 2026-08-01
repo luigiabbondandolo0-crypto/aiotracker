@@ -62,11 +62,11 @@ const emptyTradeForm = {
 };
 
 const inputStyle = {
-  background: "#212946", border: "1px solid #29314f", color: "#bdc8f0",
+  background: "#162032", border: "1px solid #1E2D42", color: "#CBD5E1",
   borderRadius: "8px", padding: "8px 12px", width: "100%", outline: "none",
 };
 const labelStyle: React.CSSProperties = {
-  display: "block", fontSize: "12px", fontWeight: 500, color: "#8492c4", marginBottom: "6px",
+  display: "block", fontSize: "12px", fontWeight: 500, color: "#64748B", marginBottom: "6px",
 };
 
 export default function TradingPage() {
@@ -134,33 +134,39 @@ export default function TradingPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="flex gap-2 justify-end">
-        {accounts.length > 0 && (
-          <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} className="btn-ghost flex items-center gap-2">
-            <Plus size={15} /> Aggiungi Trade
+      <div className="page-hero animate-fade-in">
+        <div className="page-hero-text">
+          <h1 className="page-hero-title">Trading</h1>
+          <p className="page-hero-sub">Account trading personali e log operazioni</p>
+        </div>
+        <div className="page-hero-actions">
+          {accounts.length > 0 && (
+            <button onClick={() => { setTradeForm(emptyTradeForm); setShowAddTrade(true); }} className="btn-ghost flex items-center gap-2">
+              <Plus size={15} /> Trade
+            </button>
+          )}
+          <button onClick={() => { setAccForm(emptyAccForm); setShowAddAcc(true); }} className="btn-primary flex items-center gap-2">
+            <Plus size={15} /> Conto
           </button>
-        )}
-        <button onClick={() => { setAccForm(emptyAccForm); setShowAddAcc(true); }} className="btn-primary flex items-center gap-2">
-          <Plus size={15} /> Aggiungi Conto
-        </button>
+        </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: "Balance Totale", value: formatCurrency(totalBalance, "USD"), icon: <DollarSign size={16} />, color: "#90caf9" },
-          { label: "P&L Totale", value: formatCurrency(totalPnL, "USD"), icon: totalPnL >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalPnL >= 0 ? "#00e676" : "#f44336" },
-          { label: "Conti Attivi", value: String(accounts.filter((a) => a.isActive).length), icon: <Activity size={16} />, color: "#69f0ae" },
-          { label: "Trade Registrati", value: String(allTrades.length), icon: <Activity size={16} />, color: "#b39ddb" },
+          { label: "Balance Totale", value: formatCurrency(totalBalance, "USD"), icon: <DollarSign size={16} />, color: "#93C5FD" },
+          { label: "P&L Totale", value: formatCurrency(totalPnL, "USD"), icon: totalPnL >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalPnL >= 0 ? "#10B981" : "#EF4444" },
+          { label: "Conti Attivi", value: String(accounts.filter((a) => a.isActive).length), icon: <Activity size={16} />, color: "#6EE7B7" },
+          { label: "Trade Registrati", value: String(allTrades.length), icon: <Activity size={16} />, color: "#C4B5FD" },
         ].map((s) => (
           <div key={s.label} className="card p-4">
             <div className="flex items-center gap-2 mb-2">
               <span style={{ color: s.color }}>{s.icon}</span>
-              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>{s.label}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#64748B" }}>{s.label}</p>
             </div>
             <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
             {s.label === "P&L Totale" && (
-              <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>{totalPnLPct >= 0 ? "+" : ""}{totalPnLPct.toFixed(2)}%</p>
+              <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{totalPnLPct >= 0 ? "+" : ""}{totalPnLPct.toFixed(2)}%</p>
             )}
           </div>
         ))}
@@ -169,13 +175,13 @@ export default function TradingPage() {
       <TabBar tabs={[{ key: "conti", label: "Conti" }, { key: "trades", label: `Trade Log (${allTrades.length})` }]} active={tab} onChange={setTab} />
 
       {loading ? (
-        <div className="card p-8 text-center" style={{ color: "#8492c4" }}>Caricamento...</div>
+        <div className="card p-8 text-center" style={{ color: "#64748B" }}>Caricamento...</div>
       ) : tab === "conti" ? (
         accounts.length === 0 ? (
           <div className="card p-10 text-center">
-            <TrendingUp size={40} style={{ color: "#8492c4", margin: "0 auto 12px" }} />
-            <p className="font-medium" style={{ color: "#d7dcec" }}>Nessun conto trading</p>
-            <p className="text-sm mt-1" style={{ color: "#8492c4" }}>Aggiungi il tuo primo conto broker</p>
+            <TrendingUp size={40} style={{ color: "#64748B", margin: "0 auto 12px" }} />
+            <p className="font-medium" style={{ color: "#F1F5F9" }}>Nessun conto trading</p>
+            <p className="text-sm mt-1" style={{ color: "#64748B" }}>Aggiungi il tuo primo conto broker</p>
             <button onClick={() => setShowAddAcc(true)} className="btn-primary mt-4">Aggiungi Conto</button>
           </div>
         ) : (
@@ -191,28 +197,28 @@ export default function TradingPage() {
                         <span className={ASSET_BADGE[acc.assetClass]}>{ASSET_LABELS[acc.assetClass]}</span>
                         {!acc.isActive && <span className="badge">Inattivo</span>}
                       </div>
-                      <h3 className="font-semibold text-base" style={{ color: "#d7dcec" }}>{acc.brokerName}</h3>
-                      <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>{acc.accountName}</p>
+                      <h3 className="font-semibold text-base" style={{ color: "#F1F5F9" }}>{acc.brokerName}</h3>
+                      <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{acc.accountName}</p>
                     </div>
                     <div className="flex gap-1">
                       <button onClick={() => openEditAcc(acc)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
-                      <button onClick={() => setDeletingAcc(acc)} className="btn-ghost p-1.5" style={{ color: "#ef9a9a" }}><Trash2 size={13} /></button>
+                      <button onClick={() => setDeletingAcc(acc)} className="btn-ghost p-1.5" style={{ color: "#FCA5A5" }}><Trash2 size={13} /></button>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { label: "Deposito", value: formatCurrency(acc.initialDeposit, acc.currency), color: "#bdc8f0" },
-                      { label: "Balance", value: formatCurrency(acc.balance, acc.currency), color: "#bdc8f0" },
-                      { label: "P&L", value: `${formatCurrency(pnl, acc.currency)} (${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(1)}%)`, color: pnl >= 0 ? "#00e676" : "#f44336" },
+                      { label: "Deposito", value: formatCurrency(acc.initialDeposit, acc.currency), color: "#CBD5E1" },
+                      { label: "Balance", value: formatCurrency(acc.balance, acc.currency), color: "#CBD5E1" },
+                      { label: "P&L", value: `${formatCurrency(pnl, acc.currency)} (${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(1)}%)`, color: pnl >= 0 ? "#10B981" : "#EF4444" },
                     ].map((c) => (
-                      <div key={c.label} className="rounded-lg p-3" style={{ background: "#212946" }}>
-                        <p className="text-xs" style={{ color: "#8492c4" }}>{c.label}</p>
+                      <div key={c.label} className="rounded-lg p-3" style={{ background: "#162032" }}>
+                        <p className="text-xs" style={{ color: "#64748B" }}>{c.label}</p>
                         <p className="font-semibold text-sm mt-0.5" style={{ color: c.color }}>{c.value}</p>
                       </div>
                     ))}
                   </div>
-                  <div className="flex items-center mt-3 pt-3" style={{ borderTop: "1px solid #29314f" }}>
-                    <span className="text-xs" style={{ color: "#8492c4" }}>{acc.trades.length} trade registrati</span>
+                  <div className="flex items-center mt-3 pt-3" style={{ borderTop: "1px solid #1E2D42" }}>
+                    <span className="text-xs" style={{ color: "#64748B" }}>{acc.trades.length} trade registrati</span>
                   </div>
                 </div>
               );
@@ -222,42 +228,42 @@ export default function TradingPage() {
       ) : (
         allTrades.length === 0 ? (
           <div className="card p-10 text-center">
-            <Activity size={40} style={{ color: "#8492c4", margin: "0 auto 12px" }} />
-            <p className="font-medium" style={{ color: "#d7dcec" }}>Nessun trade registrato</p>
+            <Activity size={40} style={{ color: "#64748B", margin: "0 auto 12px" }} />
+            <p className="font-medium" style={{ color: "#F1F5F9" }}>Nessun trade registrato</p>
           </div>
         ) : (
           <div className="card overflow-hidden">
             <div className="overflow-x-auto">
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #29314f" }}>
+                  <tr style={{ borderBottom: "1px solid #1E2D42" }}>
                     {["Data", "Conto", "Simbolo", "Dir.", "Open", "Close", "Size", "P&L", "Fees"].map((h) => (
-                      <th key={h} style={{ padding: "10px 14px", textAlign: "left", color: "#8492c4", fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{h}</th>
+                      <th key={h} style={{ padding: "10px 14px", textAlign: "left", color: "#64748B", fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {allTrades.map((t) => (
-                    <tr key={t.id} style={{ borderBottom: "1px solid #29314f", transition: "background 150ms" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "#212946")}
+                    <tr key={t.id} style={{ borderBottom: "1px solid #1E2D42", transition: "background 150ms" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "#162032")}
                       onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
-                      <td style={{ padding: "10px 14px", color: "#8492c4", whiteSpace: "nowrap" }}>{formatDate(t.openDate)}</td>
-                      <td style={{ padding: "10px 14px", color: "#bdc8f0", whiteSpace: "nowrap" }}>{(t as any)._accName}</td>
-                      <td style={{ padding: "10px 14px", color: "#d7dcec", fontWeight: 600 }}>{t.symbol}</td>
+                      <td style={{ padding: "10px 14px", color: "#64748B", whiteSpace: "nowrap" }}>{formatDate(t.openDate)}</td>
+                      <td style={{ padding: "10px 14px", color: "#CBD5E1", whiteSpace: "nowrap" }}>{(t as any)._accName}</td>
+                      <td style={{ padding: "10px 14px", color: "#F1F5F9", fontWeight: 600 }}>{t.symbol}</td>
                       <td style={{ padding: "10px 14px" }}>
                         <span className={t.direction === "LONG" ? "badge badge-green" : "badge badge-red"}>{t.direction}</span>
                       </td>
-                      <td style={{ padding: "10px 14px", color: "#bdc8f0" }}>{t.openPrice}</td>
-                      <td style={{ padding: "10px 14px", color: "#bdc8f0" }}>{t.closePrice ?? "—"}</td>
-                      <td style={{ padding: "10px 14px", color: "#bdc8f0" }}>{t.size}</td>
+                      <td style={{ padding: "10px 14px", color: "#CBD5E1" }}>{t.openPrice}</td>
+                      <td style={{ padding: "10px 14px", color: "#CBD5E1" }}>{t.closePrice ?? "—"}</td>
+                      <td style={{ padding: "10px 14px", color: "#CBD5E1" }}>{t.size}</td>
                       <td style={{ padding: "10px 14px" }}>
                         {t.pnl != null ? (
-                          <span style={{ color: t.pnl >= 0 ? "#00e676" : "#f44336", fontWeight: 600 }}>
+                          <span style={{ color: t.pnl >= 0 ? "#10B981" : "#EF4444", fontWeight: 600 }}>
                             {t.pnl >= 0 ? "+" : ""}{formatCurrency(t.pnl, (t as any)._cur)}
                           </span>
-                        ) : <span style={{ color: "#8492c4" }}>—</span>}
+                        ) : <span style={{ color: "#64748B" }}>—</span>}
                       </td>
-                      <td style={{ padding: "10px 14px", color: "#8492c4" }}>{t.fees > 0 ? formatCurrency(t.fees, (t as any)._cur) : "—"}</td>
+                      <td style={{ padding: "10px 14px", color: "#64748B" }}>{t.fees > 0 ? formatCurrency(t.fees, (t as any)._cur) : "—"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -340,16 +346,16 @@ export default function TradingPage() {
       {deletingAcc && (
         <Modal title="Elimina Conto" onClose={() => setDeletingAcc(null)}>
           <div className="space-y-4">
-            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={18} style={{ color: "#f44336", flexShrink: 0, marginTop: 1 }} />
-              <p className="text-sm" style={{ color: "#bdc8f0" }}>
-                Elimina <strong style={{ color: "#d7dcec" }}>{deletingAcc.brokerName} — {deletingAcc.accountName}</strong> e tutti i suoi trade. Azione irreversibile.
+            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+              <AlertCircle size={18} style={{ color: "#EF4444", flexShrink: 0, marginTop: 1 }} />
+              <p className="text-sm" style={{ color: "#CBD5E1" }}>
+                Elimina <strong style={{ color: "#F1F5F9" }}>{deletingAcc.brokerName} — {deletingAcc.accountName}</strong> e tutti i suoi trade. Azione irreversibile.
               </p>
             </div>
             <div className="flex gap-2 justify-end">
               <button className="btn-ghost" onClick={() => setDeletingAcc(null)}>Annulla</button>
               <button onClick={handleDeleteAcc} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
-                style={{ background: "rgba(244,67,54,0.15)", color: "#f44336", border: "1px solid rgba(244,67,54,0.3)" }}>
+                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
                 Elimina
               </button>
             </div>

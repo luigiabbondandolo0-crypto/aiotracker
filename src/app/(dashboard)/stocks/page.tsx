@@ -27,11 +27,11 @@ const emptyForm = {
 };
 
 const inputStyle = {
-  background: "#212946", border: "1px solid #29314f", color: "#bdc8f0",
+  background: "#162032", border: "1px solid #1E2D42", color: "#CBD5E1",
   borderRadius: "8px", padding: "8px 12px", width: "100%", outline: "none",
 };
 const labelStyle: React.CSSProperties = {
-  display: "block", fontSize: "12px", fontWeight: 500, color: "#8492c4", marginBottom: "6px",
+  display: "block", fontSize: "12px", fontWeight: 500, color: "#64748B", marginBottom: "6px",
 };
 
 export default function StocksPage() {
@@ -101,40 +101,46 @@ export default function StocksPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="flex justify-end">
-        <button onClick={() => { setForm(emptyForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
-          <Plus size={15} /> Aggiungi Azione
-        </button>
+      <div className="page-hero animate-fade-in">
+        <div className="page-hero-text">
+          <h1 className="page-hero-title">Azioni</h1>
+          <p className="page-hero-sub">Portfolio azionario e holding</p>
+        </div>
+        <div className="page-hero-actions">
+          <button onClick={() => { setForm(emptyForm); setShowAdd(true); }} className="btn-primary flex items-center gap-2">
+            <Plus size={15} /> Aggiungi Azione
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: "Valore Portfolio", value: formatCurrency(totalValue, "USD"), icon: <DollarSign size={16} />, color: "#90caf9" },
-          { label: "Costo Totale", value: formatCurrency(totalCost, "USD"), icon: <DollarSign size={16} />, color: "#b39ddb" },
-          { label: "P&L Non Realizzato", value: formatCurrency(totalGain, "USD"), icon: totalGain >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalGain >= 0 ? "#00e676" : "#f44336" },
-          { label: "Titoli", value: String(holdings.length), icon: <LineChart size={16} />, color: "#69f0ae" },
+          { label: "Valore Portfolio", value: formatCurrency(totalValue, "USD"), icon: <DollarSign size={16} />, color: "#93C5FD" },
+          { label: "Costo Totale", value: formatCurrency(totalCost, "USD"), icon: <DollarSign size={16} />, color: "#C4B5FD" },
+          { label: "P&L Non Realizzato", value: formatCurrency(totalGain, "USD"), icon: totalGain >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />, color: totalGain >= 0 ? "#10B981" : "#EF4444" },
+          { label: "Titoli", value: String(holdings.length), icon: <LineChart size={16} />, color: "#6EE7B7" },
         ].map((s) => (
           <div key={s.label} className="card p-4">
             <div className="flex items-center gap-2 mb-2">
               <span style={{ color: s.color }}>{s.icon}</span>
-              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>{s.label}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#64748B" }}>{s.label}</p>
             </div>
             <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
             {s.label === "P&L Non Realizzato" && (
-              <p className="text-xs mt-0.5" style={{ color: "#8492c4" }}>{totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(2)}%</p>
+              <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{totalGainPct >= 0 ? "+" : ""}{totalGainPct.toFixed(2)}%</p>
             )}
           </div>
         ))}
       </div>
 
       {loading ? (
-        <div className="card p-8 text-center" style={{ color: "#8492c4" }}>Caricamento...</div>
+        <div className="card p-8 text-center" style={{ color: "#64748B" }}>Caricamento...</div>
       ) : holdings.length === 0 ? (
         <div className="card p-10 text-center">
-          <LineChart size={40} style={{ color: "#8492c4", margin: "0 auto 12px" }} />
-          <p className="font-medium" style={{ color: "#d7dcec" }}>Nessuna posizione azionaria</p>
-          <p className="text-sm mt-1" style={{ color: "#8492c4" }}>Aggiungi le tue azioni al portfolio</p>
+          <LineChart size={40} style={{ color: "#64748B", margin: "0 auto 12px" }} />
+          <p className="font-medium" style={{ color: "#F1F5F9" }}>Nessuna posizione azionaria</p>
+          <p className="text-sm mt-1" style={{ color: "#64748B" }}>Aggiungi le tue azioni al portfolio</p>
           <button onClick={() => setShowAdd(true)} className="btn-primary mt-4">Aggiungi Azione</button>
         </div>
       ) : (
@@ -142,9 +148,9 @@ export default function StocksPage() {
           <div className="overflow-x-auto">
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid #29314f" }}>
+                <tr style={{ borderBottom: "1px solid #1E2D42" }}>
                   {["Ticker", "Azienda", "Qtà", "Prezzo Medio", "Prezzo Attuale", "Valore", "P&L", "P&L %", ""].map((h) => (
-                    <th key={h} style={{ padding: "10px 14px", textAlign: "left", color: "#8492c4", fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{h}</th>
+                    <th key={h} style={{ padding: "10px 14px", textAlign: "left", color: "#64748B", fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -156,38 +162,38 @@ export default function StocksPage() {
                   const pnl = value - cost;
                   const pnlPct = cost > 0 ? (pnl / cost) * 100 : 0;
                   return (
-                    <tr key={h.id} style={{ borderBottom: "1px solid #29314f", transition: "background 150ms" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "#212946")}
+                    <tr key={h.id} style={{ borderBottom: "1px solid #1E2D42", transition: "background 150ms" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "#162032")}
                       onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
                       <td style={{ padding: "10px 14px" }}>
                         <span className="badge badge-blue">{h.ticker}</span>
                       </td>
-                      <td style={{ padding: "10px 14px", color: "#bdc8f0" }}>
+                      <td style={{ padding: "10px 14px", color: "#CBD5E1" }}>
                         <div>{h.companyName ?? "—"}</div>
-                        {h.exchange && <div style={{ color: "#8492c4", fontSize: "11px" }}>{h.exchange}</div>}
+                        {h.exchange && <div style={{ color: "#64748B", fontSize: "11px" }}>{h.exchange}</div>}
                       </td>
-                      <td style={{ padding: "10px 14px", color: "#bdc8f0" }}>{h.units}</td>
-                      <td style={{ padding: "10px 14px", color: "#8492c4" }}>{formatCurrency(h.avgPrice, h.currency)}</td>
+                      <td style={{ padding: "10px 14px", color: "#CBD5E1" }}>{h.units}</td>
+                      <td style={{ padding: "10px 14px", color: "#64748B" }}>{formatCurrency(h.avgPrice, h.currency)}</td>
                       <td style={{ padding: "10px 14px" }}>
                         <button onClick={() => { setUpdatingPrice(h); setNewPrice(h.currentPrice ? String(h.currentPrice) : ""); }}
                           className="flex items-center gap-1.5 cursor-pointer transition-all"
-                          style={{ color: h.currentPrice ? "#bdc8f0" : "#8492c4", background: "none", border: "none", padding: 0 }}
+                          style={{ color: h.currentPrice ? "#CBD5E1" : "#64748B", background: "none", border: "none", padding: 0 }}
                           title="Aggiorna prezzo">
                           {h.currentPrice ? formatCurrency(h.currentPrice, h.currency) : "—"}
                           <RefreshCw size={11} style={{ opacity: 0.5 }} />
                         </button>
                       </td>
-                      <td style={{ padding: "10px 14px", color: "#d7dcec", fontWeight: 600 }}>{formatCurrency(value, h.currency)}</td>
-                      <td style={{ padding: "10px 14px", color: pnl >= 0 ? "#00e676" : "#f44336", fontWeight: 600 }}>
+                      <td style={{ padding: "10px 14px", color: "#F1F5F9", fontWeight: 600 }}>{formatCurrency(value, h.currency)}</td>
+                      <td style={{ padding: "10px 14px", color: pnl >= 0 ? "#10B981" : "#EF4444", fontWeight: 600 }}>
                         {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, h.currency)}
                       </td>
-                      <td style={{ padding: "10px 14px", color: pnlPct >= 0 ? "#00e676" : "#f44336" }}>
+                      <td style={{ padding: "10px 14px", color: pnlPct >= 0 ? "#10B981" : "#EF4444" }}>
                         {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
                       </td>
                       <td style={{ padding: "10px 14px" }}>
                         <div className="flex gap-1">
                           <button onClick={() => openEdit(h)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
-                          <button onClick={() => setDeleting(h)} className="btn-ghost p-1.5" style={{ color: "#ef9a9a" }}><Trash2 size={13} /></button>
+                          <button onClick={() => setDeleting(h)} className="btn-ghost p-1.5" style={{ color: "#FCA5A5" }}><Trash2 size={13} /></button>
                         </div>
                       </td>
                     </tr>
@@ -253,16 +259,16 @@ export default function StocksPage() {
       {deleting && (
         <Modal title="Elimina Posizione" onClose={() => setDeleting(null)}>
           <div className="space-y-4">
-            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={18} style={{ color: "#f44336", flexShrink: 0, marginTop: 1 }} />
-              <p className="text-sm" style={{ color: "#bdc8f0" }}>
-                Elimina <strong style={{ color: "#d7dcec" }}>{deleting.ticker}</strong>{deleting.companyName ? ` (${deleting.companyName})` : ""}. Azione irreversibile.
+            <div className="flex items-start gap-3 rounded-lg p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+              <AlertCircle size={18} style={{ color: "#EF4444", flexShrink: 0, marginTop: 1 }} />
+              <p className="text-sm" style={{ color: "#CBD5E1" }}>
+                Elimina <strong style={{ color: "#F1F5F9" }}>{deleting.ticker}</strong>{deleting.companyName ? ` (${deleting.companyName})` : ""}. Azione irreversibile.
               </p>
             </div>
             <div className="flex gap-2 justify-end">
               <button className="btn-ghost" onClick={() => setDeleting(null)}>Annulla</button>
               <button onClick={handleDelete} className="px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all"
-                style={{ background: "rgba(244,67,54,0.15)", color: "#f44336", border: "1px solid rgba(244,67,54,0.3)" }}>
+                style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.3)" }}>
                 Elimina
               </button>
             </div>
