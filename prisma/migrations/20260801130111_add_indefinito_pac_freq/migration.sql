@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "PACFreq" ADD VALUE 'INDEFINITO';

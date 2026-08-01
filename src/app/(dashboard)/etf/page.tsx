@@ -5,7 +5,7 @@ import { Modal } from "@/components/ui/Modal";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { BarChart2, Plus, Edit2, Trash2, TrendingUp, TrendingDown, DollarSign, AlertCircle } from "lucide-react";
 
-type PACFreq = "WEEKLY" | "BIWEEKLY" | "MONTHLY" | "QUARTERLY";
+type PACFreq = "WEEKLY" | "BIWEEKLY" | "MONTHLY" | "QUARTERLY" | "INDEFINITO";
 
 interface ETFContribution {
   id: string;
@@ -37,11 +37,11 @@ interface ETFPlan {
 }
 
 const FREQ_LABELS: Record<PACFreq, string> = {
-  WEEKLY: "Settimanale", BIWEEKLY: "Bisettimanale", MONTHLY: "Mensile", QUARTERLY: "Trimestrale",
+  WEEKLY: "Settimanale", BIWEEKLY: "Bisettimanale", MONTHLY: "Mensile", QUARTERLY: "Trimestrale", INDEFINITO: "Indefinito",
 };
 const FREQ_BADGE: Record<PACFreq, string> = {
   WEEKLY: "badge badge-yellow", BIWEEKLY: "badge badge-purple",
-  MONTHLY: "badge badge-blue", QUARTERLY: "badge badge-green",
+  MONTHLY: "badge badge-blue", QUARTERLY: "badge badge-green", INDEFINITO: "badge",
 };
 
 const emptyPlanForm = {
@@ -70,6 +70,8 @@ export default function ETFPage() {
   const [editing, setEditing] = useState<ETFPlan | null>(null);
   const [deleting, setDeleting] = useState<ETFPlan | null>(null);
   const [contribTarget, setContribTarget] = useState<ETFPlan | null>(null);
+  const [updatingPrice, setUpdatingPrice] = useState<ETFPlan | null>(null);
+  const [newPrice, setNewPrice] = useState("");
   const [form, setForm] = useState(emptyPlanForm);
   const [contribForm, setContribForm] = useState(emptyContribForm);
   const [saving, setSaving] = useState(false);
@@ -122,6 +124,18 @@ export default function ETFPage() {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(contribForm),
     });
     await fetchData(); setSaving(false); setContribTarget(null); setContribForm(emptyContribForm);
+  };
+
+  const handleUpdatePrice = async () => {
+    if (!updatingPrice) return;
+    setSaving(true);
+    const price = Number(newPrice);
+    const currentValue = updatingPrice.units > 0 ? updatingPrice.units * price : price;
+    await fetch(`/api/etf-plans/${updatingPrice.id}`, {
+      method: "PUT", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...updatingPrice, currentValue, startDate: updatingPrice.startDate.slice(0, 10) }),
+    });
+    await fetchData(); setSaving(false); setUpdatingPrice(null); setNewPrice("");
   };
 
   return (
@@ -250,10 +264,16 @@ export default function ETFPage() {
                       <span className="text-xs" style={{ color: "#64748B" }}>{plan.contributions.length} contributi</span>
                     </div>
                   </div>
-                  <button onClick={() => { setContribTarget(plan); setContribForm(emptyContribForm); }}
-                    className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#93C5FD" }}>
-                    <Plus size={12} /> Contributo
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => { setUpdatingPrice(plan); setNewPrice(plan.units > 0 && plan.currentValue ? String((plan.currentValue / plan.units).toFixed(4)) : ""); }}
+                      className="btn-ghost text-xs flex items-center gap-1" style={{ color: "#6EE7B7", padding: "5px 10px" }}>
+                      <TrendingUp size={11} /> Prezzo
+                    </button>
+                    <button onClick={() => { setContribTarget(plan); setContribForm(emptyContribForm); }}
+                      className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#93C5FD", padding: "5px 10px" }}>
+                      <Plus size={12} /> Contributo
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -270,7 +290,7 @@ export default function ETFPage() {
               <div><label style={labelStyle}>Ticker *</label><input style={inputStyle} placeholder="es. SWDA" value={form.ticker} onChange={(e) => f("ticker", e.target.value)} /></div>
               <div><label style={labelStyle}>ISIN (opz.)</label><input style={inputStyle} placeholder="es. IE00B4L5Y983" value={form.isin} onChange={(e) => f("isin", e.target.value)} /></div>
               <div><label style={labelStyle}>Broker (opz.)</label><input style={inputStyle} placeholder="es. Fineco, Directa" value={form.broker} onChange={(e) => f("broker", e.target.value)} /></div>
-              <div><label style={labelStyle}>Frequenza</label>
+              <div><label style={labelStyle}>Frequenza acquisto</label>
                 <select style={inputStyle} value={form.frequency} onChange={(e) => f("frequency", e.target.value)}>
                   {Object.entries(FREQ_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                 </select>
@@ -314,6 +334,45 @@ export default function ETFPage() {
               <button className="btn-green flex-1" onClick={handleContrib}
                 disabled={saving || !contribForm.amount || !contribForm.units || !contribForm.price}>
                 {saving ? "Salvo..." : "Aggiungi Contributo"}
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Update Price Modal */}
+      {updatingPrice && (
+        <Modal title={`Aggiorna Prezzo — ${updatingPrice.ticker}`} onClose={() => { setUpdatingPrice(null); setNewPrice(""); }}>
+          <div className="space-y-4">
+            <div className="rounded-xl p-4" style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)" }}>
+              <p className="text-xs" style={{ color: "#64748B" }}>Quote totali: <span style={{ color: "#CBD5E1", fontWeight: 600 }}>{updatingPrice.units.toFixed(4)}</span></p>
+              <p className="text-xs mt-1" style={{ color: "#64748B" }}>Valore attuale: <span style={{ color: "#CBD5E1", fontWeight: 600 }}>{formatCurrency(updatingPrice.currentValue || 0, updatingPrice.currency)}</span></p>
+            </div>
+            <div>
+              <label style={labelStyle}>Prezzo Attuale per Quota ({updatingPrice.currency})</label>
+              <input style={inputStyle} type="number" step="any" placeholder="0.0000" value={newPrice}
+                onChange={(e) => setNewPrice(e.target.value)} autoFocus />
+              {newPrice && updatingPrice.units > 0 && (
+                <div className="mt-2 p-3 rounded-xl" style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)" }}>
+                  {(() => {
+                    const price = Number(newPrice);
+                    const value = updatingPrice.units * price;
+                    const gain = value - updatingPrice.totalInvested;
+                    const gainPct = updatingPrice.totalInvested > 0 ? (gain / updatingPrice.totalInvested) * 100 : 0;
+                    return (
+                      <>
+                        <p className="text-xs" style={{ color: "#64748B" }}>{updatingPrice.units.toFixed(4)} quote × {formatCurrency(price, updatingPrice.currency)} = <span style={{ color: "#6EE7B7", fontWeight: 700 }}>{formatCurrency(value, updatingPrice.currency)}</span></p>
+                        <p className="text-xs mt-1" style={{ color: gain >= 0 ? "#6EE7B7" : "#FCA5A5" }}>P&L: {gain >= 0 ? "+" : ""}{formatCurrency(gain, updatingPrice.currency)} ({gainPct >= 0 ? "+" : ""}{gainPct.toFixed(2)}%)</p>
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+            <div className="flex gap-3 pt-2">
+              <button className="btn-ghost flex-1" onClick={() => { setUpdatingPrice(null); setNewPrice(""); }}>Annulla</button>
+              <button className="btn-green flex-1" onClick={handleUpdatePrice} disabled={saving || !newPrice}>
+                {saving ? "Salvo..." : "Aggiorna"}
               </button>
             </div>
           </div>

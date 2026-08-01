@@ -235,6 +235,7 @@ enum PACFreq {
   BIWEEKLY
   MONTHLY
   QUARTERLY
+  INDEFINITO
 }
 
 // ─── AZIONI ──────────────────────────────────────────────────────────────────
