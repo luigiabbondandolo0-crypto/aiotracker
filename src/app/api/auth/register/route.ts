@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+function isStrongPassword(pw: string): boolean {
+  return (
+    pw.length >= 8 &&
+    /[A-Z]/.test(pw) &&
+    /[0-9]/.test(pw) &&
+    /[^A-Za-z0-9]/.test(pw)
+  );
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { name, email, password } = await req.json();
@@ -10,8 +19,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Campi obbligatori mancanti" }, { status: 400 });
     }
 
-    if (password.length < 8) {
-      return NextResponse.json({ error: "Password minimo 8 caratteri" }, { status: 400 });
+    if (!isStrongPassword(password)) {
+      return NextResponse.json(
+        { error: "Password non sicura: minimo 8 caratteri, una maiuscola, un numero, un simbolo" },
+        { status: 400 }
+      );
     }
 
     const existing = await prisma.user.findUnique({ where: { email } });
