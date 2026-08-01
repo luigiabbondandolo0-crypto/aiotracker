@@ -222,8 +222,8 @@ export default function ETFPage() {
                     </p>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => openEdit(plan)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
-                    <button onClick={() => setDeleting(plan)} className="btn-ghost p-1.5" style={{ color: "#FCA5A5" }}><Trash2 size={13} /></button>
+                    <button onClick={() => openEdit(plan)} className="btn-icon"><Edit2 size={13} /></button>
+                    <button onClick={() => setDeleting(plan)} className="btn-icon danger"><Trash2 size={13} /></button>
                   </div>
                 </div>
 

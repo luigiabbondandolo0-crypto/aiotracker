@@ -295,11 +295,10 @@ export default function PropFirmPage() {
                     </p>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => openEdit(acc)} className="btn-ghost p-1.5" title="Modifica">
+                    <button onClick={() => openEdit(acc)} className="btn-icon" title="Modifica">
                       <Edit2 size={13} />
                     </button>
-                    <button onClick={() => setDeleting(acc)} className="btn-ghost p-1.5" title="Elimina"
-                      style={{ color: "#FCA5A5" }}>
+                    <button onClick={() => setDeleting(acc)} className="btn-icon danger" title="Elimina">
                       <Trash2 size={13} />
                     </button>
                   </div>

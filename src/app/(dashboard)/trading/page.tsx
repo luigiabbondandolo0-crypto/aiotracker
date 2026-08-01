@@ -223,8 +223,8 @@ export default function TradingPage() {
                       <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{acc.accountName}</p>
                     </div>
                     <div className="flex gap-1">
-                      <button onClick={() => openEditAcc(acc)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
-                      <button onClick={() => setDeletingAcc(acc)} className="btn-ghost p-1.5" style={{ color: "#FCA5A5" }}><Trash2 size={13} /></button>
+                      <button onClick={() => openEditAcc(acc)} className="btn-icon"><Edit2 size={13} /></button>
+                      <button onClick={() => setDeletingAcc(acc)} className="btn-icon danger"><Trash2 size={13} /></button>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">

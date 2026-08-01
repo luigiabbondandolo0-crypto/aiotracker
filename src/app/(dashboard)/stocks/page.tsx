@@ -210,8 +210,8 @@ export default function StocksPage() {
                       </td>
                       <td style={{ padding: "10px 14px" }}>
                         <div className="flex gap-1">
-                          <button onClick={() => openEdit(h)} className="btn-ghost p-1.5"><Edit2 size={13} /></button>
-                          <button onClick={() => setDeleting(h)} className="btn-ghost p-1.5" style={{ color: "#FCA5A5" }}><Trash2 size={13} /></button>
+                          <button onClick={() => openEdit(h)} className="btn-icon"><Edit2 size={13} /></button>
+                          <button onClick={() => setDeleting(h)} className="btn-icon danger"><Trash2 size={13} /></button>
                         </div>
                       </td>
                     </tr>
