@@ -55,8 +55,8 @@ function FinanceCanvas() {
         ctx.fill();
       }
 
-      // Animated chart line
-      const prog = Math.min(t / 100, 1);
+      // Animated chart line — draws once, slow rise
+      const prog = Math.min(t / 240, 1);
       const vis = Math.floor(prog * points.length);
       if (vis > 1) {
         const visible = points.slice(0, vis);
@@ -95,8 +95,7 @@ function FinanceCanvas() {
         ctx.fill();
       }
 
-      t++;
-      if (t > 280) t = 0;
+      t++; // no reset — draw once
     }
 
     const ro = new ResizeObserver(() => { setup(); t = 0; });

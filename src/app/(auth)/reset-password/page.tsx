@@ -33,9 +33,7 @@ const CHECKS = [
 
 function ResetForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token") ?? "";
-
+  const token = useSearchParams().get("token") ?? "";
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -63,44 +61,44 @@ function ResetForm() {
     <AuthCard>
       <AuthLeftPanel subtitle="Scegli una nuova password sicura" />
       <AuthRight>
-        <h1 className="text-2xl font-bold mb-1" style={{ color: "#d7dcec" }}>Nuova Password</h1>
-        <p className="text-sm mb-6" style={{ color: "#8492c4" }}>Inserisci la tua nuova password</p>
+        <h1 style={{ color: "#d7dcec", fontSize: "24px", fontWeight: 700, margin: "0 0 4px" }}>Nuova Password</h1>
+        <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 24px" }}>Inserisci la tua nuova password</p>
 
         {!token ? (
-          <div className="text-center py-4">
-            <p className="text-sm mb-3" style={{ color: "#ef9a9a" }}>Link non valido o scaduto.</p>
-            <Link href="/forgot-password" style={{ color: "#90caf9" }} className="text-sm font-medium">
+          <div style={{ textAlign: "center", padding: "20px 0" }}>
+            <p style={{ color: "#ef9a9a", fontSize: "13px", marginBottom: "12px" }}>Link non valido o scaduto.</p>
+            <Link href="/forgot-password" style={{ color: "#90caf9", fontSize: "13px", fontWeight: 500 }}>
               Richiedi un nuovo link →
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div>
-              <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#8492c4" }}>Nuova Password</label>
-              <div className="relative">
-                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#8492c4" }} />
+              <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Nuova Password</label>
+              <div style={{ position: "relative" }}>
+                <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
                 <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Minimo 8 caratteri" required className="input-dark pl-10 pr-10 w-full" />
+                  placeholder="Minimo 8 caratteri" required className="input-dark pl-icon-pr" />
                 <button type="button" onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "#8492c4" }} tabIndex={-1}>
+                  style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+                  tabIndex={-1}>
                   {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
 
               {password && (
-                <div className="mt-2 space-y-2 animate-fade-in">
-                  <div className="flex gap-1">
+                <div style={{ marginTop: "10px" }}>
+                  <div style={{ display: "flex", gap: "4px", marginBottom: "6px" }}>
                     {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="h-1 flex-1 rounded-full transition-all duration-300"
-                        style={{ background: strength.score >= i ? strength.color : "#29314f" }} />
+                      <div key={i} style={{ height: "3px", flex: 1, borderRadius: "2px", transition: "background 0.3s", background: strength.score >= i ? strength.color : "#29314f" }} />
                     ))}
                   </div>
-                  {strength.label && <p className="text-xs font-medium" style={{ color: strength.color }}>{strength.label}</p>}
-                  <div className="space-y-1">
+                  {strength.label && <p style={{ color: strength.color, fontSize: "11px", fontWeight: 600, margin: "0 0 6px" }}>{strength.label}</p>}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                     {CHECKS.map(({ key, label }) => (
-                      <div key={key} className="flex items-center gap-1.5">
-                        <CheckCircle size={11} style={{ color: strength.checks[key] ? "#00e676" : "#29314f" }} />
-                        <span className="text-xs" style={{ color: strength.checks[key] ? "#8492c4" : "#4a5280" }}>{label}</span>
+                      <div key={key} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <CheckCircle size={11} style={{ color: strength.checks[key] ? "#00e676" : "#29314f", flexShrink: 0 }} />
+                        <span style={{ fontSize: "11px", color: strength.checks[key] ? "#8492c4" : "#4a5280" }}>{label}</span>
                       </div>
                     ))}
                   </div>
@@ -109,24 +107,20 @@ function ResetForm() {
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 px-4 py-3 rounded-xl animate-fade-in"
-                style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-                <AlertCircle size={14} className="flex-shrink-0" style={{ color: "#ef9a9a" }} />
-                <p className="text-sm" style={{ color: "#ef9a9a" }}>{error}</p>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 16px", borderRadius: "10px", background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
+                <AlertCircle size={14} style={{ color: "#ef9a9a", flexShrink: 0 }} />
+                <p style={{ color: "#ef9a9a", fontSize: "13px", margin: 0 }}>{error}</p>
               </div>
             )}
 
-            <button type="submit" disabled={loading || !isValid}
-              className="btn-primary w-full flex items-center justify-center gap-2"
+            <button type="submit" disabled={loading || !isValid} className="btn-primary"
               style={{
-                marginTop: "8px",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "4px",
                 opacity: !isValid && password.length > 0 ? 0.5 : 1,
               }}>
               {loading ? (
                 <><span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />Salvataggio...</>
-              ) : (
-                <>Salva Password <ArrowRight size={14} /></>
-              )}
+              ) : <>Salva Password <ArrowRight size={14} /></>}
             </button>
           </form>
         )}

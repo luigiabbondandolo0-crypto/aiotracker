@@ -4,8 +4,35 @@ import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 import { AuthCard, AuthLeftPanel, AuthRight } from "@/components/AuthPanel";
+
+function SuccessBanner({ icon, title, subtitle }: { icon: string; title: string; subtitle: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -8, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 28 }}
+      style={{
+        background: "linear-gradient(135deg, rgba(0,230,118,0.08) 0%, rgba(0,230,118,0.04) 100%)",
+        border: "1px solid rgba(0,230,118,0.25)",
+        borderRadius: "12px",
+        padding: "14px 16px",
+        marginBottom: "20px",
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+      }}
+    >
+      <span style={{ fontSize: "22px", lineHeight: 1 }}>{icon}</span>
+      <div>
+        <p style={{ color: "#69f0ae", fontWeight: 600, fontSize: "13px", margin: 0 }}>{title}</p>
+        <p style={{ color: "#8492c4", fontSize: "12px", margin: "2px 0 0" }}>{subtitle}</p>
+      </div>
+    </motion.div>
+  );
+}
 
 function LoginForm() {
   const router = useRouter();
@@ -37,62 +64,77 @@ function LoginForm() {
     <AuthCard>
       <AuthLeftPanel subtitle="Accedi al tuo workspace finanziario" />
       <AuthRight>
-        <h1 className="text-2xl font-bold mb-1" style={{ color: "#d7dcec" }}>Bentornato</h1>
-        <p className="text-sm mb-6" style={{ color: "#8492c4" }}>Inserisci le tue credenziali per accedere</p>
+        <h1 style={{ color: "#d7dcec", fontSize: "24px", fontWeight: 700, margin: "0 0 4px" }}>Bentornato</h1>
+        <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 24px" }}>Inserisci le tue credenziali per accedere</p>
 
         {registered && (
-          <div className="flex items-center gap-2 px-4 py-3 rounded-xl mb-4 animate-fade-in"
-            style={{ background: "rgba(0,230,118,0.08)", border: "1px solid rgba(0,230,118,0.2)" }}>
-            <CheckCircle size={14} className="flex-shrink-0" style={{ color: "#69f0ae" }} />
-            <p className="text-sm" style={{ color: "#69f0ae" }}>Account creato. Accedi ora.</p>
-          </div>
+          <SuccessBanner icon="🎉" title="Account creato con successo!" subtitle="Effettua l'accesso per iniziare." />
         )}
         {reset && (
-          <div className="flex items-center gap-2 px-4 py-3 rounded-xl mb-4 animate-fade-in"
-            style={{ background: "rgba(0,230,118,0.08)", border: "1px solid rgba(0,230,118,0.2)" }}>
-            <CheckCircle size={14} className="flex-shrink-0" style={{ color: "#69f0ae" }} />
-            <p className="text-sm" style={{ color: "#69f0ae" }}>Password aggiornata. Accedi ora.</p>
-          </div>
+          <SuccessBanner icon="🔐" title="Password aggiornata!" subtitle="Accedi con la tua nuova password." />
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
-            <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#8492c4" }}>Email</label>
-            <div className="relative">
-              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#8492c4" }} />
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                placeholder="nome@email.com" required className="input-dark pl-10 w-full" />
+            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>
+              Email
+            </label>
+            <div style={{ position: "relative" }}>
+              <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="nome@email.com"
+                required
+                className="input-dark pl-icon"
+              />
             </div>
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: "#8492c4" }}>Password</label>
-              <Link href="/forgot-password" className="text-xs transition" style={{ color: "#90caf9" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+              <label style={{ color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                Password
+              </label>
+              <Link href="/forgot-password" style={{ color: "#90caf9", fontSize: "12px", textDecoration: "none" }}>
                 Password dimenticata?
               </Link>
             </div>
-            <div className="relative">
-              <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#8492c4" }} />
-              <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••" required className="input-dark pl-10 pr-10 w-full" />
-              <button type="button" onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "#8492c4" }} tabIndex={-1}>
+            <div style={{ position: "relative" }}>
+              <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="input-dark pl-icon-pr"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+                tabIndex={-1}
+              >
                 {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
             </div>
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 px-4 py-3 rounded-xl animate-fade-in"
-              style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={14} className="flex-shrink-0" style={{ color: "#ef9a9a" }} />
-              <p className="text-sm" style={{ color: "#ef9a9a" }}>{error}</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 16px", borderRadius: "10px", background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
+              <AlertCircle size={14} style={{ color: "#ef9a9a", flexShrink: 0 }} />
+              <p style={{ color: "#ef9a9a", fontSize: "13px", margin: 0 }}>{error}</p>
             </div>
           )}
 
-          <button type="submit" disabled={loading}
-            className="btn-primary w-full flex items-center justify-center gap-2" style={{ marginTop: "8px" }}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary"
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "4px" }}
+          >
             {loading ? (
               <><span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />Accesso...</>
             ) : (
@@ -101,9 +143,9 @@ function LoginForm() {
           </button>
         </form>
 
-        <p className="text-center text-sm mt-6" style={{ color: "#8492c4" }}>
+        <p style={{ textAlign: "center", fontSize: "13px", color: "#8492c4", marginTop: "24px" }}>
           Non hai un account?{" "}
-          <Link href="/register" className="font-medium transition" style={{ color: "#90caf9" }}>Registrati gratis</Link>
+          <Link href="/register" style={{ color: "#90caf9", fontWeight: 500, textDecoration: "none" }}>Registrati gratis</Link>
         </p>
       </AuthRight>
     </AuthCard>

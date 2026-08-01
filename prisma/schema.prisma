@@ -14,9 +14,11 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
-  password      String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  password              String?
+  onboardingCompleted   Boolean   @default(false)
+  preferences           Json?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   accounts           Account[]
   sessions           Session[]

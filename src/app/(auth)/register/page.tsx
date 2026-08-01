@@ -62,54 +62,54 @@ export default function RegisterPage() {
     <AuthCard>
       <AuthLeftPanel subtitle="Crea il tuo account gratuito" />
       <AuthRight>
-        <h1 className="text-2xl font-bold mb-1" style={{ color: "#d7dcec" }}>Crea Account</h1>
-        <p className="text-sm mb-6" style={{ color: "#8492c4" }}>Inizia a tracciare le tue finanze oggi</p>
+        <h1 style={{ color: "#d7dcec", fontSize: "24px", fontWeight: 700, margin: "0 0 4px" }}>Crea Account</h1>
+        <p style={{ color: "#8492c4", fontSize: "13px", margin: "0 0 24px" }}>Inizia a tracciare le tue finanze oggi</p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
-            <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#8492c4" }}>Nome</label>
-            <div className="relative">
-              <User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#8492c4" }} />
+            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Nome</label>
+            <div style={{ position: "relative" }}>
+              <User size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
               <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                placeholder="Mario Rossi" required className="input-dark pl-10 w-full" />
+                placeholder="Mario Rossi" required className="input-dark pl-icon" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#8492c4" }}>Email</label>
-            <div className="relative">
-              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#8492c4" }} />
+            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Email</label>
+            <div style={{ position: "relative" }}>
+              <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                placeholder="nome@email.com" required className="input-dark pl-10 w-full" />
+                placeholder="nome@email.com" required className="input-dark pl-icon" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold mb-2 uppercase tracking-wider" style={{ color: "#8492c4" }}>Password</label>
-            <div className="relative">
-              <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#8492c4" }} />
+            <label style={{ display: "block", color: "#8492c4", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Password</label>
+            <div style={{ position: "relative" }}>
+              <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", pointerEvents: "none" }} />
               <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimo 8 caratteri" required className="input-dark pl-10 pr-10 w-full" />
+                placeholder="Minimo 8 caratteri" required className="input-dark pl-icon-pr" />
               <button type="button" onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "#8492c4" }} tabIndex={-1}>
+                style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "#8492c4", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+                tabIndex={-1}>
                 {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
             </div>
 
             {password && (
-              <div className="mt-2 space-y-2 animate-fade-in">
-                <div className="flex gap-1">
+              <div style={{ marginTop: "10px" }}>
+                <div style={{ display: "flex", gap: "4px", marginBottom: "6px" }}>
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="h-1 flex-1 rounded-full transition-all duration-300"
-                      style={{ background: strength.score >= i ? strength.color : "#29314f" }} />
+                    <div key={i} style={{ height: "3px", flex: 1, borderRadius: "2px", transition: "background 0.3s", background: strength.score >= i ? strength.color : "#29314f" }} />
                   ))}
                 </div>
-                {strength.label && <p className="text-xs font-medium" style={{ color: strength.color }}>{strength.label}</p>}
-                <div className="space-y-1">
+                {strength.label && <p style={{ color: strength.color, fontSize: "11px", fontWeight: 600, margin: "0 0 6px" }}>{strength.label}</p>}
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                   {CHECKS.map(({ key, label }) => (
-                    <div key={key} className="flex items-center gap-1.5">
-                      <CheckCircle size={11} style={{ color: strength.checks[key] ? "#00e676" : "#29314f" }} />
-                      <span className="text-xs" style={{ color: strength.checks[key] ? "#8492c4" : "#4a5280" }}>{label}</span>
+                    <div key={key} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <CheckCircle size={11} style={{ color: strength.checks[key] ? "#00e676" : "#29314f", flexShrink: 0 }} />
+                      <span style={{ fontSize: "11px", color: strength.checks[key] ? "#8492c4" : "#4a5280" }}>{label}</span>
                     </div>
                   ))}
                 </div>
@@ -118,41 +118,38 @@ export default function RegisterPage() {
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 px-4 py-3 rounded-xl animate-fade-in"
-              style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
-              <AlertCircle size={14} className="flex-shrink-0" style={{ color: "#ef9a9a" }} />
-              <p className="text-sm" style={{ color: "#ef9a9a" }}>{error}</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px 16px", borderRadius: "10px", background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.2)" }}>
+              <AlertCircle size={14} style={{ color: "#ef9a9a", flexShrink: 0 }} />
+              <p style={{ color: "#ef9a9a", fontSize: "13px", margin: 0 }}>{error}</p>
             </div>
           )}
 
           <button type="submit" disabled={loading || !isValid}
-            className="btn-primary w-full flex items-center justify-center gap-2"
+            className="btn-primary"
             style={{
-              marginTop: "8px",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "4px",
               background: "linear-gradient(135deg, #5e35b1, #7c4dff)",
               boxShadow: loading || !isValid ? "none" : "0 4px 16px rgba(94,53,177,0.4)",
               opacity: !isValid && password.length > 0 ? 0.5 : 1,
             }}>
             {loading ? (
               <><span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />Registrazione...</>
-            ) : (
-              <>Crea Account <ArrowRight size={14} /></>
-            )}
+            ) : <>Crea Account <ArrowRight size={14} /></>}
           </button>
         </form>
 
-        <div className="mt-5 pt-4 space-y-2" style={{ borderTop: "1px solid #29314f" }}>
+        <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid #29314f", display: "flex", flexDirection: "column", gap: "8px" }}>
           {["Dati protetti e privati", "Nessuna carta di credito richiesta", "Cancella quando vuoi"].map((item) => (
-            <div key={item} className="flex items-center gap-2">
-              <CheckCircle size={12} className="flex-shrink-0" style={{ color: "#00e676" }} />
-              <p className="text-xs" style={{ color: "#8492c4" }}>{item}</p>
+            <div key={item} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <CheckCircle size={12} style={{ color: "#00e676", flexShrink: 0 }} />
+              <p style={{ fontSize: "12px", color: "#8492c4", margin: 0 }}>{item}</p>
             </div>
           ))}
         </div>
 
-        <p className="text-center text-sm mt-4" style={{ color: "#8492c4" }}>
+        <p style={{ textAlign: "center", fontSize: "13px", color: "#8492c4", marginTop: "16px" }}>
           Hai già un account?{" "}
-          <Link href="/login" className="font-medium transition" style={{ color: "#90caf9" }}>Accedi</Link>
+          <Link href="/login" style={{ color: "#90caf9", fontWeight: 500, textDecoration: "none" }}>Accedi</Link>
         </p>
       </AuthRight>
     </AuthCard>

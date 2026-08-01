@@ -166,6 +166,8 @@ body {
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
 }
+.input-dark.pl-icon { padding-left: 2.5rem; }
+.input-dark.pl-icon-pr { padding-left: 2.5rem; padding-right: 2.5rem; }
 .input-dark::placeholder { color: var(--text-secondary); }
 .input-dark:focus {
   border-color: rgba(33, 150, 243, 0.6);
