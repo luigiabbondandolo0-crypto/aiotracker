@@ -162,64 +162,81 @@ export default function StocksPage() {
           <button onClick={() => setShowAdd(true)} className="btn-primary mt-4">Aggiungi Azione</button>
         </div>
       ) : (
-        <div className="card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
-              <thead>
-                <tr style={{ borderBottom: "1px solid #1E2D42" }}>
-                  {["Ticker", "Azienda", "Qtà", "Prezzo Medio", "Prezzo Attuale", "Valore", "P&L", "P&L %", ""].map((h) => (
-                    <th key={h} style={{ padding: "10px 14px", textAlign: "left", color: "#64748B", fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {holdings.map((h) => {
-                  const price = h.currentPrice ?? h.avgPrice;
-                  const value = h.units * price;
-                  const cost = h.units * h.avgPrice;
-                  const pnl = value - cost;
-                  const pnlPct = cost > 0 ? (pnl / cost) * 100 : 0;
-                  return (
-                    <tr key={h.id} style={{ borderBottom: "1px solid #1E2D42", transition: "background 150ms" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "#162032")}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
-                      <td style={{ padding: "10px 14px" }}>
-                        <span className="badge badge-blue">{h.ticker}</span>
-                      </td>
-                      <td style={{ padding: "10px 14px", color: "#CBD5E1" }}>
-                        <div>{h.companyName ?? "—"}</div>
-                        {h.exchange && <div style={{ color: "#64748B", fontSize: "11px" }}>{h.exchange}</div>}
-                      </td>
-                      <td style={{ padding: "10px 14px", color: "#CBD5E1" }}>{h.units}</td>
-                      <td style={{ padding: "10px 14px", color: "#64748B" }}>{formatCurrency(h.avgPrice, h.currency)}</td>
-                      <td style={{ padding: "10px 14px" }}>
-                        <button onClick={() => { setUpdatingPrice(h); setNewPrice(h.currentPrice ? String(h.currentPrice) : ""); }}
-                          className="flex items-center gap-1.5 cursor-pointer transition-all"
-                          style={{ color: h.currentPrice ? "#CBD5E1" : "#64748B", background: "none", border: "none", padding: 0 }}
-                          title="Aggiorna prezzo">
-                          {h.currentPrice ? formatCurrency(h.currentPrice, h.currency) : "—"}
-                          <RefreshCw size={11} style={{ opacity: 0.5 }} />
-                        </button>
-                      </td>
-                      <td style={{ padding: "10px 14px", color: "#F1F5F9", fontWeight: 600 }}>{formatCurrency(value, h.currency)}</td>
-                      <td style={{ padding: "10px 14px", color: pnl >= 0 ? "#10B981" : "#EF4444", fontWeight: 600 }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {holdings.map((h) => {
+            const price = h.currentPrice ?? h.avgPrice;
+            const value = h.units * price;
+            const cost = h.units * h.avgPrice;
+            const pnl = value - cost;
+            const pnlPct = cost > 0 ? (pnl / cost) * 100 : 0;
+            const barWidth = Math.min(Math.abs(pnlPct) * 4, 100);
+            return (
+              <div key={h.id} className="animate-fade-in" style={{ borderRadius: "16px", background: "#0F172A", border: "1px solid #1E2D42", borderLeft: "3px solid #F59E0B", overflow: "hidden", transition: "box-shadow 0.2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 1px #2D4460, 0 8px 24px rgba(0,0,0,0.3)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}>
+
+                {/* Header */}
+                <div style={{ padding: "14px 18px", borderBottom: "1px solid #1E2D42" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
+                        <span className="badge badge-yellow" style={{ fontSize: "12px", fontWeight: 800, letterSpacing: "0.03em" }}>{h.ticker}</span>
+                        {h.sector && <span className="badge" style={{ fontSize: "10px" }}>{h.sector}</span>}
+                      </div>
+                      <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#F1F5F9", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", lineHeight: 1.3 }}>{h.companyName || h.ticker}</h3>
+                      <p style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>
+                        {h.units} azioni
+                        {h.exchange ? ` · ${h.exchange}` : ""}
+                        {` · ${h.currency}`}
+                      </p>
+                    </div>
+                    <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+                      <button onClick={() => openEdit(h)} className="btn-icon"><Edit2 size={13} /></button>
+                      <button onClick={() => setDeleting(h)} className="btn-icon danger"><Trash2 size={13} /></button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Metrics */}
+                <div style={{ padding: "14px 18px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px", marginBottom: "12px" }}>
+                    <div>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "4px" }}>Valore</p>
+                      <p style={{ fontSize: "20px", fontWeight: 700, color: "#FCD34D", letterSpacing: "-0.03em", lineHeight: 1, whiteSpace: "nowrap" }}>{formatCurrency(value, h.currency)}</p>
+                      <p style={{ fontSize: "11px", color: "#64748B", marginTop: "3px" }}>Medio: {formatCurrency(h.avgPrice, h.currency)}</p>
+                    </div>
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "4px" }}>P&amp;L</p>
+                      <p style={{ fontSize: "15px", fontWeight: 700, color: pnl >= 0 ? "#6EE7B7" : "#FCA5A5", lineHeight: 1, whiteSpace: "nowrap" }}>
                         {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, h.currency)}
-                      </td>
-                      <td style={{ padding: "10px 14px", color: pnlPct >= 0 ? "#10B981" : "#EF4444" }}>
+                      </p>
+                      <p style={{ fontSize: "12px", fontWeight: 600, color: pnl >= 0 ? "#10B981" : "#EF4444", marginTop: "2px" }}>
                         {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
-                      </td>
-                      <td style={{ padding: "10px 14px" }}>
-                        <div className="flex gap-1">
-                          <button onClick={() => openEdit(h)} className="btn-icon"><Edit2 size={13} /></button>
-                          <button onClick={() => setDeleting(h)} className="btn-icon danger"><Trash2 size={13} /></button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: "12px" }}>
+                    <div className="progress-track">
+                      <div className="progress-fill" style={{ width: `${barWidth}%`, background: pnl >= 0 ? "linear-gradient(90deg, #B45309, #F59E0B)" : "linear-gradient(90deg, #B91C1C, #EF4444)", boxShadow: pnl >= 0 ? "0 0 8px rgba(245,158,11,0.4)" : "0 0 8px rgba(239,68,68,0.4)" }} />
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "10px", borderTop: "1px solid #1E2D42", gap: "8px" }}>
+                    <p style={{ fontSize: "11px", color: "#64748B" }}>
+                      Prezzo attuale:{" "}
+                      <button onClick={() => { setUpdatingPrice(h); setNewPrice(h.currentPrice ? String(h.currentPrice) : ""); }}
+                        style={{ color: h.currentPrice ? "#FCD34D" : "#3B82F6", fontWeight: 600, background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: "11px", fontFamily: "inherit" }}>
+                        {h.currentPrice ? formatCurrency(h.currentPrice, h.currency) : "— imposta"}
+                      </button>
+                      <RefreshCw size={9} style={{ color: "#64748B", marginLeft: "3px", verticalAlign: "middle", opacity: 0.6 }} />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 

@@ -280,98 +280,92 @@ export default function PropFirmPage() {
               ? Math.min((acc.currentDrawdown / acc.maxDrawdown) * 100, 100)
               : null;
 
+            const accentColor = acc.status === "FAILED" || acc.status === "CLOSED" ? "#EF4444"
+              : acc.status === "PASSED" ? "#10B981"
+              : "#7C3AED";
+
             return (
-              <div key={acc.id} className="card p-5 space-y-4">
+              <div key={acc.id} className="animate-fade-in" style={{ borderRadius: "16px", background: "#0F172A", border: "1px solid #1E2D42", borderLeft: `3px solid ${accentColor}`, overflow: "hidden", transition: "box-shadow 0.2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 1px #2D4460, 0 8px 24px rgba(0,0,0,0.3)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}>
+
                 {/* Header */}
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={typeBadge(acc.accountType)}>{TYPE_LABELS[acc.accountType]}</span>
-                      <span className={statusBadge(acc.status)}>{STATUS_LABELS[acc.status]}</span>
+                <div style={{ padding: "16px 20px", borderBottom: "1px solid #1E2D42" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                        <span className={typeBadge(acc.accountType)}>{TYPE_LABELS[acc.accountType]}</span>
+                        <span className={statusBadge(acc.status)}>{STATUS_LABELS[acc.status]}</span>
+                      </div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#F1F5F9", lineHeight: 1.2, marginBottom: "3px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{acc.firmName}</h3>
+                      <p style={{ fontSize: "12px", color: "#64748B" }}>
+                        <span style={{ color: "#C4B5FD", fontWeight: 600 }}>{formatCurrency(acc.accountSize, acc.currency)}</span>
+                        {` · ${acc.currency} · dal ${formatDate(acc.startDate)}`}
+                      </p>
                     </div>
-                    <h3 className="font-semibold text-base" style={{ color: "#F1F5F9" }}>{acc.firmName}</h3>
-                    <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>
-                      {formatCurrency(acc.accountSize, acc.currency)} — dal {formatDate(acc.startDate)}
-                    </p>
-                  </div>
-                  <div className="flex gap-1">
-                    <button onClick={() => openEdit(acc)} className="btn-icon" title="Modifica">
-                      <Edit2 size={13} />
-                    </button>
-                    <button onClick={() => setDeleting(acc)} className="btn-icon danger" title="Elimina">
-                      <Trash2 size={13} />
-                    </button>
+                    <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+                      <button onClick={() => openEdit(acc)} className="btn-icon" title="Modifica"><Edit2 size={13} /></button>
+                      <button onClick={() => setDeleting(acc)} className="btn-icon danger" title="Elimina"><Trash2 size={13} /></button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Balance / Equity */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Balance</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{formatCurrency(acc.balance, acc.currency)}</p>
+                {/* Metrics */}
+                <div style={{ padding: "16px 20px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px", marginBottom: "14px" }}>
+                    <div>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "5px" }}>Equity</p>
+                      <p style={{ fontSize: "22px", fontWeight: 700, color: pnl >= 0 ? "#6EE7B7" : "#FCA5A5", letterSpacing: "-0.03em", lineHeight: 1, whiteSpace: "nowrap" }}>{formatCurrency(acc.equity, acc.currency)}</p>
+                      <p style={{ fontSize: "11px", color: "#64748B", marginTop: "3px" }}>Balance: {formatCurrency(acc.balance, acc.currency)}</p>
+                    </div>
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "5px" }}>P&amp;L</p>
+                      <p style={{ fontSize: "17px", fontWeight: 700, color: pnl >= 0 ? "#6EE7B7" : "#FCA5A5", lineHeight: 1, whiteSpace: "nowrap" }}>
+                        {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, acc.currency)}
+                      </p>
+                      <p style={{ fontSize: "12px", fontWeight: 600, color: pnl >= 0 ? "#10B981" : "#EF4444", marginTop: "2px" }}>
+                        {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
+                      </p>
+                    </div>
                   </div>
-                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Equity</p>
-                    <p className="font-semibold mt-0.5" style={{ color: pnl >= 0 ? "#10B981" : "#EF4444" }}>
-                      {formatCurrency(acc.equity, acc.currency)}
-                      <span className="text-xs ml-1" style={{ opacity: 0.8 }}>({pnl >= 0 ? "+" : ""}{pnlPct.toFixed(1)}%)</span>
-                    </p>
-                  </div>
-                </div>
 
-                {/* Progress bars */}
-                {profitPct !== null && (
-                  <div>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-xs" style={{ color: "#64748B" }}>Profit Target</span>
-                      <span className="text-xs" style={{ color: "#93C5FD" }}>{profitPct.toFixed(1)}%</span>
+                  {/* Progress bars */}
+                  {profitPct !== null && (
+                    <div style={{ marginBottom: "10px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
+                        <span style={{ fontSize: "11px", color: "#64748B" }}>Profit Target</span>
+                        <span style={{ fontSize: "11px", color: "#93C5FD", fontWeight: 600 }}>{profitPct.toFixed(1)}% di {formatCurrency(acc.profitTarget!, acc.currency)}</span>
+                      </div>
+                      <div className="progress-track">
+                        <div className="progress-fill" style={{ width: `${Math.max(profitPct, 0)}%`, background: "linear-gradient(90deg, #1D4ED8, #3B82F6)", boxShadow: "0 0 8px rgba(59,130,246,0.5)" }} />
+                      </div>
                     </div>
-                    <div className="progress-track">
-                      <div className="progress-fill" style={{
-                        width: `${Math.max(profitPct, 0)}%`,
-                        background: "linear-gradient(90deg, #1D4ED8, #3B82F6)",
-                        boxShadow: "0 0 8px rgba(59,130,246,0.5)",
-                      }} />
-                    </div>
-                  </div>
-                )}
-                {drawdownPct !== null && (
-                  <div>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-xs" style={{ color: "#64748B" }}>Drawdown Corrente</span>
-                      <span className="text-xs" style={{ color: drawdownPct > 70 ? "#EF4444" : "#FCD34D" }}>
-                        {acc.currentDrawdown?.toFixed(1)}% / {acc.maxDrawdown}%
-                      </span>
-                    </div>
-                    <div className="progress-track">
-                      <div className="progress-fill" style={{
-                        width: `${Math.min(drawdownPct, 100)}%`,
-                        background: drawdownPct > 70
-                          ? "linear-gradient(90deg, #B91C1C, #EF4444)"
-                          : "linear-gradient(90deg, #B45309, #F59E0B)",
-                        boxShadow: drawdownPct > 70 ? "0 0 8px rgba(239,68,68,0.5)" : "0 0 8px rgba(255,193,7,0.5)",
-                      }} />
-                    </div>
-                  </div>
-                )}
-
-                {/* Payouts */}
-                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #1E2D42" }}>
-                  <div>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Payout Totale</p>
-                    <p className="font-semibold text-sm" style={{ color: "#6EE7B7" }}>{formatCurrency(acc.totalPayout, acc.currency)}</p>
-                  </div>
-                  {(acc.status === "PASSED" || acc.status === "ACTIVE" || acc.status === "PAYOUT_REQUESTED") && (
-                    <button
-                      onClick={() => { setPayoutTarget(acc); setPayoutForm(emptyPayoutForm); }}
-                      className="btn-ghost text-xs flex items-center gap-1.5"
-                      style={{ color: "#93C5FD" }}
-                    >
-                      <Plus size={12} />
-                      Aggiungi Payout
-                    </button>
                   )}
-                </div>
+                  {drawdownPct !== null && (
+                    <div style={{ marginBottom: "10px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
+                        <span style={{ fontSize: "11px", color: "#64748B" }}>Drawdown</span>
+                        <span style={{ fontSize: "11px", color: drawdownPct > 70 ? "#FCA5A5" : "#FCD34D", fontWeight: 600 }}>{acc.currentDrawdown?.toFixed(1)}% / {acc.maxDrawdown}%</span>
+                      </div>
+                      <div className="progress-track">
+                        <div className="progress-fill" style={{ width: `${Math.min(drawdownPct, 100)}%`, background: drawdownPct > 70 ? "linear-gradient(90deg, #B91C1C, #EF4444)" : "linear-gradient(90deg, #B45309, #F59E0B)", boxShadow: drawdownPct > 70 ? "0 0 8px rgba(239,68,68,0.5)" : "0 0 8px rgba(255,193,7,0.5)" }} />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Footer */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "12px", borderTop: "1px solid #1E2D42", gap: "8px" }}>
+                    <div>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "3px" }}>Payout Totale</p>
+                      <p style={{ fontSize: "14px", fontWeight: 700, color: "#6EE7B7", whiteSpace: "nowrap" }}>{formatCurrency(acc.totalPayout, acc.currency)}</p>
+                    </div>
+                    {(acc.status === "PASSED" || acc.status === "ACTIVE" || acc.status === "PAYOUT_REQUESTED") && (
+                      <button onClick={() => { setPayoutTarget(acc); setPayoutForm(emptyPayoutForm); }}
+                        className="btn-pill" style={{ color: "#C4B5FD", borderColor: "rgba(124,58,237,0.25)", background: "rgba(124,58,237,0.1)", flexShrink: 0 }}>
+                        <Plus size={11} /> Payout
+                      </button>
+                    )}
+                  </div>
 
                 {/* Recent payouts */}
                 {acc.payouts.length > 0 && (
@@ -392,6 +386,7 @@ export default function PropFirmPage() {
                   </div>
                 )}
               </div>
+            </div>
             );
           })}
         </div>

@@ -211,36 +211,65 @@ export default function TradingPage() {
             {accounts.map((acc) => {
               const pnl = acc.balance - acc.initialDeposit;
               const pnlPct = acc.initialDeposit > 0 ? (pnl / acc.initialDeposit) * 100 : 0;
+              const barWidth = Math.min(Math.abs(pnlPct) * 4, 100);
               return (
-                <div key={acc.id} className="card p-5">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={ASSET_BADGE[acc.assetClass]}>{ASSET_LABELS[acc.assetClass]}</span>
-                        {!acc.isActive && <span className="badge">Inattivo</span>}
+                <div key={acc.id} className="animate-fade-in" style={{ borderRadius: "16px", background: "#0F172A", border: "1px solid #1E2D42", borderLeft: "3px solid #3B82F6", overflow: "hidden", transition: "box-shadow 0.2s" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 1px #2D4460, 0 8px 24px rgba(0,0,0,0.3)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}>
+
+                  {/* Header */}
+                  <div style={{ padding: "16px 20px", borderBottom: "1px solid #1E2D42" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                          <span className={ASSET_BADGE[acc.assetClass]}>{ASSET_LABELS[acc.assetClass]}</span>
+                          {!acc.isActive && <span className="badge">Inattivo</span>}
+                        </div>
+                        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#F1F5F9", lineHeight: 1.2, marginBottom: "3px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{acc.brokerName}</h3>
+                        <p style={{ fontSize: "12px", color: "#64748B" }}>
+                          <span style={{ color: "#93C5FD", fontWeight: 600 }}>{acc.accountName}</span>
+                          {` · ${acc.currency}`}
+                          {acc.notes ? ` · ${acc.notes}` : ""}
+                        </p>
                       </div>
-                      <h3 className="font-semibold text-base" style={{ color: "#F1F5F9" }}>{acc.brokerName}</h3>
-                      <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{acc.accountName}</p>
-                    </div>
-                    <div className="flex gap-1">
-                      <button onClick={() => openEditAcc(acc)} className="btn-icon"><Edit2 size={13} /></button>
-                      <button onClick={() => setDeletingAcc(acc)} className="btn-icon danger"><Trash2 size={13} /></button>
+                      <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+                        <button onClick={() => openEditAcc(acc)} className="btn-icon"><Edit2 size={13} /></button>
+                        <button onClick={() => setDeletingAcc(acc)} className="btn-icon danger"><Trash2 size={13} /></button>
+                      </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { label: "Deposito", value: formatCurrency(acc.initialDeposit, acc.currency), color: "#CBD5E1" },
-                      { label: "Balance", value: formatCurrency(acc.balance, acc.currency), color: "#CBD5E1" },
-                      { label: "P&L", value: `${formatCurrency(pnl, acc.currency)} (${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(1)}%)`, color: pnl >= 0 ? "#10B981" : "#EF4444" },
-                    ].map((c) => (
-                      <div key={c.label} className="rounded-lg p-3" style={{ background: "#162032" }}>
-                        <p className="text-xs" style={{ color: "#64748B" }}>{c.label}</p>
-                        <p className="font-semibold text-sm mt-0.5" style={{ color: c.color }}>{c.value}</p>
+
+                  {/* Metrics */}
+                  <div style={{ padding: "16px 20px" }}>
+                    <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px", marginBottom: "14px" }}>
+                      <div>
+                        <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "5px" }}>Balance</p>
+                        <p style={{ fontSize: "22px", fontWeight: 700, color: "#93C5FD", letterSpacing: "-0.03em", lineHeight: 1, whiteSpace: "nowrap" }}>{formatCurrency(acc.balance, acc.currency)}</p>
+                        <p style={{ fontSize: "11px", color: "#64748B", marginTop: "3px" }}>Deposito: {formatCurrency(acc.initialDeposit, acc.currency)}</p>
                       </div>
-                    ))}
-                  </div>
-                  <div className="flex items-center mt-3 pt-3" style={{ borderTop: "1px solid #1E2D42" }}>
-                    <span className="text-xs" style={{ color: "#64748B" }}>{acc.trades.length} trade registrati</span>
+                      <div style={{ textAlign: "right", flexShrink: 0 }}>
+                        <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "5px" }}>P&amp;L</p>
+                        <p style={{ fontSize: "17px", fontWeight: 700, color: pnl >= 0 ? "#6EE7B7" : "#FCA5A5", lineHeight: 1, whiteSpace: "nowrap" }}>
+                          {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, acc.currency)}
+                        </p>
+                        <p style={{ fontSize: "12px", fontWeight: 600, color: pnl >= 0 ? "#10B981" : "#EF4444", marginTop: "2px" }}>
+                          {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
+                        </p>
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: "14px" }}>
+                      <div className="progress-track">
+                        <div className="progress-fill" style={{ width: `${barWidth}%`, background: pnl >= 0 ? "linear-gradient(90deg, #1D4ED8, #3B82F6)" : "linear-gradient(90deg, #B91C1C, #EF4444)", boxShadow: pnl >= 0 ? "0 0 8px rgba(59,130,246,0.4)" : "0 0 8px rgba(239,68,68,0.4)" }} />
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", paddingTop: "12px", borderTop: "1px solid #1E2D42", gap: "8px" }}>
+                      <Activity size={12} style={{ color: "#64748B" }} />
+                      <span style={{ fontSize: "12px", color: "#64748B" }}>
+                        <span style={{ color: "#CBD5E1", fontWeight: 600 }}>{acc.trades.length}</span> trade registrati
+                      </span>
+                    </div>
                   </div>
                 </div>
               );

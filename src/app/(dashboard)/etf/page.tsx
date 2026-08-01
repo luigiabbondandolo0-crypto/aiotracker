@@ -206,73 +206,85 @@ export default function ETFPage() {
             const value = plan.currentValue || plan.totalInvested;
             const gain = value - plan.totalInvested;
             const gainPct = plan.totalInvested > 0 ? (gain / plan.totalInvested) * 100 : 0;
-            const progressPct = plan.totalInvested > 0 ? Math.min((value / plan.totalInvested) * 100, 200) : 0;
+            const barWidth = Math.min(Math.abs(gainPct) * 3.5, 100);
 
             return (
-              <div key={plan.id} className="card p-5 space-y-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={FREQ_BADGE[plan.frequency]}>{FREQ_LABELS[plan.frequency]}</span>
-                      {!plan.isActive && <span className="badge">Inattivo</span>}
+              <div key={plan.id} className="animate-fade-in" style={{ borderRadius: "16px", background: "#0F172A", border: "1px solid #1E2D42", borderLeft: "3px solid #10B981", overflow: "hidden", transition: "box-shadow 0.2s, border-color 0.2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 1px #2D4460, 0 8px 24px rgba(0,0,0,0.3)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}>
+
+                {/* Header */}
+                <div style={{ padding: "16px 20px", borderBottom: "1px solid #1E2D42" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px", flexWrap: "wrap" }}>
+                        <span className={FREQ_BADGE[plan.frequency]}>{FREQ_LABELS[plan.frequency]}</span>
+                        {!plan.isActive && <span className="badge">Inattivo</span>}
+                      </div>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#F1F5F9", lineHeight: 1.2, marginBottom: "3px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{plan.name}</h3>
+                      <p style={{ fontSize: "12px", color: "#64748B" }}>
+                        <span style={{ color: "#93C5FD", fontWeight: 600 }}>{plan.ticker}</span>
+                        {plan.broker ? ` · ${plan.broker}` : ""}
+                        {plan.isin ? ` · ${plan.isin}` : ""}
+                        {` · dal ${formatDate(plan.startDate)}`}
+                      </p>
                     </div>
-                    <h3 className="font-semibold text-base" style={{ color: "#F1F5F9" }}>{plan.name}</h3>
-                    <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>
-                      {plan.ticker}{plan.broker ? ` — ${plan.broker}` : ""} — dal {formatDate(plan.startDate)}
-                    </p>
-                  </div>
-                  <div className="flex gap-1">
-                    <button onClick={() => openEdit(plan)} className="btn-icon"><Edit2 size={13} /></button>
-                    <button onClick={() => setDeleting(plan)} className="btn-icon danger"><Trash2 size={13} /></button>
+                    <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+                      <button onClick={() => openEdit(plan)} className="btn-icon"><Edit2 size={13} /></button>
+                      <button onClick={() => setDeleting(plan)} className="btn-icon danger"><Trash2 size={13} /></button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Investito</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{formatCurrency(plan.totalInvested, plan.currency)}</p>
-                  </div>
-                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Valore Attuale</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{formatCurrency(value, plan.currency)}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-xs" style={{ color: "#64748B" }}>Performance</span>
-                    <span className="text-xs font-semibold" style={{ color: gain >= 0 ? "#10B981" : "#EF4444" }}>
-                      {gain >= 0 ? "+" : ""}{formatCurrency(gain, plan.currency)} ({gainPct >= 0 ? "+" : ""}{gainPct.toFixed(2)}%)
-                    </span>
-                  </div>
-                  <div className="progress-track">
-                    <div className="progress-fill" style={{
-                      width: `${Math.min(Math.max(progressPct - 100, 0) + (progressPct < 100 ? progressPct : 0), 100)}%`,
-                      background: gain >= 0 ? "linear-gradient(90deg, #059669, #10B981)" : "linear-gradient(90deg, #B91C1C, #EF4444)",
-                      boxShadow: gain >= 0 ? "0 0 8px rgba(16,185,129,0.5)" : "0 0 8px rgba(239,68,68,0.5)",
-                    }} />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #1E2D42" }}>
-                  <div className="flex gap-3">
+                {/* Metrics */}
+                <div style={{ padding: "16px 20px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px", marginBottom: "14px" }}>
                     <div>
-                      <span className="text-xs" style={{ color: "#64748B" }}>Quota mensile: </span>
-                      <span className="text-xs font-semibold" style={{ color: "#CBD5E1" }}>{formatCurrency(plan.amount, plan.currency)}</span>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "5px" }}>Valore Attuale</p>
+                      <p style={{ fontSize: "22px", fontWeight: 700, color: "#6EE7B7", letterSpacing: "-0.03em", lineHeight: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{formatCurrency(value, plan.currency)}</p>
+                      <p style={{ fontSize: "11px", color: "#64748B", marginTop: "3px" }}>Investito: {formatCurrency(plan.totalInvested, plan.currency)}</p>
                     </div>
-                    <div>
-                      <span className="text-xs" style={{ color: "#64748B" }}>{plan.contributions.length} contributi</span>
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "5px" }}>P&amp;L</p>
+                      <p style={{ fontSize: "17px", fontWeight: 700, color: gain >= 0 ? "#6EE7B7" : "#FCA5A5", lineHeight: 1, whiteSpace: "nowrap" }}>
+                        {gain >= 0 ? "+" : ""}{formatCurrency(gain, plan.currency)}
+                      </p>
+                      <p style={{ fontSize: "12px", fontWeight: 600, color: gain >= 0 ? "#10B981" : "#EF4444", marginTop: "2px" }}>
+                        {gainPct >= 0 ? "+" : ""}{gainPct.toFixed(2)}%
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <button onClick={() => { setUpdatingPrice(plan); setNewPrice(plan.units > 0 && plan.currentValue ? String((plan.currentValue / plan.units).toFixed(4)) : ""); }}
-                      className="btn-ghost text-xs flex items-center gap-1" style={{ color: "#6EE7B7", padding: "5px 10px" }}>
-                      <TrendingUp size={11} /> Prezzo
-                    </button>
-                    <button onClick={() => { setContribTarget(plan); setContribForm(emptyContribForm); }}
-                      className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#93C5FD", padding: "5px 10px" }}>
-                      <Plus size={12} /> Contributo
-                    </button>
+
+                  {/* Progress bar */}
+                  <div style={{ marginBottom: "14px" }}>
+                    <div className="progress-track">
+                      <div className="progress-fill" style={{
+                        width: `${barWidth}%`,
+                        background: gain >= 0 ? "linear-gradient(90deg, #059669, #10B981)" : "linear-gradient(90deg, #B91C1C, #EF4444)",
+                        boxShadow: gain >= 0 ? "0 0 8px rgba(16,185,129,0.4)" : "0 0 8px rgba(239,68,68,0.4)",
+                      }} />
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "12px", borderTop: "1px solid #1E2D42", gap: "8px", flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                      <span style={{ fontSize: "12px", color: "#64748B" }}>
+                        <span style={{ color: "#CBD5E1", fontWeight: 600 }}>{formatCurrency(plan.amount, plan.currency)}</span>/{FREQ_LABELS[plan.frequency].toLowerCase()}
+                      </span>
+                      <span style={{ fontSize: "12px", color: "#64748B" }}>{plan.contributions.length} contributi</span>
+                      {plan.units > 0 && <span style={{ fontSize: "12px", color: "#64748B" }}>{plan.units.toFixed(3)} quote</span>}
+                    </div>
+                    <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
+                      <button onClick={() => { setUpdatingPrice(plan); setNewPrice(plan.units > 0 && plan.currentValue ? String((plan.currentValue / plan.units).toFixed(4)) : ""); }}
+                        className="btn-pill" style={{ color: "#6EE7B7", borderColor: "rgba(16,185,129,0.25)", background: "rgba(16,185,129,0.08)" }}>
+                        <TrendingUp size={11} /> Prezzo
+                      </button>
+                      <button onClick={() => { setContribTarget(plan); setContribForm(emptyContribForm); }}
+                        className="btn-pill" style={{ color: "#93C5FD", borderColor: "rgba(59,130,246,0.25)", background: "rgba(59,130,246,0.08)" }}>
+                        <Plus size={11} /> Contributo
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

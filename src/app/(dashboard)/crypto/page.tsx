@@ -206,63 +206,75 @@ export default function CryptoPage() {
             const cost = h.amount * h.avgBuyPrice;
             const pnl = value - cost;
             const pnlPct = cost > 0 ? (pnl / cost) * 100 : 0;
+            const barWidth = Math.min(Math.abs(pnlPct) * 3, 100);
 
             return (
-              <div key={h.id} className="card p-5 space-y-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      {h.exchange && <span className="badge badge-purple">{h.exchange}</span>}
-                      {h.wallet && <span className="badge">{h.wallet}</span>}
+              <div key={h.id} className="animate-fade-in" style={{ borderRadius: "16px", background: "#0F172A", border: "1px solid #1E2D42", borderLeft: "3px solid #EF4444", overflow: "hidden", transition: "box-shadow 0.2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 1px #2D4460, 0 8px 24px rgba(0,0,0,0.3)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}>
+
+                {/* Header */}
+                <div style={{ padding: "14px 18px", borderBottom: "1px solid #1E2D42" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "6px", flexWrap: "wrap" }}>
+                        {h.exchange && <span className="badge badge-purple">{h.exchange}</span>}
+                        {h.wallet && <span className="badge">{h.wallet}</span>}
+                      </div>
+                      <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#F1F5F9", letterSpacing: "-0.02em", lineHeight: 1 }}>{h.symbol}</h3>
+                      {h.name && <p style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>{h.name}</p>}
                     </div>
-                    <h3 className="font-bold text-xl" style={{ color: "#F1F5F9" }}>{h.symbol}</h3>
-                    {h.name && <p className="text-xs mt-0.5" style={{ color: "#64748B" }}>{h.name}</p>}
-                  </div>
-                  <div className="flex gap-1">
-                    <button onClick={() => openEdit(h)} className="btn-icon"><Edit2 size={13} /></button>
-                    <button onClick={() => setDeleting(h)} className="btn-icon danger"><Trash2 size={13} /></button>
+                    <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+                      <button onClick={() => openEdit(h)} className="btn-icon"><Edit2 size={13} /></button>
+                      <button onClick={() => setDeleting(h)} className="btn-icon danger"><Trash2 size={13} /></button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Quantità</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>{h.amount}</p>
-                  </div>
-                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Valore</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#F1F5F9" }}>{formatCurrency(value, h.currency)}</p>
-                  </div>
-                  <div className="rounded-lg p-3" style={{ background: "#162032" }}>
-                    <p className="text-xs" style={{ color: "#64748B" }}>Prezzo Medio</p>
-                    <p className="font-semibold mt-0.5" style={{ color: "#64748B" }}>{formatCurrency(h.avgBuyPrice, h.currency)}</p>
-                  </div>
-                  <div className="rounded-lg p-3 cursor-pointer" style={{ background: "#162032" }}
-                    onClick={() => { setUpdatingPrice(h); setNewPrice(h.currentPrice ? String(h.currentPrice) : ""); }}
-                    title="Clicca per aggiornare">
-                    <div className="flex items-center gap-1">
-                      <p className="text-xs" style={{ color: "#64748B" }}>Prezzo Attuale</p>
-                      <RefreshCw size={10} style={{ color: "#64748B", opacity: 0.6 }} />
+                {/* Metrics */}
+                <div style={{ padding: "14px 18px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px", marginBottom: "12px" }}>
+                    <div>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "4px" }}>Valore</p>
+                      <p style={{ fontSize: "20px", fontWeight: 700, color: "#FCA5A5", letterSpacing: "-0.03em", lineHeight: 1, whiteSpace: "nowrap" }}>{formatCurrency(value, h.currency)}</p>
+                      <p style={{ fontSize: "11px", color: "#64748B", marginTop: "3px" }}>{h.amount} {h.symbol}</p>
                     </div>
-                    <p className="font-semibold mt-0.5" style={{ color: "#CBD5E1" }}>
-                      {h.currentPrice ? formatCurrency(h.currentPrice, h.currency) : "—"}
-                    </p>
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#64748B", marginBottom: "4px" }}>P&amp;L</p>
+                      <p style={{ fontSize: "15px", fontWeight: 700, color: pnl >= 0 ? "#6EE7B7" : "#FCA5A5", lineHeight: 1, whiteSpace: "nowrap" }}>
+                        {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, h.currency)}
+                      </p>
+                      <p style={{ fontSize: "12px", fontWeight: 600, color: pnl >= 0 ? "#10B981" : "#EF4444", marginTop: "2px" }}>
+                        {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between pt-1" style={{ borderTop: "1px solid #1E2D42" }}>
-                  <div>
-                    <p style={{ color: pnl >= 0 ? "#10B981" : "#EF4444", fontWeight: 600, fontSize: "14px" }}>
-                      {pnl >= 0 ? "+" : ""}{formatCurrency(pnl, h.currency)}
-                    </p>
-                    <p className="text-xs" style={{ color: pnlPct >= 0 ? "#10B981" : "#EF4444" }}>
-                      {pnlPct >= 0 ? "+" : ""}{pnlPct.toFixed(2)}%
-                    </p>
+                  <div style={{ marginBottom: "12px" }}>
+                    <div className="progress-track">
+                      <div className="progress-fill" style={{ width: `${barWidth}%`, background: pnl >= 0 ? "linear-gradient(90deg, #059669, #10B981)" : "linear-gradient(90deg, #B91C1C, #EF4444)", boxShadow: pnl >= 0 ? "0 0 8px rgba(16,185,129,0.4)" : "0 0 8px rgba(239,68,68,0.4)" }} />
+                    </div>
                   </div>
-                  <button onClick={() => { setTxTarget(h); setTxForm(emptyTxForm); }}
-                    className="btn-ghost text-xs flex items-center gap-1.5" style={{ color: "#93C5FD" }}>
-                    <Plus size={12} /> Aggiungi TX
-                  </button>
+
+                  {/* Footer */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "10px", borderTop: "1px solid #1E2D42", gap: "8px", flexWrap: "wrap" }}>
+                    <div>
+                      <p style={{ fontSize: "11px", color: "#64748B" }}>
+                        Medio: <span style={{ color: "#CBD5E1", fontWeight: 600 }}>{formatCurrency(h.avgBuyPrice, h.currency)}</span>
+                      </p>
+                      <p style={{ fontSize: "11px", color: "#64748B", marginTop: "2px" }}>
+                        Attuale: <button onClick={() => { setUpdatingPrice(h); setNewPrice(h.currentPrice ? String(h.currentPrice) : ""); }}
+                          style={{ color: h.currentPrice ? "#CBD5E1" : "#3B82F6", fontWeight: 600, background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: "11px", fontFamily: "inherit" }}>
+                          {h.currentPrice ? formatCurrency(h.currentPrice, h.currency) : "— imposta"}
+                        </button>
+                        <RefreshCw size={9} style={{ color: "#64748B", marginLeft: "3px", verticalAlign: "middle", opacity: 0.6 }} />
+                      </p>
+                    </div>
+                    <button onClick={() => { setTxTarget(h); setTxForm(emptyTxForm); }}
+                      className="btn-pill" style={{ color: "#93C5FD", borderColor: "rgba(59,130,246,0.25)", background: "rgba(59,130,246,0.08)", flexShrink: 0 }}>
+                      <Plus size={11} /> TX
+                    </button>
+                  </div>
                 </div>
               </div>
             );
