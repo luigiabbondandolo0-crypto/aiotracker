@@ -12,7 +12,8 @@ function FinanceCanvas() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d")!;
+    const el = canvas; // non-null ref for closures
+    const ctx = el.getContext("2d")!;
     let raf: number;
     let t = 0;
     let W = 0;
@@ -21,13 +22,13 @@ function FinanceCanvas() {
     let dots: { x: number; y: number; o: number }[] = [];
 
     function setup() {
-      const parent = canvas.parentElement;
+      const parent = el.parentElement;
       if (!parent) return;
       const r = parent.getBoundingClientRect();
       W = r.width;
       H = r.height;
-      canvas.width = W;
-      canvas.height = H;
+      el.width = W;
+      el.height = H;
 
       points = Array.from({ length: 60 }, (_, i) => ({
         x: (i / 59) * W,
@@ -99,7 +100,7 @@ function FinanceCanvas() {
     }
 
     const ro = new ResizeObserver(() => { setup(); t = 0; });
-    if (canvas.parentElement) ro.observe(canvas.parentElement);
+    if (el.parentElement) ro.observe(el.parentElement);
     setup();
     draw();
 
